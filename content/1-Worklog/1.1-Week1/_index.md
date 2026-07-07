@@ -5,53 +5,35 @@ weight: 1
 chapter: false
 pre: " <b> 1.1. </b> "
 ---
-{{% notice warning %}} 
+
+{{% notice warning %}}
 ⚠️ **Note:** The following information is for reference purposes only. Please **do not copy verbatim** for your own report, including this warning.
 {{% /notice %}}
 
-
 ### Week 1 Objectives:
 
-* Connect and get acquainted with members of First Cloud AI Journey.
-* Understand basic AWS services, how to use the console & CLI.
+Master the foundations of AWS account administration & security (IAM, cost management, support), understand and deploy a basic network infrastructure (VPC), get familiar with cloud development environments (Cloud9), and set up static web hosting and relational databases (S3, RDS).
 
 ### Tasks to be carried out this week:
-| Day | Task                                                                                                                                                                                                   | Start Date | Completion Date | Reference Material                        |
-| --- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------- | --------------- | ----------------------------------------- |
-| 2   | - Get acquainted with FCAJ members <br> - Read and take note of internship unit rules and regulations                                                                                                   | 08/11/2025 | 08/11/2025      |
-| 3   | - Learn about AWS and its types of services <br>&emsp; + Compute <br>&emsp; + Storage <br>&emsp; + Networking <br>&emsp; + Database <br>&emsp; + ... <br>                                              | 08/12/2025 | 08/12/2025      | <https://cloudjourney.awsstudygroup.com/> |
-| 4   | - Create AWS Free Tier account <br> - Learn about AWS Console & AWS CLI <br> - **Practice:** <br>&emsp; + Create AWS account <br>&emsp; + Install & configure AWS CLI <br> &emsp; + How to use AWS CLI | 08/13/2025 | 08/13/2025      | <https://cloudjourney.awsstudygroup.com/> |
-| 5   | - Learn basic EC2: <br>&emsp; + Instance types <br>&emsp; + AMI <br>&emsp; + EBS <br>&emsp; + ... <br> - SSH connection methods to EC2 <br> - Learn about Elastic IP   <br>                            | 08/14/2025 | 08/15/2025      | <https://cloudjourney.awsstudygroup.com/> |
-| 6   | - **Practice:** <br>&emsp; + Launch an EC2 instance <br>&emsp; + Connect via SSH <br>&emsp; + Attach an EBS volume                                                                                     | 08/15/2025 | 08/15/2025      | <https://cloudjourney.awsstudygroup.com/> |
 
+| Day | Task                                                                                                                                                                                    | Start Date | Completion Date | Reference Material                                                                                              |
+| --- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- | --------------- | --------------------------------------------------------------------------------------------------------------- |
+| 2   | - Access Management with IAM: user, group, policy, MFA <br> - Managing Costs with AWS Budgets: create budget alerts <br> - Getting Help with AWS Support: support tiers, opening a case | 22/06/2026 | 22/06/2026      | <https://000002.awsstudygroup.com/> , <https://000007.awsstudygroup.com/> , <https://000009.awsstudygroup.com/> |
+| 3   | - Networking Essentials with Amazon VPC <br> - Practice: create VPC, subnet (public/private), Internet Gateway, Route Table, Security Group, NACL                                       | 23/06/2026 | 23/06/2026      | <https://000003.awsstudygroup.com/>                                                                             |
+| 4   | - Instance Profiling with IAM Roles for EC2 <br> - Cloud Development with AWS Cloud9 <br> - Practice: attach IAM Role to EC2, code directly on Cloud9                                   | 24/06/2026 | 24/06/2026      | <https://000048.awsstudygroup.com/> , <https://000049.awsstudygroup.com/>                                       |
+| 5   | - Static Website Hosting with Amazon S3 <br> - Practice: create bucket, enable static hosting, upload files, configure public bucket policy                                             | 25/06/2026 | 25/06/2026      | <https://000057.awsstudygroup.com/>                                                                             |
+| 6   | - Database Essentials with Amazon RDS <br> - Practice: create RDS instance (MySQL/PostgreSQL), connect from EC2, basic backup/snapshot                                                  | 26/06/2026 | 26/06/2026      | <https://000005.awsstudygroup.com/>                                                                             |
 
-### Week 1 Achievements:
+### Week 2 Achievements:
 
-* Understood what AWS is and mastered the basic service groups: 
-  * Compute
-  * Storage
-  * Networking 
-  * Database
-  * ...
+- Managed users/permissions via IAM (user, group, policy, role) and understood the principle of least privilege.
 
-* Successfully created and configured an AWS Free Tier account.
+- Set up cost alerts (Budgets) and learned how to use AWS Support when encountering issues.
 
-* Became familiar with the AWS Management Console and learned how to find, access, and use services via the web interface.
+- Independently designed and deployed a complete VPC: subnet, routing, gateway, and security.
 
-* Installed and configured AWS CLI on the computer, including:
-  * Access Key
-  * Secret Key
-  * Default Region
-  * ...
+- Attached an IAM Role to EC2 to grant permissions securely without access keys; got familiar with the Cloud9 cloud IDE.
 
-* Used AWS CLI to perform basic operations such as:
+- Successfully hosted a static website on S3.
 
-  * Check account & configuration information
-  * Retrieve the list of regions
-  * View EC2 service
-  * Create and manage key pairs
-  * Check information about running services
-  * ...
-
-* Acquired the ability to connect between the web interface and CLI to manage AWS resources in parallel.
-* ...
+- Successfully deployed and connected an RDS database from an application/EC2.

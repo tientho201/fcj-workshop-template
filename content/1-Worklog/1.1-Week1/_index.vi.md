@@ -5,55 +5,31 @@ weight: 1
 chapter: false
 pre: " <b> 1.1. </b> "
 ---
-{{% notice warning %}}
-⚠️ **Lưu ý:** Các thông tin dưới đây chỉ nhằm mục đích tham khảo, vui lòng **không sao chép nguyên văn** cho bài báo cáo của bạn kể cả warning này.
-{{% /notice %}}
-
 
 ### Mục tiêu tuần 1:
 
-* Kết nối, làm quen với các thành viên trong First Cloud AI Journey.
-* Hiểu dịch vụ AWS cơ bản, cách dùng console & CLI.
+Nắm vững nền tảng quản trị & bảo mật tài khoản AWS (IAM, chi phí, hỗ trợ), hiểu và triển khai được hệ thống mạng cơ bản (VPC), làm quen môi trường phát triển trên cloud (Cloud9) và lưu trữ web tĩnh + database quan hệ (S3, RDS).
 
 ### Các công việc cần triển khai trong tuần này:
-| Thứ | Công việc                                                                                                                                                                                   | Ngày bắt đầu | Ngày hoàn thành | Nguồn tài liệu                            |
-| --- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------ | --------------- | ----------------------------------------- |
-| 2   | - Làm quen với các thành viên FCAJ <br> - Đọc và lưu ý các nội quy, quy định tại đơn vị thực tập                                                                                             | 11/08/2025   | 11/08/2025      |
-| 3   | - Tìm hiểu AWS và các loại dịch vụ <br>&emsp; + Compute <br>&emsp; + Storage <br>&emsp; + Networking <br>&emsp; + Database <br>&emsp; + ... <br>                                            | 12/08/2025   | 12/08/2025      | <https://cloudjourney.awsstudygroup.com/> |
-| 4   | - Tạo AWS Free Tier account <br> - Tìm hiểu AWS Console & AWS CLI <br> - **Thực hành:** <br>&emsp; + Tạo AWS account <br>&emsp; + Cài AWS CLI & cấu hình <br> &emsp; + Cách sử dụng AWS CLI | 13/08/2025   | 13/08/2025      | <https://cloudjourney.awsstudygroup.com/> |
-| 5   | - Tìm hiểu EC2 cơ bản: <br>&emsp; + Instance types <br>&emsp; + AMI <br>&emsp; + EBS <br>&emsp; + ... <br> - Các cách remote SSH vào EC2 <br> - Tìm hiểu Elastic IP   <br>                  | 14/08/2025   | 15/08/2025      | <https://cloudjourney.awsstudygroup.com/> |
-| 6   | - **Thực hành:** <br>&emsp; + Tạo EC2 instance <br>&emsp; + Kết nối SSH <br>&emsp; + Gắn EBS volume                                                                                         | 15/08/2025   | 15/08/2025      | <https://cloudjourney.awsstudygroup.com/> |
 
+| Thứ | Công việc                                                                                                                                                                    | Ngày bắt đầu | Ngày hoàn thành | Nguồn tài liệu                                                                                                  |
+| --- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------ | --------------- | --------------------------------------------------------------------------------------------------------------- |
+| 2   | - Access Management với IAM: user, group, policy, MFA <br> - Managing Costs với AWS Budgets: tạo budget alert <br> - Getting Help với AWS Support: các tier support, mở case | 22/06/2026   | 22/06/2026      | <https://000002.awsstudygroup.com/> , <https://000007.awsstudygroup.com/> , <https://000009.awsstudygroup.com/> |
+| 3   | - Networking Essentials với Amazon VPC <br> - Thực hành: tạo VPC, subnet (public/private), Internet Gateway, Route Table, Security Group, NACL                               | 23/06/2026   | 23/06/2026      | <https://000003.awsstudygroup.com/>                                                                             |
+| 4   | - Instance Profiling với IAM Roles for EC2 <br> - Cloud Development với AWS Cloud9 <br> - Thực hành: gắn IAM Role vào EC2, code trực tiếp trên Cloud9                        | 24/06/2026   | 24/06/2026      | <https://000048.awsstudygroup.com/> , <https://000049.awsstudygroup.com/>                                       |
+| 5   | - Static Website Hosting với Amazon S3 <br> - Thực hành: tạo bucket, bật static hosting, upload file, cấu hình bucket policy public                                          | 25/06/2026   | 25/06/2026      | <https://000057.awsstudygroup.com/>                                                                             |
+| 6   | - Database Essentials với Amazon RDS <br> - Thực hành: tạo RDS instance (MySQL/PostgreSQL), kết nối từ EC2, backup/snapshot cơ bản                                           | 26/06/2026   | 26/06/2026      | <https://000005.awsstudygroup.com/>                                                                             |
 
 ### Kết quả đạt được tuần 1:
 
-* Hiểu AWS là gì và nắm được các nhóm dịch vụ cơ bản: 
-  * Compute
-  * Storage
-  * Networking 
-  * Database
-  * ...
+- Quản lý được người dùng/quyền hạn qua IAM (user, group, policy, role), hiểu nguyên tắc least privilege.
 
-* Đã tạo và cấu hình AWS Free Tier account thành công.
+- Thiết lập được cảnh báo chi phí (Budgets) và biết cách sử dụng AWS Support khi gặp sự cố.
 
-* Làm quen với AWS Management Console và biết cách tìm, truy cập, sử dụng dịch vụ từ giao diện web.
+- Tự thiết kế và triển khai được một VPC hoàn chỉnh: subnet, routing, gateway, security.
 
-* Cài đặt và cấu hình AWS CLI trên máy tính bao gồm:
-  * Access Key
-  * Secret Key
-  * Region mặc định
-  * ...
+- Gắn IAM Role vào EC2 để cấp quyền an toàn mà không cần access key; làm quen IDE cloud Cloud9.
 
-* Sử dụng AWS CLI để thực hiện các thao tác cơ bản như:
+- Host được một website tĩnh trên S3.
 
-  * Kiểm tra thông tin tài khoản & cấu hình
-  * Lấy danh sách region
-  * Xem dịch vụ EC2
-  * Tạo và quản lý key pair
-  * Kiểm tra thông tin dịch vụ đang chạy
-  * ...
-
-* Có khả năng kết nối giữa giao diện web và CLI để quản lý tài nguyên AWS song song.
-* ...
-
-
+- Triển khai và kết nối thành công database RDS từ ứng dụng/EC2.
