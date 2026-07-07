@@ -1,57 +1,41 @@
 ---
 title: "Week 2 Worklog"
 date: 2024-01-01
-weight: 1
+weight: 2
 chapter: false
 pre: " <b> 1.2. </b> "
 ---
-{{% notice warning %}} 
+{{% notice warning %}}
 ⚠️ **Note:** The following information is for reference purposes only. Please **do not copy verbatim** for your own report, including this warning.
 {{% /notice %}}
 
 
 ### Week 2 Objectives:
 
-* Connect and get acquainted with members of First Cloud AI Journey.
-* Understand basic AWS services, how to use the console & CLI.
+Expand knowledge in simplified compute (Lightsail), system scalability & monitoring (Auto Scaling, CloudWatch), advanced networking (Route 53, Networking Workshop, Windows workloads), NoSQL & caching (DynamoDB, ElastiCache), and complete the foundation with CDN and high-availability architecture.
 
 ### Tasks to be carried out this week:
-| Day | Task                                                                                                                                                                                                   | Start Date | Completion Date | Reference Material                        |
-| --- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------- | --------------- | ----------------------------------------- |
-| 2   | - Get acquainted with FCAJ members <br> - Read and take note of internship unit rules and regulations                                                                                                   | 08/11/2025 | 08/11/2025      |
-| 3   | - Learn about AWS and its types of services <br>&emsp; + Compute <br>&emsp; + Storage <br>&emsp; + Networking <br>&emsp; + Database <br>&emsp; + ... <br>                                              | 08/12/2025 | 08/12/2025      | <https://cloudjourney.awsstudygroup.com/> |
-| 4   | - Create AWS Free Tier account <br> - Learn about AWS Console & AWS CLI <br> - **Practice:** <br>&emsp; + Create AWS account <br>&emsp; + Install & configure AWS CLI <br> &emsp; + How to use AWS CLI | 08/13/2025 | 08/13/2025      | <https://cloudjourney.awsstudygroup.com/> |
-| 5   | - Learn basic EC2: <br>&emsp; + Instance types <br>&emsp; + AMI <br>&emsp; + EBS <br>&emsp; + ... <br> - SSH connection methods to EC2 <br> - Learn about Elastic IP   <br>                            | 08/14/2025 | 08/15/2025      | <https://cloudjourney.awsstudygroup.com/> |
-| 6   | - **Practice:** <br>&emsp; + Launch an EC2 instance <br>&emsp; + Connect via SSH <br>&emsp; + Attach an EBS volume                                                                                     | 08/15/2025 | 08/15/2025      | <https://cloudjourney.awsstudygroup.com/> |
+
+| Day | Task                                                                                                                                                                                                                             | Start Date | Completion Date | Reference Material                                                                                                                      |
+| --- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- | --------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| 2   | - Simplified Computing with Amazon Lightsail <br> - Container Deployment with Lightsail Containers <br> - Practice: create a Lightsail instance & deploy a simple container                                                      | 08/25/2025 | 08/25/2025      | <https://000045.awsstudygroup.com/> , <https://000046.awsstudygroup.com/>                                                               |
+| 3   | - Scaling Applications with EC2 Auto Scaling <br> - Monitoring with Amazon CloudWatch <br> - Practice: create an Auto Scaling Group + CloudWatch CPU alarm                                                                       | 08/26/2025 | 08/26/2025      | <https://000006.awsstudygroup.com/> , <https://000008.awsstudygroup.com/>                                                               |
+| 4   | - Hybrid DNS Management with Amazon Route 53 <br> - Networking on AWS Workshop (comprehensive/advanced) <br> - Windows Workloads on AWS                                                                                          | 08/27/2025 | 08/27/2025      | <https://000010.awsstudygroup.com/> , <https://000092.awsstudygroup.com/> , <https://000093.awsstudygroup.com/>                         |
+| 5   | - NoSQL Database Essentials with DynamoDB <br> - In-Memory Caching with Amazon ElastiCache <br> - Directory Services with AWS Managed Microsoft AD                                                                               | 08/28/2025 | 08/28/2025      | <https://000060.awsstudygroup.com/> , <https://000061.awsstudygroup.com/> , <https://000095.awsstudygroup.com/>                         |
+| 6   | - Content Delivery with Amazon CloudFront <br> - Edge Computing with CloudFront + Lambda@Edge <br> - Building Highly Available Web Applications (capstone)                                                                       | 08/29/2025 | 08/29/2025      | <https://000094.awsstudygroup.com/> , <https://000130.awsstudygroup.com/> , <https://000101.awsstudygroup.com/>                         |
 
 
 ### Week 2 Achievements:
 
-* Understood what AWS is and mastered the basic service groups: 
-  * Compute
-  * Storage
-  * Networking 
-  * Database
-  * ...
+- Learned to rapidly deploy applications with Lightsail (VM and containers), suitable for small/simple workloads.
 
-* Successfully created and configured an AWS Free Tier account.
+- Automatically scaled applications based on load with Auto Scaling and monitored systems in real-time with CloudWatch.
 
-* Became familiar with the AWS Management Console and learned how to find, access, and use services via the web interface.
+- Managed DNS with Route 53, gained a deeper understanding of network architecture on AWS, and learned the specifics of running Windows workloads on AWS.
 
-* Installed and configured AWS CLI on the computer, including:
-  * Access Key
-  * Secret Key
-  * Default Region
-  * ...
+- Used DynamoDB (NoSQL) and ElastiCache (caching) to optimize application performance; understood Directory Services for enterprise environments (AD).
 
-* Used AWS CLI to perform basic operations such as:
+- Deployed a CDN with CloudFront and handled edge logic with Lambda@Edge.
 
-  * Check account & configuration information
-  * Retrieve the list of regions
-  * View EC2 service
-  * Create and manage key pairs
-  * Check information about running services
-  * ...
+- Capstone: Capable of independently designing and building a highly available web application architecture (Multi-AZ, Auto Scaling, Load Balancer, RDS, CloudFront) — consolidating all 3 weeks of knowledge.
 
-* Acquired the ability to connect between the web interface and CLI to manage AWS resources in parallel.
-* ...

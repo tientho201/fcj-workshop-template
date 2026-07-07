@@ -1,7 +1,7 @@
 ---
 title: "Worklog Tuần 2"
 date: 2024-01-01
-weight: 1
+weight: 2
 chapter: false
 pre: " <b> 1.2. </b> "
 ---
@@ -12,48 +12,30 @@ pre: " <b> 1.2. </b> "
 
 ### Mục tiêu tuần 2:
 
-* Kết nối, làm quen với các thành viên trong First Cloud AI Journey.
-* Hiểu dịch vụ AWS cơ bản, cách dùng console & CLI.
+Mở rộng kiến thức về compute đơn giản hóa (Lightsail), khả năng mở rộng & giám sát hệ thống (Auto Scaling, CloudWatch), networking nâng cao (Route 53, Networking Workshop, Windows), NoSQL & caching (DynamoDB, ElastiCache), và hoàn thiện với CDN + kiến trúc high-availability.
 
 ### Các công việc cần triển khai trong tuần này:
-| Thứ | Công việc                                                                                                                                                                                   | Ngày bắt đầu | Ngày hoàn thành | Nguồn tài liệu                            |
-| --- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------ | --------------- | ----------------------------------------- |
-| 2   | - Làm quen với các thành viên FCAJ <br> - Đọc và lưu ý các nội quy, quy định tại đơn vị thực tập                                                                                             | 11/08/2025   | 11/08/2025      |
-| 3   | - Tìm hiểu AWS và các loại dịch vụ <br>&emsp; + Compute <br>&emsp; + Storage <br>&emsp; + Networking <br>&emsp; + Database <br>&emsp; + ... <br>                                            | 12/08/2025   | 12/08/2025      | <https://cloudjourney.awsstudygroup.com/> |
-| 4   | - Tạo AWS Free Tier account <br> - Tìm hiểu AWS Console & AWS CLI <br> - **Thực hành:** <br>&emsp; + Tạo AWS account <br>&emsp; + Cài AWS CLI & cấu hình <br> &emsp; + Cách sử dụng AWS CLI | 13/08/2025   | 13/08/2025      | <https://cloudjourney.awsstudygroup.com/> |
-| 5   | - Tìm hiểu EC2 cơ bản: <br>&emsp; + Instance types <br>&emsp; + AMI <br>&emsp; + EBS <br>&emsp; + ... <br> - Các cách remote SSH vào EC2 <br> - Tìm hiểu Elastic IP   <br>                  | 14/08/2025   | 15/08/2025      | <https://cloudjourney.awsstudygroup.com/> |
-| 6   | - **Thực hành:** <br>&emsp; + Tạo EC2 instance <br>&emsp; + Kết nối SSH <br>&emsp; + Gắn EBS volume                                                                                         | 15/08/2025   | 15/08/2025      | <https://cloudjourney.awsstudygroup.com/> |
+
+| Thứ | Công việc                                                                                                                                                                                                                          | Ngày bắt đầu | Ngày hoàn thành | Nguồn tài liệu                                                                                                                          |
+| --- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------ | --------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| 2   | - Simplified Computing với Amazon Lightsail <br> - Container Deployment với Lightsail Containers <br> - Thực hành: tạo Lightsail instance & deploy 1 container đơn giản                                                            | 25/08/2025   | 25/08/2025      | <https://000045.awsstudygroup.com/> , <https://000046.awsstudygroup.com/>                                                               |
+| 3   | - Scaling Applications với EC2 Auto Scaling <br> - Monitoring với Amazon CloudWatch <br> - Thực hành: tạo Auto Scaling Group + alarm CloudWatch theo CPU                                                                           | 26/08/2025   | 26/08/2025      | <https://000006.awsstudygroup.com/> , <https://000008.awsstudygroup.com/>                                                               |
+| 4   | - Hybrid DNS Management với Amazon Route 53 <br> - Networking on AWS Workshop (tổng hợp/nâng cao) <br> - Windows Workloads on AWS                                                                                                  | 27/08/2025   | 27/08/2025      | <https://000010.awsstudygroup.com/> , <https://000092.awsstudygroup.com/> , <https://000093.awsstudygroup.com/>                         |
+| 5   | - NoSQL Database Essentials với DynamoDB <br> - In-Memory Caching với Amazon ElastiCache <br> - Directory Services với AWS Managed Microsoft AD                                                                                     | 28/08/2025   | 28/08/2025      | <https://000060.awsstudygroup.com/> , <https://000061.awsstudygroup.com/> , <https://000095.awsstudygroup.com/>                         |
+| 6   | - Content Delivery với Amazon CloudFront <br> - Edge Computing với CloudFront + Lambda@Edge <br> - Building Highly Available Web Applications (bài tổng hợp/capstone)                                                              | 29/08/2025   | 29/08/2025      | <https://000094.awsstudygroup.com/> , <https://000130.awsstudygroup.com/> , <https://000101.awsstudygroup.com/>                         |
 
 
 ### Kết quả đạt được tuần 2:
 
-* Hiểu AWS là gì và nắm được các nhóm dịch vụ cơ bản: 
-  * Compute
-  * Storage
-  * Networking 
-  * Database
-  * ...
+- Biết triển khai ứng dụng nhanh với Lightsail (VM và container), phù hợp cho workload nhỏ/đơn giản.
 
-* Đã tạo và cấu hình AWS Free Tier account thành công.
+- Tự động scale ứng dụng theo tải với Auto Scaling và giám sát hệ thống real-time bằng CloudWatch.
 
-* Làm quen với AWS Management Console và biết cách tìm, truy cập, sử dụng dịch vụ từ giao diện web.
+- Quản lý DNS với Route 53, hiểu sâu hơn về network architecture trên AWS, và biết đặc thù chạy Windows workload trên AWS.
 
-* Cài đặt và cấu hình AWS CLI trên máy tính bao gồm:
-  * Access Key
-  * Secret Key
-  * Region mặc định
-  * ...
+- Sử dụng được DynamoDB (NoSQL) và ElastiCache (caching) để tối ưu hiệu năng ứng dụng; hiểu Directory Service cho môi trường doanh nghiệp (AD).
 
-* Sử dụng AWS CLI để thực hiện các thao tác cơ bản như:
+- Triển khai CDN với CloudFront, xử lý logic tại edge với Lambda@Edge.
 
-  * Kiểm tra thông tin tài khoản & cấu hình
-  * Lấy danh sách region
-  * Xem dịch vụ EC2
-  * Tạo và quản lý key pair
-  * Kiểm tra thông tin dịch vụ đang chạy
-  * ...
-
-* Có khả năng kết nối giữa giao diện web và CLI để quản lý tài nguyên AWS song song.
-* ...
-
+- Capstone: Có khả năng tự thiết kế và dựng một kiến trúc web application có tính sẵn sàng cao (Multi-AZ, Auto Scaling, Load Balancer, RDS, CloudFront) — tổng hợp toàn bộ kiến thức 3 tuần.
 
