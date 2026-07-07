@@ -6,10 +6,6 @@ chapter: false
 pre: " <b> 1.1. </b> "
 ---
 
-{{% notice warning %}}
-⚠️ **Note:** The following information is for reference purposes only. Please **do not copy verbatim** for your own report, including this warning.
-{{% /notice %}}
-
 ### Week 1 Objectives:
 
 Master the foundations of AWS account administration & security (IAM, cost management, support), understand and deploy a basic network infrastructure (VPC), get familiar with cloud development environments (Cloud9), and set up static web hosting and relational databases (S3, RDS).
@@ -24,7 +20,7 @@ Master the foundations of AWS account administration & security (IAM, cost manag
 | 5   | - Static Website Hosting with Amazon S3 <br> - Practice: create bucket, enable static hosting, upload files, configure public bucket policy                                             | 06/25/2026 | 06/25/2026      | <https://000057.awsstudygroup.com/>                                                                             |
 | 6   | - Database Essentials with Amazon RDS <br> - Practice: create RDS instance (MySQL/PostgreSQL), connect from EC2, basic backup/snapshot                                                  | 06/26/2026 | 06/26/2026      | <https://000005.awsstudygroup.com/>                                                                             |
 
-### Week 2 Achievements:
+### Week 1 Achievements:
 
 - Managed users/permissions via IAM (user, group, policy, role) and understood the principle of least privilege.
 
