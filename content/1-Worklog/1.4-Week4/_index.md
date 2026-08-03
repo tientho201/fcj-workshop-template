@@ -5,53 +5,25 @@ weight: 1
 chapter: false
 pre: " <b> 1.4. </b> "
 ---
-{{% notice warning %}} 
-⚠️ **Note:** The following information is for reference purposes only. Please **do not copy verbatim** for your own report, including this warning.
-{{% /notice %}}
-
 
 ### Week 4 Objectives:
 
-* Connect and get acquainted with members of First Cloud AI Journey.
-* Understand basic AWS services, how to use the console & CLI.
+- Master Serverless fundamentals (Lambda, SQS, IAM Role) and independently implement Flow 1: Document Processing & Storage.
 
 ### Tasks to be carried out this week:
-| Day | Task                                                                                                                                                                                                   | Start Date | Completion Date | Reference Material                        |
-| --- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------- | --------------- | ----------------------------------------- |
-| 2   | - Get acquainted with FCAJ members <br> - Read and take note of internship unit rules and regulations                                                                                                   | 08/11/2025 | 08/11/2025      |
-| 3   | - Learn about AWS and its types of services <br>&emsp; + Compute <br>&emsp; + Storage <br>&emsp; + Networking <br>&emsp; + Database <br>&emsp; + ... <br>                                              | 08/12/2025 | 08/12/2025      | <https://cloudjourney.awsstudygroup.com/> |
-| 4   | - Create AWS Free Tier account <br> - Learn about AWS Console & AWS CLI <br> - **Practice:** <br>&emsp; + Create AWS account <br>&emsp; + Install & configure AWS CLI <br> &emsp; + How to use AWS CLI | 08/13/2025 | 08/13/2025      | <https://cloudjourney.awsstudygroup.com/> |
-| 5   | - Learn basic EC2: <br>&emsp; + Instance types <br>&emsp; + AMI <br>&emsp; + EBS <br>&emsp; + ... <br> - SSH connection methods to EC2 <br> - Learn about Elastic IP   <br>                            | 08/14/2025 | 08/15/2025      | <https://cloudjourney.awsstudygroup.com/> |
-| 6   | - **Practice:** <br>&emsp; + Launch an EC2 instance <br>&emsp; + Connect via SSH <br>&emsp; + Attach an EBS volume                                                                                     | 08/15/2025 | 08/15/2025      | <https://cloudjourney.awsstudygroup.com/> |
 
+| Day | Task                                                                                                                                           | Start Date | Completion Date | Reference Material                                                                                                               |
+| --- | ---------------------------------------------------------------------------------------------------------------------------------------------- | ---------- | --------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| 2   | - Learn about AWS Lambda: function, trigger, layers, environment variables, cold start, IAM execution role                                     | 07/13/2025 | 07/13/2025      | [AWS Lambda Documentation](https://docs.aws.amazon.com/lambda/)                                                                  |
+| 3   | - Learn about Amazon S3 (Event Notification) and Amazon SQS: Standard Queue, Dead Letter Queue (DLQ), retry policy                             | 07/14/2025 | 07/14/2025      | [Amazon S3 Documentation](https://docs.aws.amazon.com/AmazonS3/)<br>[Amazon SQS Documentation](https://docs.aws.amazon.com/sqs/) |
+| 4   | - Learn about Amazon Textract (OCR scanned files/images)<br>- **Practice:** Lambda polling messages from SQS and processing files              | 07/15/2025 | 07/15/2025      | [Amazon Textract Documentation](https://docs.aws.amazon.com/textract/)                                                           |
+| 5   | - Learn about advanced IAM Roles: least privilege, resource-based policy between services (S3 → SQS → Lambda)                                  | 07/16/2025 | 07/16/2025      | [AWS IAM Documentation](https://docs.aws.amazon.com/IAM/)                                                                        |
+| 6   | - **Practice:** Complete build of Flow 1 – S3 (upload) → S3 Event → SQS (buffer + retry) → Lambda (Document Processor) → OCR for scanned files | 07/17/2025 | 07/17/2025      | Personal Project                                                                                                                 |
 
 ### Week 4 Achievements:
 
-* Understood what AWS is and mastered the basic service groups: 
-  * Compute
-  * Storage
-  * Networking 
-  * Database
-  * ...
-
-* Successfully created and configured an AWS Free Tier account.
-
-* Became familiar with the AWS Management Console and learned how to find, access, and use services via the web interface.
-
-* Installed and configured AWS CLI on the computer, including:
-  * Access Key
-  * Secret Key
-  * Default Region
-  * ...
-
-* Used AWS CLI to perform basic operations such as:
-
-  * Check account & configuration information
-  * Retrieve the list of regions
-  * View EC2 service
-  * Create and manage key pairs
-  * Check information about running services
-  * ...
-
-* Acquired the ability to connect between the web interface and CLI to manage AWS resources in parallel.
-* ...
+- Understood and implemented basic event-driven architecture: S3 Event → SQS → Lambda.
+- Configured Dead Letter Queue (DLQ) and retry mechanisms for failed document processing.
+- Automated OCR processing for images/scanned documents using Amazon Textract.
+- Configured secure least privilege permissions between services using IAM Roles.
+- Established an automated document ingestion pipeline, ready for vector generation in the following week.

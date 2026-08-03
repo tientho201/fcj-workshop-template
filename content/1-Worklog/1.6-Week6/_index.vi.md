@@ -5,54 +5,26 @@ weight: 1
 chapter: false
 pre: " <b> 1.6. </b> "
 ---
-{{% notice warning %}}
-⚠️ **Lưu ý:** Các thông tin dưới đây chỉ nhằm mục đích tham khảo, vui lòng **không sao chép nguyên văn** cho bài báo cáo của bạn kể cả warning này.
-{{% /notice %}}
-
 
 ### Mục tiêu tuần 6:
 
-* Kết nối, làm quen với các thành viên trong First Cloud AI Journey.
-* Hiểu dịch vụ AWS cơ bản, cách dùng console & CLI.
+- Không để hệ thống chạy "mù" — cần biết ngay khi có sự cố, phân biệt được lỗi nhẹ và lỗi nghiêm trọng, và đưa cảnh báo tới đúng kênh (Slack) để đội vận hành phản ứng kịp thời.
+- Triển khai đánh giá tự động chất lượng RAG bằng framework RAGAS (Faithfulness, Answer Relevancy, Context Precision) qua EventBridge Scheduler và Lambda Evaluation Runner.
 
 ### Các công việc cần triển khai trong tuần này:
-| Thứ | Công việc                                                                                                                                                                                   | Ngày bắt đầu | Ngày hoàn thành | Nguồn tài liệu                            |
-| --- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------ | --------------- | ----------------------------------------- |
-| 2   | - Làm quen với các thành viên FCAJ <br> - Đọc và lưu ý các nội quy, quy định tại đơn vị thực tập                                                                                             | 11/08/2025   | 11/08/2025      |
-| 3   | - Tìm hiểu AWS và các loại dịch vụ <br>&emsp; + Compute <br>&emsp; + Storage <br>&emsp; + Networking <br>&emsp; + Database <br>&emsp; + ... <br>                                            | 12/08/2025   | 12/08/2025      | <https://cloudjourney.awsstudygroup.com/> |
-| 4   | - Tạo AWS Free Tier account <br> - Tìm hiểu AWS Console & AWS CLI <br> - **Thực hành:** <br>&emsp; + Tạo AWS account <br>&emsp; + Cài AWS CLI & cấu hình <br> &emsp; + Cách sử dụng AWS CLI | 13/08/2025   | 13/08/2025      | <https://cloudjourney.awsstudygroup.com/> |
-| 5   | - Tìm hiểu EC2 cơ bản: <br>&emsp; + Instance types <br>&emsp; + AMI <br>&emsp; + EBS <br>&emsp; + ... <br> - Các cách remote SSH vào EC2 <br> - Tìm hiểu Elastic IP   <br>                  | 14/08/2025   | 15/08/2025      | <https://cloudjourney.awsstudygroup.com/> |
-| 6   | - **Thực hành:** <br>&emsp; + Tạo EC2 instance <br>&emsp; + Kết nối SSH <br>&emsp; + Gắn EBS volume                                                                                         | 15/08/2025   | 15/08/2025      | <https://cloudjourney.awsstudygroup.com/> |
 
+| Thứ | Công việc                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             | Ngày bắt đầu | Ngày hoàn thành | Nguồn tài liệu                                                                                                              |
+| --- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------ | --------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| 2   | **CloudWatch Advanced & Custom Metrics:**<br>- Trao đổi với nhóm về ưu tiên công việc.<br>- Tìm hiểu CloudWatch nâng cao: cách đẩy Custom Metrics từ Lambda bằng lệnh `put_metric_data` (boto3).<br>- Thử nghiệm gửi 3 chỉ số giả lập Faithfulness/Relevancy/Precision để chuẩn bị cho tuần đánh giá RAGAS.<br>- Dựng CloudWatch Dashboard tổng quan gồm các widget: Lambda invocation/error rate, API Gateway 4xx/5xx, SQS queue depth.                                                                                                                              | 27/07/2025   | 27/07/2025      | [AWS CloudWatch Documentation](https://docs.aws.amazon.com/cloudwatch)                                                      |
+| 3   | **CloudWatch Alarms & SNS Topics:**<br>- Tạo các CloudWatch Alarm riêng biệt: Lambda Errors (ngưỡng > 5 lỗi/5 phút → Warning), API Gateway 5xx (ngưỡng tương tự → Warning), DLQ Depth > 0 (Critical — vì nghĩa là có tài liệu xử lý thất bại hoàn toàn), Bedrock Throttle (Critical — ảnh hưởng trực tiếp trải nghiệm người dùng).<br>- Tạo 2 SNS topic tương ứng: `alerts-info` và `alerts-critical`, subscribe email cá nhân để test trước.                                                                                                                         | 28/07/2025   | 28/07/2025      | [Amazon SNS Documentation](https://docs.aws.amazon.com/sns)                                                                 |
+| 4   | **AWS Chatbot & Tích hợp Slack:**<br>- Kết nối AWS Chatbot với Slack Workspace của nhóm — xử lý bước OAuth authorize Slack (nhờ trưởng nhóm cấp quyền admin workspace).<br>- Sau khi kết nối thành công, route topic `alerts-critical` vào channel riêng `#rag-alerts`.<br>- Test bằng cách chủ động tạo lỗi Lambda (throw exception liên tục) — nhận được tin nhắn Slack đúng trong vòng chưa đầy 1 phút.                                                                                                                                                            | 29/07/2025   | 29/07/2025      | [AWS Chatbot Documentation](https://docs.aws.amazon.com/chatbot)                                                            |
+| 5   | **RAGAS Framework & EventBridge Scheduler:**<br>- Tìm hiểu sâu framework RAGAS — cụ thể là cách 3 chỉ số được tính: Faithfulness đo mức độ câu trả lời có bám sát nội dung context được truy xuất (dùng chính LLM để chấm chéo), Answer Relevancy đo câu trả lời có đúng trọng tâm câu hỏi, Context Precision đo chất lượng của bước retrieval.<br>- Song song, tìm hiểu EventBridge Scheduler để tạo rule chạy hàng ngày lúc 2h sáng (giờ ít traffic) trigger Lambda đánh giá.                                                                                       | 30/07/2025   | 30/07/2025      | [RAGAS Documentation](https://docs.ragas.io)<br>[Amazon EventBridge Documentation](https://docs.aws.amazon.com/eventbridge) |
+| 6   | **Lambda RAGAS Evaluation Runner & Tổng kết:**<br>- Viết Lambda RAGAS Evaluation Runner: lấy mẫu ngẫu nhiên ~20 cặp câu hỏi/câu trả lời từ bảng `ChatHistory` trong 24h gần nhất, chấm điểm theo 3 chỉ số, lưu kết quả dạng JSON vào S3 Evaluation Results theo cấu trúc thư mục `year=2025/month=08/day=28/`.<br>- Chạy thử lần đầu, phát hiện điểm Faithfulness của 2/20 câu khá thấp (~0.4) — do context truy xuất từ OpenSearch chưa đủ liên quan (ghi nhận để cải thiện threshold similarity).<br>- Cuối ngày tổng hợp toàn bộ tiến độ tuần và báo cáo với nhóm. | 31/07/2025   | 31/07/2025      | Dự án cá nhân                                                                                                               |
 
 ### Kết quả đạt được tuần 6:
-* Hiểu AWS là gì và nắm được các nhóm dịch vụ cơ bản: 
-  * Compute
-  * Storage
-  * Networking 
-  * Database
-  * ...
 
-* Đã tạo và cấu hình AWS Free Tier account thành công.
+- **Hệ thống giám sát & cảnh báo tự động:** Điểm sáng lớn nhất tuần này là hệ thống giờ đã "biết tự báo" khi có sự cố — không cần ai ngồi canh log thủ công nữa. Việc phân alarm theo 2 mức Warning/Critical giúp tránh tình trạng "báo động giả" làm loãng sự chú ý: những lỗi tạm thời, ít nghiêm trọng chỉ vào kênh info, còn sự cố ảnh hưởng trực tiếp người dùng (DLQ tồn đọng, Bedrock bị throttle) sẽ đẩy ngay tới Slack (`#rag-alerts`).
 
-* Làm quen với AWS Management Console và biết cách tìm, truy cập, sử dụng dịch vụ từ giao diện web.
+- **Đánh giá chất lượng RAG tự động (RAGAS):** Phần RAGAS mang lại giá trị bất ngờ hơn mong đợi: chỉ sau lần chạy thử đầu tiên, đã phát hiện ra 2 câu trả lời có dấu hiệu "trả lời không sát context" — điều mà nếu chỉ nhìn bằng mắt thường rất khó nhận ra vì câu trả lời vẫn đọc trôi chảy, hợp lý. Đây chính là giá trị của việc đánh giá định lượng thay vì chỉ dựa vào cảm quan.
 
-* Cài đặt và cấu hình AWS CLI trên máy tính bao gồm:
-  * Access Key
-  * Secret Key
-  * Region mặc định
-  * ...
-
-* Sử dụng AWS CLI để thực hiện các thao tác cơ bản như:
-
-  * Kiểm tra thông tin tài khoản & cấu hình
-  * Lấy danh sách region
-  * Xem dịch vụ EC2
-  * Tạo và quản lý key pair
-  * Kiểm tra thông tin dịch vụ đang chạy
-  * ...
-
-* Có khả năng kết nối giữa giao diện web và CLI để quản lý tài nguyên AWS song song.
-* ...
-
-
+- **Hoàn thiện 4 luồng kiến trúc:** Đến cuối tuần, Luồng 3 (Monitoring/Alert) và Luồng 4 (RAG Evaluation) đã hoạt động tự động, hoàn tất bức tranh 4 luồng của toàn bộ kiến trúc hệ thống.

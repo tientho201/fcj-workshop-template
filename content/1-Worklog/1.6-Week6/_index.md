@@ -5,53 +5,26 @@ weight: 1
 chapter: false
 pre: " <b> 1.6. </b> "
 ---
-{{% notice warning %}} 
-⚠️ **Note:** The following information is for reference purposes only. Please **do not copy verbatim** for your own report, including this warning.
-{{% /notice %}}
-
 
 ### Week 6 Objectives:
 
-* Connect and get acquainted with members of First Cloud AI Journey.
-* Understand basic AWS services, how to use the console & CLI.
+- Prevent the system from running "blind" — detect incidents immediately, distinguish between minor and critical errors, and route alerts to the right channel (Slack) for timely operational response.
+- Implement automated RAG quality evaluation using the RAGAS framework (Faithfulness, Answer Relevancy, Context Precision) via EventBridge Scheduler and Lambda Evaluation Runner.
 
 ### Tasks to be carried out this week:
-| Day | Task                                                                                                                                                                                                   | Start Date | Completion Date | Reference Material                        |
-| --- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------- | --------------- | ----------------------------------------- |
-| 2   | - Get acquainted with FCAJ members <br> - Read and take note of internship unit rules and regulations                                                                                                   | 08/11/2025 | 08/11/2025      |
-| 3   | - Learn about AWS and its types of services <br>&emsp; + Compute <br>&emsp; + Storage <br>&emsp; + Networking <br>&emsp; + Database <br>&emsp; + ... <br>                                              | 08/12/2025 | 08/12/2025      | <https://cloudjourney.awsstudygroup.com/> |
-| 4   | - Create AWS Free Tier account <br> - Learn about AWS Console & AWS CLI <br> - **Practice:** <br>&emsp; + Create AWS account <br>&emsp; + Install & configure AWS CLI <br> &emsp; + How to use AWS CLI | 08/13/2025 | 08/13/2025      | <https://cloudjourney.awsstudygroup.com/> |
-| 5   | - Learn basic EC2: <br>&emsp; + Instance types <br>&emsp; + AMI <br>&emsp; + EBS <br>&emsp; + ... <br> - SSH connection methods to EC2 <br> - Learn about Elastic IP   <br>                            | 08/14/2025 | 08/15/2025      | <https://cloudjourney.awsstudygroup.com/> |
-| 6   | - **Practice:** <br>&emsp; + Launch an EC2 instance <br>&emsp; + Connect via SSH <br>&emsp; + Attach an EBS volume                                                                                     | 08/15/2025 | 08/15/2025      | <https://cloudjourney.awsstudygroup.com/> |
 
+| Day | Task                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                | Start Date | Completion Date | Reference Material                                                                                                          |
+| --- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- | --------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| 2   | **Advanced CloudWatch & Custom Metrics:**<br>- Discuss work priorities with the team.<br>- Study advanced CloudWatch: pushing Custom Metrics from Lambda using `put_metric_data` (boto3).<br>- Test sending 3 simulated metrics (Faithfulness/Relevancy/Precision) to prepare for RAGAS evaluation.<br>- Build an overview CloudWatch Dashboard with widgets: Lambda invocation/error rate, API Gateway 4xx/5xx, SQS queue depth.                                                                                                                                                                   | 07/27/2025 | 07/27/2025      | [AWS CloudWatch Documentation](https://docs.aws.amazon.com/cloudwatch)                                                      |
+| 3   | **CloudWatch Alarms & SNS Topics:**<br>- Create separate CloudWatch Alarms: Lambda Errors (threshold > 5 errors/5 mins → Warning), API Gateway 5xx (similar threshold → Warning), DLQ Depth > 0 (Critical — indicates complete document processing failure), Bedrock Throttle (Critical — directly impacts user experience).<br>- Create 2 corresponding SNS topics: `alerts-info` and `alerts-critical`, subscribe personal email for testing.                                                                                                                                                     | 07/28/2025 | 07/28/2025      | [Amazon SNS Documentation](https://docs.aws.amazon.com/sns)                                                                 |
+| 4   | **AWS Chatbot & Slack Integration:**<br>- Connect AWS Chatbot to the team's Slack Workspace — resolve Slack OAuth authorization issue (asked team lead for workspace admin permissions).<br>- After successful connection, route the `alerts-critical` topic to dedicated channel `#rag-alerts`.<br>- Test by intentionally triggering Lambda errors (throwing continuous exceptions) — received Slack notifications in less than 1 minute.                                                                                                                                                         | 07/29/2025 | 07/29/2025      | [AWS Chatbot Documentation](https://docs.aws.amazon.com/chatbot)                                                            |
+| 5   | **RAGAS Framework & EventBridge Scheduler:**<br>- Deep dive into the RAGAS framework — specifically how the 3 metrics are calculated: Faithfulness measures answer adherence to retrieved context (using LLM cross-checking), Answer Relevancy measures relevance to the query, Context Precision measures retrieval quality.<br>- Concurrently explore EventBridge Scheduler to create a daily rule running at 2 AM (low-traffic hours) to trigger evaluation Lambda.                                                                                                                              | 07/30/2025 | 07/30/2025      | [RAGAS Documentation](https://docs.ragas.io)<br>[Amazon EventBridge Documentation](https://docs.aws.amazon.com/eventbridge) |
+| 6   | **Lambda RAGAS Evaluation Runner & Summary:**<br>- Write Lambda RAGAS Evaluation Runner: randomly sample ~20 Q&A pairs from `ChatHistory` table in the last 24h, score across 3 metrics, save JSON results to S3 Evaluation Results under directory structure `year=2025/month=08/day=28/`.<br>- Run initial test, discovered low Faithfulness score (~0.4) for 2/20 questions — traced to insufficient relevant context retrieved from OpenSearch (noted to improve similarity threshold in retrieval later).<br>- Summarize overall weekly progress and report to the team at the end of the day. | 07/31/2025 | 07/31/2025      | Personal Project                                                                                                            |
 
 ### Week 6 Achievements:
 
-* Understood what AWS is and mastered the basic service groups: 
-  * Compute
-  * Storage
-  * Networking 
-  * Database
-  * ...
+- **Automated Monitoring & Alerting System:** The highlight of this week is that the system can now "self-report" when issues occur — no manual log watching required. Categorizing alarms into Warning/Critical levels avoids "alarm fatigue": minor/temporary errors go to the info channel, while user-impacting issues (DLQ backlog, Bedrock throttling) trigger immediate Slack alerts (`#rag-alerts`).
 
-* Successfully created and configured an AWS Free Tier account.
+- **Automated RAG Quality Evaluation (RAGAS):** The RAGAS evaluation yielded unexpected value: after the very first test run, it caught 2 answers with low context faithfulness — something hard to spot manually because the generated answers still read smoothly and logically. This highlights the true value of quantitative evaluation over subjective feel.
 
-* Became familiar with the AWS Management Console and learned how to find, access, and use services via the web interface.
-
-* Installed and configured AWS CLI on the computer, including:
-  * Access Key
-  * Secret Key
-  * Default Region
-  * ...
-
-* Used AWS CLI to perform basic operations such as:
-
-  * Check account & configuration information
-  * Retrieve the list of regions
-  * View EC2 service
-  * Create and manage key pairs
-  * Check information about running services
-  * ...
-
-* Acquired the ability to connect between the web interface and CLI to manage AWS resources in parallel.
-* ...
+- **Completion of 4 Architecture Flows:** By the end of the week, Flow 3 (Monitoring/Alert) and Flow 4 (RAG Evaluation) were fully automated, completing all 4 flows of the overall architecture.

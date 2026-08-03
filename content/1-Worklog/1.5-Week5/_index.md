@@ -5,53 +5,25 @@ weight: 1
 chapter: false
 pre: " <b> 1.5. </b> "
 ---
-{{% notice warning %}} 
-⚠️ **Note:** The following information is for reference purposes only. Please **do not copy verbatim** for your own report, including this warning.
-{{% /notice %}}
-
 
 ### Week 5 Objectives:
 
-* Connect and get acquainted with members of First Cloud AI Journey.
-* Understand basic AWS services, how to use the console & CLI.
+- Build a secure communication gateway for end users, connect retrieval from OpenSearch, and implement Semantic Cache to optimize Bedrock invocation costs.
 
 ### Tasks to be carried out this week:
-| Day | Task                                                                                                                                                                                                   | Start Date | Completion Date | Reference Material                        |
-| --- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------- | --------------- | ----------------------------------------- |
-| 2   | - Get acquainted with FCAJ members <br> - Read and take note of internship unit rules and regulations                                                                                                   | 08/11/2025 | 08/11/2025      |
-| 3   | - Learn about AWS and its types of services <br>&emsp; + Compute <br>&emsp; + Storage <br>&emsp; + Networking <br>&emsp; + Database <br>&emsp; + ... <br>                                              | 08/12/2025 | 08/12/2025      | <https://cloudjourney.awsstudygroup.com/> |
-| 4   | - Create AWS Free Tier account <br> - Learn about AWS Console & AWS CLI <br> - **Practice:** <br>&emsp; + Create AWS account <br>&emsp; + Install & configure AWS CLI <br> &emsp; + How to use AWS CLI | 08/13/2025 | 08/13/2025      | <https://cloudjourney.awsstudygroup.com/> |
-| 5   | - Learn basic EC2: <br>&emsp; + Instance types <br>&emsp; + AMI <br>&emsp; + EBS <br>&emsp; + ... <br> - SSH connection methods to EC2 <br> - Learn about Elastic IP   <br>                            | 08/14/2025 | 08/15/2025      | <https://cloudjourney.awsstudygroup.com/> |
-| 6   | - **Practice:** <br>&emsp; + Launch an EC2 instance <br>&emsp; + Connect via SSH <br>&emsp; + Attach an EBS volume                                                                                     | 08/15/2025 | 08/15/2025      | <https://cloudjourney.awsstudygroup.com/> |
 
+| Day | Task                                                                                                                                                                                                                                                                                                                                                                                                                                                            | Start Date | Completion Date | Reference Material                                                                                                                                                                       |
+| --- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- | --------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 2   | - Discuss daily plan with the team.<br>- Set up Amazon API Gateway (REST API) with `/chat` resource, `POST` method, integrated using Lambda Proxy Integration for full control over response formatting in code.<br>- Configure CORS — manually add `OPTIONS` method for preflight requests (fixing the initial missing `Access-Control-Allow-Origin` header issue).                                                                                            | 07/20/2025 | 07/20/2025      | [Amazon API Gateway Documentation](https://docs.aws.amazon.com/apigateway)                                                                                                               |
+| 3   | - Quick sync with the team before starting.<br>- Learn about Amazon Cognito: create User Pool, App Client (without client secret for frontend calls), attach Cognito Authorizer to API Gateway.<br>- Test login to retrieve ID Token, invoke API with header `Authorization: Bearer <token>` (authenticated via ID Token/Access Token).                                                                                                                         | 07/21/2025 | 07/21/2025      | [Amazon Cognito Documentation](https://docs.aws.amazon.com/cognito)                                                                                                                      |
+| 4   | - Align with the team on today's goals.<br>- Research Amazon ElastiCache Serverless & Semantic Cache concepts (compute embeddings for new queries, compare cosine similarity with a `0.92` threshold).<br>- Design flow: Query → Embedding → Lookup Redis (ElastiCache) → Proceed to retrieval + Bedrock only on cache miss.                                                                                                                                    | 07/22/2025 | 07/22/2025      | [Amazon ElastiCache Documentation](https://docs.aws.amazon.com/elasticache)                                                                                                              |
+| 5   | - Report progress briefly to the team at start of day.<br>- Design DynamoDB schema: `ChatHistory` table (Partition Key `session_id`, Sort Key `timestamp`), `FeedbackStore` table (link `message_id` with thumbs up/down).<br>- Configure Bedrock Guardrails: policy to block sensitive topics and mask personally identifiable information (PII such as phone numbers, emails).                                                                                | 07/23/2025 | 07/23/2025      | [Amazon DynamoDB Documentation](https://docs.aws.amazon.com/dynamodb)<br>[Amazon Bedrock Guardrails Documentation](https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails.html) |
+| 6   | - Assemble all components together at the end of the week.<br>- Complete Lambda Chat Engine following the flow: API Gateway → Check Semantic Cache → On miss, query OpenSearch → Invoke Bedrock via Guardrails → Store cache → Write DynamoDB → Return response.<br>- Test via Postman with 10 sample queries (3 rephrased queries hit cache as expected, response latency dropped from ~4s to under 200ms).<br>- Wrap up and present a quick demo to the team. | 07/24/2025 | 07/24/2025      | Personal Project                                                                                                                                                                         |
 
 ### Week 5 Achievements:
 
-* Understood what AWS is and mastered the basic service groups: 
-  * Compute
-  * Storage
-  * Networking 
-  * Database
-  * ...
-
-* Successfully created and configured an AWS Free Tier account.
-
-* Became familiar with the AWS Management Console and learned how to find, access, and use services via the web interface.
-
-* Installed and configured AWS CLI on the computer, including:
-  * Access Key
-  * Secret Key
-  * Default Region
-  * ...
-
-* Used AWS CLI to perform basic operations such as:
-
-  * Check account & configuration information
-  * Retrieve the list of regions
-  * View EC2 service
-  * Create and manage key pairs
-  * Check information about running services
-  * ...
-
-* Acquired the ability to connect between the web interface and CLI to manage AWS resources in parallel.
-* ...
+- **Completed Secure Gateway Integration:** API Gateway integrated with Cognito Authorizer ensures that only authenticated users can access the chatbot.
+- **Semantic Cache Functioning as Designed:** Response latency was reduced by over 20x for semantically duplicate questions (from ~4s down to under 200ms), resulting in a proportional reduction in Bedrock API calls and costs.
+- **Structured Chat History & Feedback Storage:** Conversation history (`ChatHistory`) and user feedback (`FeedbackStore`) now have structured storage in DynamoDB, ready for RAG quality evaluation in the final week.
+- **Effective Bedrock Guardrails Enforcement:** Guardrails placed correctly in the processing flow (prior to returning answers to users), ensuring sensitive topic filtering and PII masking.
+- **Stable End-to-End Realtime Q&A Flow (Flow 2):** The most direct user-facing component of the project is now integrated and thoroughly tested via Postman across multiple scenario queries.
