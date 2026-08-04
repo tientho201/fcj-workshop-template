@@ -6,7 +6,6 @@ chapter: false
 pre: " <b> 5.2.1 </b> "
 ---
 
-Since the workshop uses HCP Terraform to run Terraform remotely, you need to add AWS credentials to the Workspace Variables on HCP instead of configuring them directly in the code.
 
 ### Preparation steps
 

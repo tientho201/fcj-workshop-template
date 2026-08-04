@@ -6,7 +6,6 @@ chapter: false
 pre: " <b> 5.2.1 </b> "
 ---
 
-Vì workshop sử dụng HCP Terraform để chạy Terraform từ xa, bạn cần thêm AWS credentials vào Workspace Variables trên HCP thay vì cấu hình trực tiếp trong code. 
 
 ### Các bước chuẩn bị
 
@@ -78,5 +77,4 @@ Vào **Billing and Cost Management → Budgets → Create budget**, loại **Cos
 #### Nội dung tiếp theo
 
 - [Cấu hình HCP Terraform](../5.2.2-Configure-HCP-Terraform/_index.vi.md)
-- [Chuẩn bị Code Terrform](../5.2.3-Prepare-Terraform-Code/_index.vi.md)
 
