@@ -1,213 +1,255 @@
 ---
-title : "Các bước chuẩn bị"
-date : 2024-01-01 
-weight : 2
-chapter : false
-pre : " <b> 5.2. </b> "
+title: "Các bước chuẩn bị"
+date: 2024-01-01
+weight: 2
+chapter: false
+pre: " <b> 5.2. </b> "
 ---
 
+
+Trước khi triển khai bất kỳ luồng nào, cần chuẩn bị đầy đủ tài khoản, quyền truy cập và công cụ dưới đây. Bỏ qua bước chuẩn bị thường là nguyên nhân gây tắc nghẽn giữa chừng — đặc biệt là việc xin quyền truy cập model trên Bedrock, vốn có thể mất thời gian chờ duyệt.
+ 
+#### Yêu cầu chung
+ 
+Trước khi bắt đầu, bạn cần chuẩn bị các điều kiện sau:
+ 
+* Một tài khoản AWS.
+* Region sử dụng trong dự án này là **N. Virginia (us-east-1)** — khu vực hỗ trợ đầy đủ các model cần dùng trên Amazon Bedrock (Claude 3, Titan Embeddings).
+* Một tài khoản **HCP Terraform** (app.terraform.io) để quản lý remote state.
+* Quyền truy cập model (Model access) đã được cấp cho Claude 3 và Titan Embeddings trên Amazon Bedrock.
+#### Công cụ cần cài đặt
+ 
+* **Terraform** (phiên bản 1.5 trở lên) để triển khai hạ tầng dưới dạng Infrastructure as Code.
+* **AWS CLI** (v2) để thao tác và kiểm thử với các dịch vụ AWS từ dòng lệnh.
+* **Python** (phiên bản 3.12) để phát triển các hàm AWS Lambda (Document Processor, Chat Engine, RAGAS Evaluation Runner).
+* **Git** để quản lý mã nguồn và Terraform state theo version.
+* Một trình soạn thảo mã nguồn như **Visual Studio Code**.
+Sau khi cài đặt xong, kiểm tra nhanh bằng các lệnh sau:
+ 
+```bash
+aws --version
+terraform -version
+python3 --version
+git --version
+```
+
+
 #### IAM permissions
-Gắn IAM permission policy sau vào tài khoản aws user của bạn để triển khai và dọn dẹp tài nguyên trong workshop này.
+
+Tài khoản/IAM User dùng để triển khai dự án (chạy `terraform apply`) cần được gắn policy với các nhóm quyền sau, tương ứng với từng nhóm dịch vụ trong kiến trúc:
+
 ```
 {
     "Version": "2012-10-17",
     "Statement": [
         {
-            "Sid": "VisualEditor0",
+            "Sid": "ComputeLambda",
             "Effect": "Allow",
             "Action": [
-                "cloudformation:*",
-                "cloudwatch:*",
-                "ec2:AcceptTransitGatewayPeeringAttachment",
-                "ec2:AcceptTransitGatewayVpcAttachment",
-                "ec2:AllocateAddress",
-                "ec2:AssociateAddress",
-                "ec2:AssociateIamInstanceProfile",
-                "ec2:AssociateRouteTable",
-                "ec2:AssociateSubnetCidrBlock",
-                "ec2:AssociateTransitGatewayRouteTable",
-                "ec2:AssociateVpcCidrBlock",
-                "ec2:AttachInternetGateway",
-                "ec2:AttachNetworkInterface",
-                "ec2:AttachVolume",
-                "ec2:AttachVpnGateway",
-                "ec2:AuthorizeSecurityGroupEgress",
-                "ec2:AuthorizeSecurityGroupIngress",
-                "ec2:CreateClientVpnEndpoint",
-                "ec2:CreateClientVpnRoute",
-                "ec2:CreateCustomerGateway",
-                "ec2:CreateDhcpOptions",
-                "ec2:CreateFlowLogs",
-                "ec2:CreateInternetGateway",
-                "ec2:CreateLaunchTemplate",
-                "ec2:CreateNetworkAcl",
-                "ec2:CreateNetworkInterface",
-                "ec2:CreateNetworkInterfacePermission",
-                "ec2:CreateRoute",
-                "ec2:CreateRouteTable",
-                "ec2:CreateSecurityGroup",
-                "ec2:CreateSubnet",
-                "ec2:CreateSubnetCidrReservation",
-                "ec2:CreateTags",
-                "ec2:CreateTransitGateway",
-                "ec2:CreateTransitGatewayPeeringAttachment",
-                "ec2:CreateTransitGatewayPrefixListReference",
-                "ec2:CreateTransitGatewayRoute",
-                "ec2:CreateTransitGatewayRouteTable",
-                "ec2:CreateTransitGatewayVpcAttachment",
-                "ec2:CreateVpc",
-                "ec2:CreateVpcEndpoint",
-                "ec2:CreateVpcEndpointConnectionNotification",
-                "ec2:CreateVpcEndpointServiceConfiguration",
-                "ec2:CreateVpnConnection",
-                "ec2:CreateVpnConnectionRoute",
-                "ec2:CreateVpnGateway",
-                "ec2:DeleteCustomerGateway",
-                "ec2:DeleteFlowLogs",
-                "ec2:DeleteInternetGateway",
-                "ec2:DeleteNetworkInterface",
-                "ec2:DeleteNetworkInterfacePermission",
-                "ec2:DeleteRoute",
-                "ec2:DeleteRouteTable",
-                "ec2:DeleteSecurityGroup",
-                "ec2:DeleteSubnet",
-                "ec2:DeleteSubnetCidrReservation",
-                "ec2:DeleteTags",
-                "ec2:DeleteTransitGateway",
-                "ec2:DeleteTransitGatewayPeeringAttachment",
-                "ec2:DeleteTransitGatewayPrefixListReference",
-                "ec2:DeleteTransitGatewayRoute",
-                "ec2:DeleteTransitGatewayRouteTable",
-                "ec2:DeleteTransitGatewayVpcAttachment",
-                "ec2:DeleteVpc",
-                "ec2:DeleteVpcEndpoints",
-                "ec2:DeleteVpcEndpointServiceConfigurations",
-                "ec2:DeleteVpnConnection",
-                "ec2:DeleteVpnConnectionRoute",
-                "ec2:Describe*",
-                "ec2:DetachInternetGateway",
-                "ec2:DisassociateAddress",
-                "ec2:DisassociateRouteTable",
-                "ec2:GetLaunchTemplateData",
-                "ec2:GetTransitGatewayAttachmentPropagations",
-                "ec2:ModifyInstanceAttribute",
-                "ec2:ModifySecurityGroupRules",
-                "ec2:ModifyTransitGatewayVpcAttachment",
-                "ec2:ModifyVpcAttribute",
-                "ec2:ModifyVpcEndpoint",
-                "ec2:ReleaseAddress",
-                "ec2:ReplaceRoute",
-                "ec2:RevokeSecurityGroupEgress",
-                "ec2:RevokeSecurityGroupIngress",
-                "ec2:RunInstances",
-                "ec2:StartInstances",
-                "ec2:StopInstances",
-                "ec2:UpdateSecurityGroupRuleDescriptionsEgress",
-                "ec2:UpdateSecurityGroupRuleDescriptionsIngress",
-                "iam:AddRoleToInstanceProfile",
-                "iam:AttachRolePolicy",
-                "iam:CreateInstanceProfile",
-                "iam:CreatePolicy",
+                "lambda:CreateFunction",
+                "lambda:DeleteFunction",
+                "lambda:GetFunction",
+                "lambda:UpdateFunctionCode",
+                "lambda:UpdateFunctionConfiguration",
+                "lambda:InvokeFunction",
+                "lambda:AddPermission",
+                "lambda:RemovePermission",
+                "lambda:CreateEventSourceMapping",
+                "lambda:DeleteEventSourceMapping",
+                "lambda:GetEventSourceMapping",
+                "lambda:ListEventSourceMappings",
+                "lambda:PublishLayerVersion",
+                "lambda:GetLayerVersion",
+                "lambda:DeleteLayerVersion",
+                "lambda:TagResource",
+                "lambda:ListTags"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Sid": "StorageS3",
+            "Effect": "Allow",
+            "Action": [
+                "s3:CreateBucket",
+                "s3:DeleteBucket",
+                "s3:PutObject",
+                "s3:GetObject",
+                "s3:DeleteObject",
+                "s3:ListBucket",
+                "s3:GetBucketVersioning",
+                "s3:PutBucketVersioning",
+                "s3:PutBucketPolicy",
+                "s3:GetBucketPolicy",
+                "s3:PutBucketPublicAccessBlock",
+                "s3:GetBucketPublicAccessBlock",
+                "s3:PutEncryptionConfiguration",
+                "s3:PutBucketNotification",
+                "s3:GetBucketNotification",
+                "s3:PutLifecycleConfiguration"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Sid": "MessagingQueueAndEvents",
+            "Effect": "Allow",
+            "Action": [
+                "sqs:CreateQueue",
+                "sqs:DeleteQueue",
+                "sqs:GetQueueAttributes",
+                "sqs:SetQueueAttributes",
+                "sqs:SendMessage",
+                "sqs:ReceiveMessage",
+                "sqs:DeleteMessage",
+                "sqs:TagQueue",
+                "sqs:ListQueues",
+                "sns:CreateTopic",
+                "sns:DeleteTopic",
+                "sns:Subscribe",
+                "sns:Unsubscribe",
+                "sns:Publish",
+                "sns:ListTopics",
+                "sns:SetTopicAttributes",
+                "sns:GetTopicAttributes",
+                "events:PutRule",
+                "events:DeleteRule",
+                "events:PutTargets",
+                "events:RemoveTargets",
+                "events:DescribeRule",
+                "events:ListRules",
+                "events:ListTargetsByRule"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Sid": "DatabaseAndCache",
+            "Effect": "Allow",
+            "Action": [
+                "dynamodb:CreateTable",
+                "dynamodb:DeleteTable",
+                "dynamodb:DescribeTable",
+                "dynamodb:UpdateTable",
+                "dynamodb:PutItem",
+                "dynamodb:GetItem",
+                "dynamodb:Query",
+                "dynamodb:Scan",
+                "dynamodb:UpdateItem",
+                "dynamodb:DeleteItem",
+                "dynamodb:TagResource",
+                "elasticache:CreateServerlessCache",
+                "elasticache:DeleteServerlessCache",
+                "elasticache:DescribeServerlessCaches",
+                "elasticache:ModifyServerlessCache",
+                "elasticache:CreateCacheSubnetGroup",
+                "elasticache:DeleteCacheSubnetGroup",
+                "elasticache:DescribeCacheSubnetGroups",
+                "elasticache:ListTagsForResource"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Sid": "SearchAndGenAI",
+            "Effect": "Allow",
+            "Action": [
+                "aoss:CreateCollection",
+                "aoss:DeleteCollection",
+                "aoss:BatchGetCollection",
+                "aoss:ListCollections",
+                "aoss:CreateSecurityPolicy",
+                "aoss:GetSecurityPolicy",
+                "aoss:UpdateSecurityPolicy",
+                "aoss:ListSecurityPolicies",
+                "aoss:CreateAccessPolicy",
+                "aoss:GetAccessPolicy",
+                "aoss:UpdateAccessPolicy",
+                "aoss:ListAccessPolicies",
+                "aoss:APIAccessAll",
+                "aoss:TagResource",
+                "bedrock:InvokeModel",
+                "bedrock:InvokeModelWithResponseStream",
+                "bedrock:GetFoundationModel",
+                "bedrock:ListFoundationModels",
+                "bedrock:CreateGuardrail",
+                "bedrock:GetGuardrail",
+                "bedrock:UpdateGuardrail",
+                "bedrock:DeleteGuardrail",
+                "bedrock:ListGuardrails",
+                "bedrock:ApplyGuardrail",
+                "textract:DetectDocumentText",
+                "textract:AnalyzeDocument",
+                "textract:StartDocumentTextDetection",
+                "textract:GetDocumentTextDetection"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Sid": "APIAndAuth",
+            "Effect": "Allow",
+            "Action": [
+                "apigateway:GET",
+                "apigateway:POST",
+                "apigateway:PUT",
+                "apigateway:PATCH",
+                "apigateway:DELETE",
+                "cognito-idp:CreateUserPool",
+                "cognito-idp:DeleteUserPool",
+                "cognito-idp:UpdateUserPool",
+                "cognito-idp:DescribeUserPool",
+                "cognito-idp:CreateUserPoolClient",
+                "cognito-idp:DeleteUserPoolClient",
+                "cognito-idp:UpdateUserPoolClient",
+                "cognito-idp:DescribeUserPoolClient",
+                "cognito-idp:ListUserPools",
+                "cognito-idp:AdminCreateUser",
+                "cognito-idp:AdminSetUserPassword",
+                "cognito-idp:TagResource"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Sid": "MonitoringAndLogs",
+            "Effect": "Allow",
+            "Action": [
+                "cloudwatch:PutMetricData",
+                "cloudwatch:GetMetricData",
+                "cloudwatch:PutDashboard",
+                "cloudwatch:GetDashboard",
+                "cloudwatch:DeleteDashboards",
+                "cloudwatch:PutMetricAlarm",
+                "cloudwatch:DeleteAlarms",
+                "cloudwatch:DescribeAlarms",
+                "cloudwatch:DescribeAlarmsForMetric",
+                "logs:CreateLogGroup",
+                "logs:DeleteLogGroup",
+                "logs:CreateLogStream",
+                "logs:PutLogEvents",
+                "logs:DescribeLogGroups",
+                "logs:PutRetentionPolicy",
+                "chatbot:CreateSlackChannelConfiguration",
+                "chatbot:DeleteSlackChannelConfiguration",
+                "chatbot:DescribeSlackChannelConfigurations",
+                "chatbot:UpdateSlackChannelConfiguration"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Sid": "IAMForServiceRoles",
+            "Effect": "Allow",
+            "Action": [
                 "iam:CreateRole",
-                "iam:DeleteInstanceProfile",
-                "iam:DeletePolicy",
                 "iam:DeleteRole",
-                "iam:DeleteRolePolicy",
-                "iam:DetachRolePolicy",
-                "iam:GetInstanceProfile",
-                "iam:GetPolicy",
                 "iam:GetRole",
+                "iam:AttachRolePolicy",
+                "iam:DetachRolePolicy",
+                "iam:PutRolePolicy",
                 "iam:GetRolePolicy",
+                "iam:DeleteRolePolicy",
+                "iam:CreatePolicy",
+                "iam:DeletePolicy",
+                "iam:GetPolicy",
                 "iam:ListPolicyVersions",
                 "iam:ListRoles",
                 "iam:PassRole",
-                "iam:PutRolePolicy",
-                "iam:RemoveRoleFromInstanceProfile",
-                "lambda:CreateFunction",
-                "lambda:DeleteFunction",
-                "lambda:DeleteLayerVersion",
-                "lambda:GetFunction",
-                "lambda:GetLayerVersion",
-                "lambda:InvokeFunction",
-                "lambda:PublishLayerVersion",
-                "logs:CreateLogGroup",
-                "logs:DeleteLogGroup",
-                "logs:DescribeLogGroups",
-                "logs:PutRetentionPolicy",
-                "route53:ChangeTagsForResource",
-                "route53:CreateHealthCheck",
-                "route53:CreateHostedZone",
-                "route53:CreateTrafficPolicy",
-                "route53:DeleteHostedZone",
-                "route53:DisassociateVPCFromHostedZone",
-                "route53:GetHostedZone",
-                "route53:ListHostedZones",
-                "route53domains:ListDomains",
-                "route53domains:ListOperations",
-                "route53domains:ListTagsForDomain",
-                "route53resolver:AssociateResolverEndpointIpAddress",
-                "route53resolver:AssociateResolverRule",
-                "route53resolver:CreateResolverEndpoint",
-                "route53resolver:CreateResolverRule",
-                "route53resolver:DeleteResolverEndpoint",
-                "route53resolver:DeleteResolverRule",
-                "route53resolver:DisassociateResolverEndpointIpAddress",
-                "route53resolver:DisassociateResolverRule",
-                "route53resolver:GetResolverEndpoint",
-                "route53resolver:GetResolverRule",
-                "route53resolver:ListResolverEndpointIpAddresses",
-                "route53resolver:ListResolverEndpoints",
-                "route53resolver:ListResolverRuleAssociations",
-                "route53resolver:ListResolverRules",
-                "route53resolver:ListTagsForResource",
-                "route53resolver:UpdateResolverEndpoint",
-                "route53resolver:UpdateResolverRule",
-                "s3:AbortMultipartUpload",
-                "s3:CreateBucket",
-                "s3:DeleteBucket",
-                "s3:DeleteObject",
-                "s3:GetAccountPublicAccessBlock",
-                "s3:GetBucketAcl",
-                "s3:GetBucketOwnershipControls",
-                "s3:GetBucketPolicy",
-                "s3:GetBucketPolicyStatus",
-                "s3:GetBucketPublicAccessBlock",
-                "s3:GetObject",
-                "s3:GetObjectVersion",
-                "s3:GetBucketVersioning",
-                "s3:ListAccessPoints",
-                "s3:ListAccessPointsForObjectLambda",
-                "s3:ListAllMyBuckets",
-                "s3:ListBucket",
-                "s3:ListBucketMultipartUploads",
-                "s3:ListBucketVersions",
-                "s3:ListJobs",
-                "s3:ListMultipartUploadParts",
-                "s3:ListMultiRegionAccessPoints",
-                "s3:ListStorageLensConfigurations",
-                "s3:PutAccountPublicAccessBlock",
-                "s3:PutBucketAcl",
-                "s3:PutBucketPolicy",
-                "s3:PutBucketPublicAccessBlock",
-                "s3:PutObject",
-                "secretsmanager:CreateSecret",
-                "secretsmanager:DeleteSecret",
-                "secretsmanager:DescribeSecret",
-                "secretsmanager:GetSecretValue",
-                "secretsmanager:ListSecrets",
-                "secretsmanager:ListSecretVersionIds",
-                "secretsmanager:PutResourcePolicy",
-                "secretsmanager:TagResource",
-                "secretsmanager:UpdateSecret",
-                "sns:ListTopics",
-                "ssm:DescribeInstanceProperties",
-                "ssm:DescribeSessions",
-                "ssm:GetConnectionStatus",
-                "ssm:GetParameters",
-                "ssm:ListAssociations",
-                "ssm:ResumeSession",
-                "ssm:StartSession",
-                "ssm:TerminateSession"
+                "iam:TagRole"
             ],
             "Resource": "*"
         }
@@ -216,27 +258,8 @@ Gắn IAM permission policy sau vào tài khoản aws user của bạn để tri
 
 ```
 
-#### Khởi tạo tài nguyên bằng CloudFormation
+#### Nội dung
 
-Trong lab này, chúng ta sẽ dùng N.Virginia region (us-east-1).
-
-Để chuẩn bị cho môi trường làm workshop, chúng ta deploy CloudFormation template sau (click link): [PrivateLinkWorkshop ](https://us-east-1.console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/quickcreate?templateURL=https://s3.us-east-1.amazonaws.com/reinvent-endpoints-builders-session/Nested.yaml&stackName=PLCloudSetup). Để nguyên các lựa chọn mặc định.
-
-![create stack](/images/5-Workshop/5.2-Prerequisite/create-stack1.png)
-
-+ Lựa chọn 2 mục acknowledgement 
-+ Chọn Create stack
-
-![create stack](/images/5-Workshop/5.2-Prerequisite/create-stack2.png)
-
-Quá trình triển khai CloudFormation cần khoảng 15 phút để hoàn thành.
-
-![complete](/images/5-Workshop/5.2-Prerequisite/complete.png)
-
-+ 2 VPCs đã được tạo
-
-![vpcs](/images/5-Workshop/5.2-Prerequisite/vpcs.png)
-
-+ 3 EC2s đã được tạo
-
-![EC2](/images/5-Workshop/5.2-Prerequisite/ec2.png)
+1. [Cấu hình AWS Credentials](5.2.1-Configure-AWS-Credentials/_index.vi.md)
+2. [Cấu hình HCP Terraform](5.2.2-Configure-HCP-Terraform/_index.vi.md)
+2. [Chuẩn bị Code Terraform](5.2.3-Prepare-Terraform-Code/_index.vi.md)

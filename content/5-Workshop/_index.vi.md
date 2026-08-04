@@ -6,28 +6,27 @@ chapter: false
 pre: " <b> 5. </b> "
 ---
 
-{{% notice warning %}}
-⚠️ **Lưu ý:** Các thông tin dưới đây chỉ nhằm mục đích tham khảo, vui lòng **không sao chép nguyên văn** cho bài báo cáo của bạn kể cả warning này.
-{{% /notice %}}
-
-
-# Đảm bảo truy cập Hybrid an toàn đến S3 bằng cách sử dụng VPC endpoint
+# Xây dựng hệ thống hỏi đáp tài liệu thông minh với kiến trúc RAG trên AWS
 
 #### Tổng quan
 
-**AWS PrivateLink** cung cấp kết nối riêng tư đến các dịch vụ aws từ VPCs hoặc trung tâm dữ liệu (on-premise) mà không làm lộ lưu lượng truy cập ra ngoài public internet.
+**RAG (Retrieval-Augmented Generation)** là kiến trúc kết hợp giữa khả năng tìm kiếm thông tin (retrieval) và mô hình ngôn ngữ lớn (LLM), giúp câu trả lời sinh ra bám sát vào nguồn dữ liệu thực tế thay vì chỉ dựa vào kiến thức sẵn có của mô hình.
 
-Trong bài lab này, chúng ta sẽ học cách tạo, cấu hình, và kiểm tra VPC endpoints để cho phép workload của bạn tiếp cận các dịch vụ AWS mà không cần đi qua Internet công cộng.
+Trong workshop này, chúng ta sẽ cùng xây dựng một hệ thống **RAG Knowledge Assistant** hoàn chỉnh trên nền tảng AWS Serverless. Hệ thống cho phép người dùng upload tài liệu (PDF/TXT/ảnh scan), tự động số hóa và lập chỉ mục ngữ nghĩa, sau đó đặt câu hỏi và nhận câu trả lời được sinh ra trực tiếp từ nội dung tài liệu đã upload — có kiểm duyệt nội dung, có bộ nhớ đệm ngữ nghĩa (semantic cache) để tối ưu chi phí, và có cơ chế tự động giám sát cùng đánh giá chất lượng câu trả lời.
 
-Chúng ta sẽ tạo hai loại endpoints để truy cập đến Amazon S3: gateway vpc endpoint và interface vpc endpoint. Hai loại vpc endpoints này mang đến nhiều lợi ích tùy thuộc vào việc bạn truy cập đến S3 từ môi trường cloud hay từ trung tâm dữ liệu (on-premise).
-+ **Gateway** - Tạo gateway endpoint để gửi lưu lượng đến Amazon S3 hoặc DynamoDB using private IP addresses. Bạn điều hướng lưu lượng từ VPC của bạn đến gateway endpoint bằng các bảng định tuyến (route tables)
-+ **Interface** - Tạo interface endpoint để gửi lưu lượng đến các dịch vụ điểm cuối (endpoints) sử dụng Network Load Balancer để phân phối lưu lượng. Lưu lượng dành cho dịch vụ điểm cuối được resolved bằng DNS.
+Toàn bộ hệ thống được chia thành bốn luồng xử lý chính, tương ứng với bốn nhóm chức năng độc lập nhưng liên kết chặt chẽ với nhau:
+
+- **Luồng 1 — Data Ingestion**: Thu thập tài liệu từ người dùng, xử lý OCR nếu là file scan/ảnh, chuyển nội dung thành vector và lưu trữ trong kho tìm kiếm ngữ nghĩa.
+- **Luồng 2 — Hỏi đáp Realtime**: Tiếp nhận câu hỏi, tìm kiếm ngữ cảnh liên quan, sinh câu trả lời thông qua mô hình ngôn ngữ lớn, có cơ chế cache để giảm chi phí và độ trễ phản hồi.
+- **Luồng 3 — Monitoring & Alert**: Giám sát toàn bộ hệ thống theo thời gian thực, phân loại cảnh báo theo mức độ nghiêm trọng và gửi thông báo tới kênh vận hành.
+- **Luồng 4 — RAG Evaluation**: Tự động đo lường và đánh giá chất lượng câu trả lời theo chu kỳ hàng ngày.
 
 #### Nội dung
 
-1. [Tổng quan về workshop](5.1-Workshop-overview/)
-2. [Chuẩn bị](5.2-Prerequiste/)
-3. [Truy cập đến S3 từ VPC](5.3-S3-vpc/)
-4. [Truy cập đến S3 từ TTDL On-premises](5.4-S3-onprem/)
-5. [VPC Endpoint Policies (làm thêm)](5.5-Policy/)
-6. [Dọn dẹp tài nguyên](5.6-Cleanup/)
+1. [Tổng quan kiến trúc hệ thống](5.1-Workshop-overview/)
+2. [Chuẩn bị môi trường & tài khoản AWS](5.2-Prerequisites/)
+3. [Luồng 1 - Xử lý và lưu trữ tài liệu](5.3-Flow-1-Data-Ingestion/)
+4. [Luồng 2 - Hỏi đáp Realtime với Semantic Cache](5.4-Flow-2-Realtime-QA/)
+5. [Luồng 3 - Giám sát và cảnh báo hệ thống](5.5-Flow-3-Monitoring/)
+6. [Luồng 4 - Đánh giá chất lượng RAG với RAGAS](5.6-Flow-4-RAGAS/)
+7. [Dọn dẹp tài nguyên](1.7-Cleanup/)

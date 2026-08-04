@@ -5,27 +5,28 @@ weight: 5
 chapter: false
 pre: " <b> 5. </b> "
 ---
-{{% notice warning %}}
-⚠️ **Note:** The information below is for reference purposes only. Please **do not copy verbatim** for your report, including this warning.
-{{% /notice %}}
 
-# Secure Hybrid Access to S3 using VPC Endpoints
+# Building an Intelligent Document Q&A System with RAG Architecture on AWS
 
 #### Overview
 
-**AWS PrivateLink** provides private connectivity to AWS services from VPCs and your on-premises networks, without exposing your traffic to the Public Internet.
+**RAG (Retrieval-Augmented Generation)** is an architecture combining information retrieval with large language models (LLMs), ensuring generated responses strictly adhere to actual ground-truth data rather than relying solely on the pre-trained knowledge of the model.
 
-In this lab, you will learn how to create, configure, and test VPC endpoints that enable your workloads to reach AWS services without traversing the Public Internet.
+In this workshop, we will build a complete **RAG Knowledge Assistant** system on the AWS Serverless platform. The system allows users to upload documents (PDF/TXT/scanned images), automatically digitize and semantically index them, and subsequently submit queries to receive answers generated directly from the uploaded content — featuring content moderation, semantic caching to optimize costs, and an automated monitoring and response quality evaluation mechanism.
 
-You will create two types of endpoints to access Amazon S3: a Gateway VPC endpoint, and an Interface VPC endpoint. These two types of VPC endpoints offer different benefits depending on if you are accessing Amazon S3 from the cloud or your on-premises location
-+ **Gateway** - Create a gateway endpoint to send traffic to Amazon S3 or DynamoDB using private IP addresses.You route traffic from your VPC to the gateway endpoint using route tables.
-+ **Interface** - Create an interface endpoint to send traffic to endpoint services that use a Network Load Balancer to distribute traffic. Traffic destined for the endpoint service is resolved using DNS.
+The entire system is divided into four main processing flows, corresponding to four independent yet closely coupled functional groups:
+
+- **Flow 1 — Data Ingestion**: Collect user documents, perform OCR processing for scanned files/images, convert content into vector embeddings, and store them in a semantic vector search store.
+- **Flow 2 — Realtime Q&A**: Receive queries, retrieve relevant context, generate answers via LLM, with a caching mechanism to minimize costs and response latency.
+- **Flow 3 — Monitoring & Alert**: Monitor the entire system in real-time, classify alerts by severity level, and dispatch notifications to operational channels.
+- **Flow 4 — RAG Evaluation**: Automatically measure and evaluate answer quality on a daily schedule.
 
 #### Content
 
-1. [Workshop overview](5.1-Workshop-overview)
-2. [Prerequiste](5.2-Prerequiste/)
-3. [Access S3 from VPC](5.3-S3-vpc/)
-4. [Access S3 from On-premises](5.4-S3-onprem/)
-5. [VPC Endpoint Policies (Bonus)](5.5-Policy/)
-6. [Clean up](5.6-Cleanup/)
+1. [System Architecture Overview](5.1-Workshop-overview/)
+2. [Prerequisites & AWS Account Setup](5.2-Prerequisites/)
+3. [Flow 1 - Document Processing and Storage](5.3-Flow-1-Data-Ingestion/)
+4. [Flow 2 - Realtime Q&A with Semantic Cache](5.4-Flow-2-Realtime-QA/)
+5. [Flow 3 - System Monitoring and Alerting](5.5-Flow-3-Monitoring/)
+6. [Flow 4 - RAG Quality Evaluation with RAGAS](5.6-Flow-4-RAGAS/)
+7. [Clean up Resources](1.7-Cleanup/)
