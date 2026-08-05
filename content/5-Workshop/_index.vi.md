@@ -29,4 +29,4 @@ Toàn bộ hệ thống được chia thành bốn luồng xử lý chính, tư�
 4. [Luồng 2 - Hỏi đáp Realtime với Semantic Cache](5.4-Flow-2-Realtime-QA/)
 5. [Luồng 3 - Giám sát và cảnh báo hệ thống](5.5-Flow-3-Monitoring/)
 6. [Luồng 4 - Đánh giá chất lượng RAG với RAGAS](5.6-Flow-4-RAGAS/)
-7. [Dọn dẹp tài nguyên](1.7-Cleanup/)
+7. [Dọn dẹp tài nguyên](5.7-Cleanup/)

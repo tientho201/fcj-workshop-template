@@ -29,4 +29,4 @@ The entire system is divided into four main processing flows, corresponding to f
 4. [Flow 2 - Realtime Q&A with Semantic Cache](5.4-Flow-2-Realtime-QA/)
 5. [Flow 3 - System Monitoring and Alerting](5.5-Flow-3-Monitoring/)
 6. [Flow 4 - RAG Quality Evaluation with RAGAS](5.6-Flow-4-RAGAS/)
-7. [Clean up Resources](1.7-Cleanup/)
+7. [Clean up Resources](5.7-Cleanup/)
