@@ -26,7 +26,6 @@ python3 --version
 
 ![](/images/5-Workshop/5.2-Prerequisite/image5.2.3a.png)
 
-
 ### Cấu hình biến môi trường AWS credentials cho CLI
 
 Trên cửa sổ terminal, cấu hình AWS credentials để AWS CLI có thể xác thực và thực thi các lệnh trong suốt quá trình triển khai cũng như kiểm thử hệ thống:
@@ -110,6 +109,7 @@ Trong terminal, chuyển đến thư mục chứa các file Terraform, sau đó 
 ```
 terraform login
 ```
+
 ![Kết nối và khởi tạo tài nguyên](/images/5-Workshop/5.2-Prerequisite/image5.2.3b.png)
 
 - Mở đường dẫn được hiển thị trên cửa sổ terminal:
@@ -137,9 +137,8 @@ terraform init
 Sau khi hoàn thành các bước trên, môi trường làm việc đã được cấu hình đầy đủ và sẵn sàng để triển khai hệ thống **RAG** trong các phần tiếp theo.
 
 ### Cấu trúc thư mục repo
- 
-Tổ chức repo theo từng luồng để dễ phân công và review:
 
+Tổ chức repo theo từng luồng để dễ phân công và review:
 
 ```
 Project/
@@ -243,4 +242,6 @@ docker/**/__pycache__/
 
 - Các file `*.tfvars`: Đây là nơi chứa giá trị biến thật như email nhận cảnh báo, nên không đưa lên repository để tránh lộ thông tin. Chúng ta chỉ giữ lại file mẫu `*.tfvars.example`.
 
-Nội dung tiếp theo 
+#### Nội dung tiếp theo
+
+- [Xử lý và lưu trữ tài liệu](../../5.3-Data-Ingestion/)

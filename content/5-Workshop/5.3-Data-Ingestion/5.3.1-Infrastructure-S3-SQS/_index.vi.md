@@ -5,6 +5,7 @@ weight: 1
 chapter: false
 pre: " <b> 5.3.1 </b> "
 ---
+
 Hạ tầng của Luồng 1 được khai báo tại `modules/ingestion/main.tf`. Trang này trình bày 2 thành phần đầu tiên: S3 bucket lưu tài liệu gốc, và SQS đóng vai trò buffer trung gian với 2 tầng Dead Letter Queue.
 
 #### S3 Bucket và vòng đời lưu trữ
@@ -59,8 +60,6 @@ resource "aws_s3_bucket_lifecycle_configuration" "raw_documents" {
 }
 ```
 
-
-
 #### SQS buffer + 2 tầng Dead Letter Queue
 
 S3 phát event `s3:ObjectCreated:*` **thẳng vào SQS `ingestion_queue`** — không qua Lambda trung gian nào để nhận event, giảm 1 lớp thành phần không cần thiết.
@@ -100,9 +99,10 @@ resource "aws_sqs_queue" "document_processor_fn_dlq" {
 
 {{% notice tip %}}
 **Có 2 tầng DLQ khác nhau, khác mục đích:**
+
 - **`ingestion_dlq`** — SQS tự động đẩy vào sau 3 lần retry, không cần code app can thiệp. Nghĩa là "file này bị thử lại 3 lần đều fail" (thường do file hỏng/sai định dạng).
 - **`document_processor_fn_dlq`** — do chính code Lambda **chủ động ghi** (hàm `_report_to_function_dlq` ở `handler.py:339`) kèm traceback đầy đủ, khi gặp lỗi runtime bất ngờ (không phải lỗi "file hỏng" mà là "code bị bug"). Chi tiết cách dùng ở trang [5.3.5 - Cơ chế Resume OCR và xử lý lỗi](../5.3.5-Resume-OCR-Error-Handling/).
-{{% /notice %}}
+  {{% /notice %}}
 
 `visibility_timeout_seconds` được tính bằng `document_processor_timeout + 30` — đủ để Lambda xử lý xong 1 message trước khi SQS phát lại nó cho consumer khác. `redrive_policy` với `maxReceiveCount = 3` nghĩa là quá 3 lần fail thì message rơi sang `ingestion_dlq`.
 
