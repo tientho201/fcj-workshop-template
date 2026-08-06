@@ -26,7 +26,6 @@ python3 --version
 
 ![](/images/5-Workshop/5.2-Prerequisite/image5.2.3a.png)
 
-
 ### Configure AWS credentials environment variables for the CLI
 
 In the terminal window, configure AWS credentials so that the AWS CLI can authenticate and run commands throughout the deployment and testing process:
@@ -110,6 +109,7 @@ In the terminal, navigate to the folder containing the Terraform files, then run
 ```
 terraform login
 ```
+
 ![Connect and initialize resources](/images/5-Workshop/5.2-Prerequisite/image5.2.3b.png)
 
 - Open the URL shown in the terminal window:
@@ -139,7 +139,6 @@ After completing the steps above, the working environment is fully configured an
 ### Repo directory structure
 
 Tổ chức repo theo từng luồng để dễ phân công và review:
-
 
 ```
 Project/
@@ -243,4 +242,6 @@ docker/**/__pycache__/
 
 - The `*.tfvars` files: These hold real variable values such as the alert notification email, so they aren't committed to the repository to avoid leaking information. We only keep the sample file `*.tfvars.example`.
 
-Next content
+#### Next content
+
+- [Data Ingestion](../../5.3-Data-Ingestion/)
