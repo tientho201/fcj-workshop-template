@@ -75,6 +75,7 @@ answer = _invoke_claude(
         {
             "answer": answer,
             "session_id": session_id,
+            "message_id": message_id,
             "cached": False,
             "rewritten_query": search_query if search_query != question else None,
             "sources": sorted({p.get("document_id", "") for p in parents}),
@@ -90,7 +91,7 @@ Persisting Conversation History (`_persist_turn`): Writes the chat turn data to 
 - `retrieved_context`: Array containing text content (`parent_text`) of parent chunks used as context.
 - `source`: Array of source document IDs (`document_id`).
 - `expires_at`: Automatic row deletion expiration (TTL) in days configured by `CHAT_HISTORY_TTL_DAYS`.
-  Client Response (`_response`): Returns HTTP Status 200 containing the answer, `session_id`, sorted `sources` list, `rewritten_query` (if applicable), and a `trace` array detailing timing/status per step.
+Client Response (`_response`): Returns HTTP Status 200 containing the answer, `session_id`, `message_id`, sorted `sources` list, `rewritten_query` (if applicable), and a `trace` array detailing timing/status per step.
 
 {{% notice note %}}
 The `retrieved_context` and `source` fields stored alongside in `chat_history` are not just for displaying chat history — this is the exact data that Stream 4 (RAGAS Evaluation) reads to calculate `context_precision` and `context_recall` metrics during daily automated RAG quality evaluations. Pre-storing these two fields eliminates the need for Stream 4 to rerun costly retrieval steps during evaluation.
@@ -100,4 +101,4 @@ The `retrieved_context` and `source` fields stored alongside in `chat_history` a
 
 #### Next Content
 
-- [5.4.6 - Error Handling and OCR Decision](../5.4.6-Error-Handling-OCR-Decision/)
+- [5.4.6 - Error Handling and OCR Decision Integration](../5.4.6-Error-Handling-OCR-Decision/)

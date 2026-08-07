@@ -75,6 +75,7 @@ answer = _invoke_claude(
         {
             "answer": answer,
             "session_id": session_id,
+            "message_id": message_id,
             "cached": False,
             "rewritten_query": search_query if search_query != question else None,
             "sources": sorted({p.get("document_id", "") for p in parents}),

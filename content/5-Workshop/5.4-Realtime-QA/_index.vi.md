@@ -30,4 +30,5 @@ Luồng vận hành với **1 Lambda `chat_engine` duy nhất phục vụ 4 rout
 4. [Hybrid Search và Retrieval](5.4.4-Hybrid-Search-Retrieval/)
 5. [Sinh câu trả lời và lưu lịch sử](5.4.5-Answer-Generation-History-Storage/)
 6. [Xử lý lỗi và kết nối OCR Decision](5.4.6-Error-Handling-OCR-Decision/)
-7. [Kiểm thử end-to-end](5.4.7-End-To-End-Testing/)
+7. [Route phụ](5.4.7-Alternative-Route/-Error-Handling-OCR-Decision/)
+8. [Kiểm thử end-to-end](5.4.8-End-To-End-Testing/)

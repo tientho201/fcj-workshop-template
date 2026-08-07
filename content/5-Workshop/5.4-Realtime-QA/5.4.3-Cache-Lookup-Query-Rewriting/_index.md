@@ -10,27 +10,39 @@ A single `chat_engine` Lambda serves all 4 routes declared on page [5.4.1](../5.
 
 ```python
 def lambda_handler(event, context):
+    # One Lambda serves the whole small API surface (chat, upload, status,
+    # OCR decision, feedback) rather than one function per route. They
+    # share the same config, IAM shape and deployment unit, so splitting
+    # them would mean more log groups/roles/packages to keep in step for no
+    # isolation benefit.
     resource_path = event.get("resource") or event.get("path") or ""
     http_method = event.get("httpMethod", "POST")
 
     if resource_path.endswith("/documents") and http_method == "POST":
         try:
             return _handle_upload(event)
-        except Exception:
+        except Exception:  # noqa: BLE001
             logger.exception("Upload failed")
             return _response(500, {"error": "Không tải được tài liệu lên."})
 
     if resource_path.endswith("/documents-decision") and http_method == "POST":
         try:
             return _handle_ocr_decision(event)
-        except Exception:
+        except Exception:  # noqa: BLE001
             logger.exception("OCR decision failed")
             return _response(500, {"error": "Không xử lý được quyết định OCR."})
+
+    if resource_path.endswith("/feedback") and http_method == "POST":
+        try:
+            return _handle_feedback(event)
+        except Exception:  # noqa: BLE001
+            logger.exception("Feedback submission failed")
+            return _response(500, {"error": "Không ghi được phản hồi."})
 
     if resource_path.endswith("/status"):
         try:
             return _handle_status(event)
-        except Exception:
+        except Exception:  # noqa: BLE001
             logger.exception("Status lookup failed")
             return _response(500, {"error": "Không đọc được trạng thái ingestion."})
 
@@ -50,6 +62,7 @@ def _handle_chat(event):
         body = json.loads(event.get("body") or "{}")
         question = (body.get("question") or "").strip()
         session_id = body.get("session_id") or str(uuid.uuid4())
+        message_id = str(uuid.uuid4())
 
         if not question:
             return _response(400, {"error": "Field 'question' is required."})
@@ -73,6 +86,7 @@ def _handle_chat(event):
                     {
                         "answer": cached_answer,
                         "session_id": session_id,
+                        "message_id": message_id,
                         "cached": True,
                         "sources": [],
                         "trace": tracer.to_dict(),
