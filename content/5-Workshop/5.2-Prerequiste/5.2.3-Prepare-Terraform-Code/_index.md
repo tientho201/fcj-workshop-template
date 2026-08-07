@@ -241,7 +241,3 @@ docker/**/__pycache__/
 - The `*.tfstate`, `*.tfstate.*` files: These are infrastructure state files, which may contain sensitive information. Since the project uses HCP Terraform to manage remote state, the state is already stored centrally on HCP, so there's no need to keep it locally in the repository.
 
 - The `*.tfvars` files: These hold real variable values such as the alert notification email, so they aren't committed to the repository to avoid leaking information. We only keep the sample file `*.tfvars.example`.
-
-#### Next content
-
-- [Data Ingestion](../../5.3-Data-Ingestion/)

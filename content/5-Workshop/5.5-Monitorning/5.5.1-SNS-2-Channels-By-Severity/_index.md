@@ -10,12 +10,12 @@ Monitoring infrastructure is declared in `modules/monitoring/main.tf`. This page
 
 #### Alarm → SNS channel mapping
 
-| Alarm | Severity | Destination |
-|---|---|---|
-| `lambda-errors` | Warning | `alerts-info` → email |
-| `apigw-5xx` | Warning | `alerts-info` → email |
-| `bedrock-throttle` | Critical | `alerts-critical` → Slack |
-| `dlq-depth` | Critical | `alerts-critical` → Slack |
+| Alarm                    | Severity | Destination               |
+| ------------------------ | -------- | ------------------------- |
+| `lambda-errors`          | Warning  | `alerts-info` → email     |
+| `apigw-5xx`              | Warning  | `alerts-info` → email     |
+| `bedrock-throttle`       | Critical | `alerts-critical` → Slack |
+| `dlq-depth`              | Critical | `alerts-critical` → Slack |
 | `ragas-faithfulness-low` | Critical | `alerts-critical` → Slack |
 
 The first four alarms live in the monitoring module. `ragas-faithfulness-low` is declared in `modules/evaluation` but publishes to the same Critical topic. Thresholds and metrics are in [5.5.2](../5.5.2-CloudWatch-Alarms/).
@@ -42,9 +42,6 @@ resource "aws_sns_topic_subscription" "alerts_info_email" {
 {{% notice warning %}}
 **Easy to miss:** after `terraform apply`, AWS emails a confirmation link to `var.alert_email`. The subscription stays **Pending** and **delivers no alerts** until that link is clicked. A successful apply does not mean the channel is live — after the first deploy, verify Confirmed status in the SNS Console.
 {{% /notice %}}
-
-![SNS subscription Pending confirmation](../images/01-sns-subscription-pending.png)
-*SNS Console: Pending confirmation before the email link is clicked, Confirmed after.*
 
 #### alerts-critical (Critical) — Slack via AWS Chatbot
 
@@ -107,9 +104,6 @@ In tfvars, set the **Slack channel ID** (`C0...`), not the channel name (e.g. `#
 **Manual prerequisite:** the Slack workspace must be OAuth-authorized with AWS Chatbot **in the Console first** (Chatbot → Configure new client → Slack). Terraform has no API for this OAuth step — skipping it and applying will fail looking for a valid `slack_team_id`. One of the few steps in the stack that cannot be fully automated with IaC.
 {{% /notice %}}
 
-![Authorize Slack on AWS Chatbot Console](../images/02-chatbot-slack-oauth.png)
-*Configure new client → Slack on the AWS Chatbot Console — do this before apply.*
-
 #### PagerDuty (optional, off by default)
 
 ```hcl
@@ -125,4 +119,6 @@ Left commented in code. To enable: uncomment, set `enable_pagerduty = true` and 
 
 ---
 
-Next: [5.5.2 - CloudWatch Alarms](../5.5.2-CloudWatch-Alarms/)
+#### Next topic
+
+- [5.5.2 - CloudWatch Alarms](../5.5.2-CloudWatch-Alarms/)

@@ -8,12 +8,12 @@ pre: " <b> 5.5.2. </b> "
 
 Trang này trình bày 4 CloudWatch Alarm trong `modules/monitoring/main.tf` — mỗi alarm nối đúng 1 SNS topic đã tạo ở [5.5.1](../5.5.1-SNS-2-Channels-By-Severity/). Alarm thứ 5 (`ragas-faithfulness-low`) nằm ở `modules/evaluation` và được mô tả ở Luồng 4.
 
-| Alarm | Cách đo | Ngưỡng mặc định | SNS |
-|---|---|---|---|
-| `lambda-errors` | Cộng `Errors` của document-processor + chat-engine (+ evaluation-runner nếu đã deploy) | > 5 / 5 phút | `alerts-info` |
-| `apigw-5xx` | `(5XXError / Count) * 100`, bọc `IF(requests > 0, …)` | > 5% / 5 phút | `alerts-info` |
-| `bedrock-throttle` | Log metric filter quét `"ThrottlingException"` từ 2 Lambda | > 3 / 5 phút | `alerts-critical` |
-| `dlq-depth` | Cộng `ApproximateNumberOfMessagesVisible` của 2 DLQ | > 0 | `alerts-critical` |
+| Alarm              | Cách đo                                                                                | Ngưỡng mặc định | SNS               |
+| ------------------ | -------------------------------------------------------------------------------------- | --------------- | ----------------- |
+| `lambda-errors`    | Cộng `Errors` của document-processor + chat-engine (+ evaluation-runner nếu đã deploy) | > 5 / 5 phút    | `alerts-info`     |
+| `apigw-5xx`        | `(5XXError / Count) * 100`, bọc `IF(requests > 0, …)`                                  | > 5% / 5 phút   | `alerts-info`     |
+| `bedrock-throttle` | Log metric filter quét `"ThrottlingException"` từ 2 Lambda                             | > 3 / 5 phút    | `alerts-critical` |
+| `dlq-depth`        | Cộng `ApproximateNumberOfMessagesVisible` của 2 DLQ                                    | > 0             | `alerts-critical` |
 
 Tất cả đặt `treat_missing_data = "notBreaching"` — không có traffic thì không báo động giả. Ngưỡng lấy từ biến (`lambda_error_alarm_threshold`, `apigw_5xx_threshold_percent`, `bedrock_throttle_alarm_threshold`).
 
@@ -124,9 +124,6 @@ resource "aws_cloudwatch_metric_alarm" "apigw_5xx" {
 Alarm dùng **tỷ lệ %** thay vì số tuyệt đối 5xx: với traffic demo thấp, vài lỗi dễ làm nhiễu; traffic cao hơn thì ngưỡng tuyệt đối lại quá lỏng. Rate ổn định hơn giữa các môi trường.
 {{% /notice %}}
 
-![2 alarm Warning trên CloudWatch Console](../images/03-cw-alarm-warning-tier.png)
-*Hai alarm Warning trạng thái OK, action trỏ `alerts-info`.*
-
 #### bedrock-throttle (Critical) — quét log thay vì metric Bedrock gốc
 
 Bedrock có metric native `AWS/Bedrock` / `InvocationThrottles`. Stack này chọn cách khác: 2 log metric filter quét chuỗi `"ThrottlingException"` trên log group của document-processor và chat-engine. Chat-engine gọi `logger.exception(...)` khi bắt throttle (trả HTTP 429) — traceback vẫn giữ tên exception để filter khớp được. Comment trong Terraform ghi sẵn hướng đổi sang metric native nếu muốn bỏ phụ thuộc log text.
@@ -178,9 +175,6 @@ Hai filter ghi **cùng một** custom metric (`BedrockThrottlingExceptions` tron
 
 Logic bắt throttle phía chat: [5.4.6 Error Handling](../../5.4-Realtime-QA/5.4.6-Error-Handling-OCR-Decision/).
 
-![Log metric filter ThrottlingException](../images/04-log-metric-filter-throttle.png)
-*Hai metric filter trên Console, cùng trỏ một custom metric.*
-
 #### dlq-depth (Critical) — cộng cả 2 tầng DLQ
 
 ```hcl
@@ -229,13 +223,12 @@ resource "aws_cloudwatch_metric_alarm" "dlq_depth" {
 
 Hai tầng DLQ đã mô tả ở [5.3.1 Infrastructure S3/SQS](../../5.3-Data-Ingestion/5.3.1-Infrastructure-S3-SQS/). Ngưỡng `> 0`: vận hành bình thường DLQ phải trống — chỉ cần 1 message cũng đủ Critical. Dùng `Maximum` trên từng queue rồi cộng, tránh bỏ sót spike nếu chỉ nhìn Average.
 
-![Alarm dlq-depth](../images/05-cw-alarm-dlq-depth.png)
-*Alarm `dlq-depth` với expression `main_dlq + fn_dlq`, action `alerts-critical`.*
-
 #### Alarm thứ 5 (Luồng 4)
 
 `ragas-faithfulness-low` — Faithfulness trung bình ngày `< 0.7`, period 86400s — cũng publish `alerts-critical`, nhưng resource nằm ở evaluation module và chỉ tạo khi `evaluation_image_pushed = true`. Không gộp vào trang này để tách rõ 4 alarm luôn có sau khi apply monitoring.
 
 ---
 
-Tiếp theo: [5.5.3 - CloudWatch Dashboard và Custom Metrics](../5.5.3-Dashboard-Custom-Metrics/)
+#### Nội dung tiếp theo
+
+- [5.5.3 - CloudWatch Dashboard và Custom Metrics](../5.5.3-Dashboard-Custom-Metrics/)

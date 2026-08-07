@@ -10,12 +10,12 @@ Hạ tầng giám sát được khai báo tại `modules/monitoring/main.tf`. Tr
 
 #### Mapping alarm → kênh SNS
 
-| Alarm | Severity | Đích |
-|---|---|---|
-| `lambda-errors` | Warning | `alerts-info` → email |
-| `apigw-5xx` | Warning | `alerts-info` → email |
-| `bedrock-throttle` | Critical | `alerts-critical` → Slack |
-| `dlq-depth` | Critical | `alerts-critical` → Slack |
+| Alarm                    | Severity | Đích                      |
+| ------------------------ | -------- | ------------------------- |
+| `lambda-errors`          | Warning  | `alerts-info` → email     |
+| `apigw-5xx`              | Warning  | `alerts-info` → email     |
+| `bedrock-throttle`       | Critical | `alerts-critical` → Slack |
+| `dlq-depth`              | Critical | `alerts-critical` → Slack |
 | `ragas-faithfulness-low` | Critical | `alerts-critical` → Slack |
 
 Bốn alarm đầu nằm trong monitoring module. `ragas-faithfulness-low` khai báo ở `modules/evaluation` nhưng publish vào cùng topic Critical. Chi tiết ngưỡng và metric ở [5.5.2](../5.5.2-CloudWatch-Alarms/).
@@ -42,9 +42,6 @@ resource "aws_sns_topic_subscription" "alerts_info_email" {
 {{% notice warning %}}
 **Điểm dễ vấp:** sau `terraform apply`, AWS gửi email xác nhận tới `var.alert_email`. Subscription ở trạng thái **Pending** và **không gửi cảnh báo nào** cho đến khi bấm link xác nhận. Apply thành công không có nghĩa kênh đã hoạt động — sau lần deploy đầu, kiểm tra trạng thái Confirmed trên SNS Console.
 {{% /notice %}}
-
-![SNS subscription Pending confirmation](../images/01-sns-subscription-pending.png)
-*SNS Console: Pending confirmation trước khi bấm link, Confirmed sau khi xác nhận.*
 
 #### alerts-critical (Critical) — Slack qua AWS Chatbot
 
@@ -107,9 +104,6 @@ Trong tfvars cần điền **Slack channel ID** (`C0...`), không phải tên ch
 **Tiền điều kiện thủ công:** workspace Slack phải authorize OAuth với AWS Chatbot **trên Console trước** (Chatbot → Configure new client → Slack). Terraform không có API cho bước OAuth này — bỏ qua rồi apply sẽ fail vì không tìm thấy `slack_team_id` hợp lệ. Đây là một trong số ít bước không tự động hóa hoàn toàn bằng IaC trong stack.
 {{% /notice %}}
 
-![Authorize Slack trên AWS Chatbot Console](../images/02-chatbot-slack-oauth.png)
-*Configure new client → Slack trên AWS Chatbot Console — thực hiện trước khi apply.*
-
 #### PagerDuty (tùy chọn, chưa bật mặc định)
 
 ```hcl
@@ -125,4 +119,6 @@ Tích hợp để sẵn dạng comment. Bật khi cần: uncomment, set `enable_
 
 ---
 
-Tiếp theo: [5.5.2 - CloudWatch Alarms](../5.5.2-CloudWatch-Alarms/)
+#### Nội dung tiếp theo
+
+- [5.5.2 - CloudWatch Alarms](../5.5.2-CloudWatch-Alarms/)

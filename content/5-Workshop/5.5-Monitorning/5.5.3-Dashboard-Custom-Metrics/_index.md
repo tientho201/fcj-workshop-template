@@ -10,17 +10,17 @@ This page covers the CloudWatch Dashboard in `modules/monitoring/main.tf` and th
 
 #### The 9 dashboard widgets
 
-| # | Widget | Metric source |
-|---|---|---|
-| 1 | Lambda Invocations / Errors | `AWS/Lambda` (document-processor + chat-engine) |
-| 2 | Lambda Duration (p50 / p99) | `AWS/Lambda` Duration |
-| 3 | API Gateway — Requests / 4xx / 5xx | `AWS/ApiGateway` (includes `Stage` dimension) |
-| 4 | API Gateway Latency | Latency + IntegrationLatency |
-| 5 | DynamoDB Capacity (on-demand, consumed) | Read/Write on `chat_history` + `feedback` |
-| 6 | SQS Queue Depth (main + DLQs) | ingestion-queue + both DLQs |
-| 7 | Bedrock Invocation Count | `AWS/Bedrock` Invocations |
-| 8 | Semantic Cache Hit Rate | Custom EMF: `CacheHit` / `CacheMiss` |
-| 9 | RAGAS Evaluation Scores (daily) | `RAGEvaluation` (`put_metric_data`) |
+| #   | Widget                                  | Metric source                                   |
+| --- | --------------------------------------- | ----------------------------------------------- |
+| 1   | Lambda Invocations / Errors             | `AWS/Lambda` (document-processor + chat-engine) |
+| 2   | Lambda Duration (p50 / p99)             | `AWS/Lambda` Duration                           |
+| 3   | API Gateway — Requests / 4xx / 5xx      | `AWS/ApiGateway` (includes `Stage` dimension)   |
+| 4   | API Gateway Latency                     | Latency + IntegrationLatency                    |
+| 5   | DynamoDB Capacity (on-demand, consumed) | Read/Write on `chat_history` + `feedback`       |
+| 6   | SQS Queue Depth (main + DLQs)           | ingestion-queue + both DLQs                     |
+| 7   | Bedrock Invocation Count                | `AWS/Bedrock` Invocations                       |
+| 8   | Semantic Cache Hit Rate                 | Custom EMF: `CacheHit` / `CacheMiss`            |
+| 9   | RAGAS Evaluation Scores (daily)         | `RAGEvaluation` (`put_metric_data`)             |
 
 Widgets 1–7 read AWS-built-in metrics. Widgets 8–9 **do not create metrics in Terraform** — Terraform only declares widgets that read them; data appears only after the Lambda/evaluation job emits.
 
@@ -30,9 +30,6 @@ resource "aws_cloudwatch_dashboard" "this" {
 
   dashboard_body = jsonencode({
     widgets = [
-      # 1–7: AWS/Lambda, AWS/ApiGateway, AWS/DynamoDB, AWS/SQS, AWS/Bedrock
-      #      (layout x/y/width/height 12×6; RAGAS row uses width 24)
-
       {
         type   = "metric"
         x      = 12
@@ -75,9 +72,6 @@ resource "aws_cloudwatch_dashboard" "this" {
 
 `local.cache_metric_namespace` comes from `modules/query` (`${name_prefix}/SemanticCache`) — producer and dashboard share one value so namespaces cannot drift.
 
-![CloudWatch Dashboard overview](../images/06-cloudwatch-dashboard-full.png)
-*Dashboard `${name_prefix}-overview` on the CloudWatch Console.*
-
 #### Widget 8 — Cache Hit Rate (EMF from chat-engine)
 
 On every request, chat-engine emits `CacheHit` or `CacheMiss` (count = 1). The widget computes:
@@ -85,7 +79,7 @@ On every request, chat-engine emits `CacheHit` or `CacheMiss` (count = 1). The w
 `IF((hit + miss) > 0, hit / (hit + miss) * 100, 0)`
 
 ```python
-# modules/query/.../chat_engine/handler.py
+# modules/query/lambda_src/chat_engine/handler.py
 def _emit_metric(name, value=1):
     """EMF: structured log line — CloudWatch Logs parses it into a metric."""
     print(
@@ -132,9 +126,8 @@ cloudwatch.put_metric_data(
 
 The RAGAS widget uses `period = 86400` (one day). It stays **empty until evaluation has run at least once** (`evaluation_image_pushed = true` and scheduler/manual invoke) — that is expected, not a dashboard misconfiguration.
 
-![Cache Hit Rate and RAGAS widgets](../images/07-dashboard-custom-metrics-widgets.png)
-*The two custom widgets; RAGAS may be empty if Stream 4 has not run yet.*
-
 ---
 
-Next: [5.5.4 - End-to-End Testing](../5.5.4-End-to-End-Testing/)
+#### Next content
+
+- [5.5.4 - End-to-End Testing](../5.5.4-End-to-End-Testing/)

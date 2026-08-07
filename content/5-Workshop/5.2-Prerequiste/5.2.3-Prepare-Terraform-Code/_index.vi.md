@@ -241,7 +241,3 @@ docker/**/__pycache__/
 - Các file `*.tfstate`, `*.tfstate.*`: Đây là file trạng thái hạ tầng, có thể chứa thông tin nhạy cảm. Vì dự án sử dụng HCP Terraform để quản lý remote state, trạng thái đã được lưu tập trung trên HCP nên không cần lưu cục bộ trong repository.
 
 - Các file `*.tfvars`: Đây là nơi chứa giá trị biến thật như email nhận cảnh báo, nên không đưa lên repository để tránh lộ thông tin. Chúng ta chỉ giữ lại file mẫu `*.tfvars.example`.
-
-#### Nội dung tiếp theo
-
-- [Xử lý và lưu trữ tài liệu](../../5.3-Data-Ingestion/)

@@ -8,12 +8,12 @@ pre: " <b> 5.5.2. </b> "
 
 This page covers the 4 CloudWatch Alarms in `modules/monitoring/main.tf` — each wired to one SNS topic from [5.5.1](../5.5.1-SNS-2-Channels-By-Severity/). A fifth alarm (`ragas-faithfulness-low`) lives in `modules/evaluation` and is documented under Stream 4.
 
-| Alarm | How it is measured | Default threshold | SNS |
-|---|---|---|---|
-| `lambda-errors` | Sum of `Errors` across document-processor + chat-engine (+ evaluation-runner once deployed) | > 5 / 5 min | `alerts-info` |
-| `apigw-5xx` | `(5XXError / Count) * 100`, wrapped in `IF(requests > 0, …)` | > 5% / 5 min | `alerts-info` |
-| `bedrock-throttle` | Log metric filters scanning `"ThrottlingException"` on both Lambdas | > 3 / 5 min | `alerts-critical` |
-| `dlq-depth` | Sum of `ApproximateNumberOfMessagesVisible` on both DLQs | > 0 | `alerts-critical` |
+| Alarm              | How it is measured                                                                          | Default threshold | SNS               |
+| ------------------ | ------------------------------------------------------------------------------------------- | ----------------- | ----------------- |
+| `lambda-errors`    | Sum of `Errors` across document-processor + chat-engine (+ evaluation-runner once deployed) | > 5 / 5 min       | `alerts-info`     |
+| `apigw-5xx`        | `(5XXError / Count) * 100`, wrapped in `IF(requests > 0, …)`                                | > 5% / 5 min      | `alerts-info`     |
+| `bedrock-throttle` | Log metric filters scanning `"ThrottlingException"` on both Lambdas                         | > 3 / 5 min       | `alerts-critical` |
+| `dlq-depth`        | Sum of `ApproximateNumberOfMessagesVisible` on both DLQs                                    | > 0               | `alerts-critical` |
 
 Every alarm sets `treat_missing_data = "notBreaching"` — no traffic means no false alarm. Thresholds come from variables (`lambda_error_alarm_threshold`, `apigw_5xx_threshold_percent`, `bedrock_throttle_alarm_threshold`).
 
@@ -124,9 +124,6 @@ resource "aws_cloudwatch_metric_alarm" "apigw_5xx" {
 The alarm uses an **error rate %** instead of an absolute 5xx count: low demo traffic makes a few errors too noisy as a fixed count; higher traffic later makes a fixed count too loose. A rate is more stable across environments.
 {{% /notice %}}
 
-![Two Warning alarms on CloudWatch Console](../images/03-cw-alarm-warning-tier.png)
-*Both Warning alarms in OK state, actions pointing at `alerts-info`.*
-
 #### bedrock-throttle (Critical) — log scan instead of native Bedrock metrics
 
 Bedrock exposes a native `AWS/Bedrock` / `InvocationThrottles` metric. This stack takes another path: two log metric filters scan for `"ThrottlingException"` on the document-processor and chat-engine log groups. Chat-engine calls `logger.exception(...)` on throttle (returns HTTP 429) — the traceback still carries the exception name for the filter to match. The Terraform comment notes you can swap to the native metric later if you want to stop depending on log text.
@@ -178,9 +175,6 @@ Both filters write to **one** custom metric (`BedrockThrottlingExceptions` in a 
 
 Chat-side throttle handling: [5.4.6 Error Handling](../../5.4-Realtime-QA/5.4.6-Error-Handling-OCR-Decision/).
 
-![Log metric filter for ThrottlingException](../images/04-log-metric-filter-throttle.png)
-*Two metric filters on the Console, both targeting the same custom metric.*
-
 #### dlq-depth (Critical) — both DLQ layers summed
 
 ```hcl
@@ -229,13 +223,12 @@ resource "aws_cloudwatch_metric_alarm" "dlq_depth" {
 
 The two DLQ layers are described in [5.3.1 Infrastructure S3/SQS](../../5.3-Data-Ingestion/5.3.1-Infrastructure-S3-SQS/). Threshold `> 0`: a healthy run leaves DLQs empty — a single message is enough for Critical. Each queue uses `Maximum`, then they are summed, so a short spike is not washed out by an Average.
 
-![dlq-depth alarm](../images/05-cw-alarm-dlq-depth.png)
-*`dlq-depth` with expression `main_dlq + fn_dlq`, action on `alerts-critical`.*
-
 #### Fifth alarm (Stream 4)
 
 `ragas-faithfulness-low` — daily Faithfulness average `< 0.7`, period 86400s — also publishes to `alerts-critical`, but the resource lives in the evaluation module and is only created when `evaluation_image_pushed = true`. Kept out of this page so the four alarms that exist as soon as monitoring is applied stay clear.
 
 ---
 
-Next: [5.5.3 - CloudWatch Dashboard and Custom Metrics](../5.5.3-Dashboard-Custom-Metrics/)
+#### Next topic
+
+- [5.5.3 - CloudWatch Dashboard và Custom Metrics](../5.5.3-Dashboard-Custom-Metrics/)
