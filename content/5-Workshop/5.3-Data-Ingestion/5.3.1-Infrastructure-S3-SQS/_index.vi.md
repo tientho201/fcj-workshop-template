@@ -138,5 +138,5 @@ resource "aws_lambda_event_source_mapping" "document_processor" {
 Test thử bằng cách upload 1 file bất kỳ lên bucket, kiểm tra message đã xuất hiện trong SQS (mục **Send and receive messages → Poll for messages**).
 
 ---
-
-Tiếp theo: [5.3.2 - Hạ tầng: DynamoDB và IAM Permissions](../5.3.2-Infrastructure-DynamoDB-IAM/)
+#### Nội dung tiếp theo
+ [5-.3.2 - Hạ tầng: DynamoDB và IAM Permissions](../5.3.2-Infrastructure-DynamoDB-IAM/)

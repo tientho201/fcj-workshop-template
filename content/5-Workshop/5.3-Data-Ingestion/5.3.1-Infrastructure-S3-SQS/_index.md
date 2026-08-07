@@ -137,5 +137,5 @@ resource "aws_lambda_event_source_mapping" "document_processor" {
 Test by uploading any file to the bucket and verifying that the message appears in SQS (under **Send and receive messages → Poll for messages**).
 
 ---
-
-Next: [5.3.2 - Infrastructure: DynamoDB and IAM Permissions](../5.3.2-Infrastructure-DynamoDB-IAM/)
+#### Next content
+- [5.3.2 - Infrastructure: DynamoDB and IAM Permissions](../5.3.2-Infrastructure-DynamoDB-IAM/)
