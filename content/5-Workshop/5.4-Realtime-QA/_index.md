@@ -30,4 +30,5 @@ The stream operates with **a single `chat_engine` Lambda serving 4 API routes**,
 4. [Hybrid Search and Retrieval](5.4.4-Hybrid-Search-Retrieval/)
 5. [Answer Generation and History Storage](5.4.5-Answer-Generation-History-Storage/)
 6. [Error Handling and OCR Decision Integration](5.4.6-Error-Handling-OCR-Decision/)
-7. [End-to-End Testing](5.4.7-End-To-End-Testing/)
+7. [Alternative Route](5.4.7-Alternative-Route/)
+8. [End-to-End Testing](5.4.8-End-To-End-Testing/)
