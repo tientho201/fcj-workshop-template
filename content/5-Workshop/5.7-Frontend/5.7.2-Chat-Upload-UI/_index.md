@@ -8,77 +8,113 @@ pre: " <b> 5.7.2. </b> "
 
 This page covers the left-pane upload and chat flows in `ui/index.html`, plus the right-pane pipeline animation that replays real backend timings.
 
-#### Document upload — text vs binary
+#### Conversation session
 
-| Kind | Extensions | How the browser reads | Body sent to `POST /documents` |
-|---|---|---|---|
-| Text | `.txt`, `.md`, `.csv`, `.json`, `.log`, `.htm`, `.html` | `file.text()` | `{ filename, content }` |
-| Binary (OCR) | `.pdf`, `.png`, `.jpg`, `.jpeg`, `.tiff`, `.tif` | `arrayBuffer()` → base64 | `{ filename, content_base64, content_type }` |
+`session_id` is created on the client (`"ui-"` + random string / UUID) and kept in **memory** only (not cookie / `localStorage`). **Phiên mới** rotates the ID and clears the chat pane.
 
-Binary files must not use `file.text()` — that would corrupt bytes before Textract. The editor becomes read-only and shows a placeholder; pick another file to change content.
+{{% notice note %}}
+📌 `session_id` is the key `chat_engine` uses to load history (`chat_history`), decide **whether semantic/exact cache is eligible**, and **whether to run query rewriting** (see `cacheable = not history` in [5.4.3](../../5.4-Realtime-QA/5.4.3-Cache-Lookup-Query-Rewriting/)). Clicking **Phiên mới** is the manual way to force a “no history yet” state on the backend.
+{{% /notice %}}
 
-```javascript
-const BINARY_EXTENSIONS = new Set([".pdf", ".png", ".jpg", ".jpeg", ".tiff", ".tif"]);
+#### Context tags on each answer
 
-if (state.binaryUpload) {
-  uploadBody = {
-    filename,
-    content_base64: state.binaryUpload.base64,
-    content_type: state.binaryUpload.contentType,
-  };
-} else {
-  uploadBody = { filename, content: $("fileContent").value };
-}
+Each bot answer shows **context tags** taken straight from the backend response — no client-side guessing:
 
-const up = await api("/documents", { body: uploadBody });
-// up.document_id, up.bytes → then poll GET /status
-```
-
-#### Polling ingestion and OCR confirmation
-
-Upload only writes to S3. Processing is async (S3 → SQS → document-processor). The UI polls `GET /status?document_id=…` every 1s (90s timeout) until status leaves `pending` / `processing`.
-
-If status is `awaiting_ocr_confirmation` (PDF with no embedded text layer), the UI shows a Yes/No box and calls:
-
-```javascript
-await api("/documents-decision", {
-  body: { document_id: documentId, decision }, // "ocr" | "cancel"
-});
-```
-
-Choosing OCR starts a second poll round (also excluding the stale `awaiting_ocr_confirmation` row until the resumed run overwrites it). Cancel stops without Textract.
-
-On success, the right pane replays the ingestion `trace` and shows parent/child chunk counts.
-
-#### Chat — session, answer, tags
-
-Each browser session gets a `session_id` (UUID). **Phiên mới** rotates it so multi-turn rewrite / history starts clean.
+| Tag | Shown when |
+|---|---|
+| `cache hit` | Response has `cached: true` |
+| rewritten query | Response includes `rewritten_query` |
+| guardrail blocked | Response has `blocked: true` |
+| one tag per source file | Each entry in `sources[]` |
 
 ```javascript
 const res = await api("/chat", {
   body: { question, session_id: state.sessionId },
 });
 await replayTrace(res.trace);
-addMessage("bot", res.answer, res); // tags: cache hit, sources, …
+addMessage("bot", res.answer, res); // tags from cached / rewritten_query / sources / …
 ```
 
-Bot bubbles show metadata tags when present (`cached`, source document ids). HTTP errors with `retryable: true` (e.g. Bedrock throttle → 429) are labeled so the user knows to wait and retry.
+![Answer with context tags: cache hit, rewritten, sources](../images/03-answer-context-tags.png)
+*Bot bubble with a `cache hit` tag and source file tags.*
+
+#### Throttle handling (429)
+
+When Bedrock is overloaded, the backend returns `429` with `{ retryable: true }` (see [5.4.6](../../5.4-Realtime-QA/5.4.6-Error-Handling-OCR-Decision/)). The UI distinguishes retryable failures from hard errors (`⏳` vs `⚠️`):
+
+```javascript
+const retryable = err.data?.retryable;
+addMessage("bot", (retryable ? "⏳ " : "⚠️ ") + err.message);
+```
+
+#### Document upload — branch by file extension
+
+Branching matches the backend `OCR_EXTENSIONS` / PDF set (see [5.3.3](../../5.3-Data-Ingestion/5.3.3-Text-Extraction/)):
+
+| Kind | Extensions | How the browser reads | Body sent to `POST /documents` |
+|---|---|---|---|
+| Text | `.txt`, `.md`, `.csv`, `.json`, `.log`, `.htm`, `.html` | `file.text()` | `{ filename, content }` |
+| Binary (OCR) | `.pdf`, `.png`, `.jpg`, `.jpeg`, `.tiff`, `.tif` | `arrayBuffer()` → base64 | `{ filename, content_base64, content_type }` |
+
+{{% notice warning %}}
+For binary files, base64 encoding is **required**. Reading with `file.text()` **corrupts binary bytes** before they reach Textract (UTF-8 decode of an image/PDF destroys the original data). For those files the editor becomes `readOnly` and shows a placeholder instead of content.
+{{% /notice %}}
+
+```javascript
+async function readFileForUpload(file) {
+  const ext = file.name.split(".").pop().toLowerCase();
+  if (TEXT_EXTENSIONS.includes(ext)) {
+    return { content: await file.text(), content_base64: null };
+  }
+  const buffer = await file.arrayBuffer();
+  return { content: null, content_base64: arrayBufferToBase64(buffer) };
+}
+```
+
+After a successful `POST /documents`, the UI **polls `GET /status` every second for up to 90 seconds** to follow the async path (S3 → SQS → Lambda) and replay the right-pane animation from the `trace` that `document-processor` writes into `ingestion-status`.
+
+![Pipeline animation driven by real ingestion-status trace](../images/04-pipeline-animation-trace.png)
+*Right pane lights steps in order from real server timings.*
+
+#### OCR confirmation dialog (human-in-the-loop)
+
+When `/status` returns `status: "awaiting_ocr_confirmation"` (PDF with no embedded text layer), the UI:
+
+1. **Stops polling**.
+2. Shows a Yes/No box (built as a `Promise` that waits for the button click).
+3. Sends the decision via `POST /documents-decision`.
+4. **Polls a second time**.
+
+{{% notice warning %}}
+**Race to watch:** on the second poll (after sending the decision), the UI **also excludes `awaiting_ocr_confirmation` from the stop condition** — so it does not re-read a stale row before Lambda overwrites it. Without that exclusion, the first poll right after the decision can still see the old `awaiting_ocr_confirmation` and ask the user again.
+{{% /notice %}}
+
+```javascript
+async function pollStatus(documentId, { excludeAwaitingOcr = false } = {}) {
+  for (let i = 0; i < 90; i++) {
+    const result = await getStatus(documentId);
+    const isTerminal = result.status === "completed" || result.status === "cancelled";
+    const isAwaitingOcr = !excludeAwaitingOcr && result.status === "awaiting_ocr_confirmation";
+    if (isTerminal || isAwaitingOcr) return result;
+    await sleep(1000);
+  }
+}
+```
+
+![OCR confirmation dialog with Yes/No](../images/05-ocr-confirm-dialog.png)
+*OCR confirm box built as a Promise waiting for the user click.*
 
 #### Right pane — real timings, compressed animation
-
-Animation is not fake:
 
 | Flow | Timing source |
 |---|---|
 | Query | `POST /chat` response field `trace` (per-step ms) |
 | Ingest | document-processor writes progress to DynamoDB; UI reads it via `GET /status` |
 
-`replayTrace` plays steps in order with compression (`compress ≈ 0.35`, cap 1.2s per step) so a 7s generation step does not freeze the UI for 7s — the **displayed ms label stays the real server value**.
-
-Steps the backend never ran (cache hit skips retrieval/generation, first-turn skip of query rewrite, etc.) are marked **skipped** (dashed/grey) with a reason, not highlighted falsely.
+`replayTrace` plays steps in order with compression (`compress ≈ 0.35`, cap ~1.2s per step) so a 7s generation step does not freeze the UI for 7s — the **displayed ms label stays the real server value**. Steps the backend never ran (cache hit skips retrieval/generation, first-turn skip of query rewrite, etc.) are marked **skipped** (dashed/grey) with a reason.
 
 {{% notice tip %}}
-Ask the **same** question again after **Phiên mới** to see a cache hit: usually one lit step, sub-second response, and a `cache hit` tag on the bot message.
+Ask the **same** question again in the **same** session to see a cache hit: usually one lit step, sub-second response, and a `cache hit` tag on the bot message. Use **Phiên mới** when you want a clean multi-turn / rewrite demo instead.
 {{% /notice %}}
 
 ---
