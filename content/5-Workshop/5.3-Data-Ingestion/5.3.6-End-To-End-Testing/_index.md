@@ -20,8 +20,27 @@ After each upload, verify in the following order:
 
 **SQS** (message consumed) → **CloudWatch Logs** (no errors, or `_report_to_function_dlq` logs if bugs exist) → **`ingestion_status` table** (final status = `completed`) → **`parent_chunks`/`child_chunks` tables** (new items created).
 
-![End-to-end test results across all 4 file types](../images/11-end-to-end-test-result.png)
-*Illustration: `ingestion_status` table showing 4 documents in `completed` status, with corresponding item count increases in `child_chunks`.*
+##### Figure 1: End-to-end test results with PDF file
+
+![End-to-end test results with PDF file](/images/5-Workshop/5.3-Data-Ingestion/image5.3.6-1.png)
+
+##### Figure 2: End-to-end test results with TXT file
+
+- For TXT files, the document text is extracted directly in the dialog box so you can click "Upload & Process".
+
+![End-to-end test results with TXT file](/images/5-Workshop/5.3-Data-Ingestion/image5.3.6-2.png)
+
+##### Figure 3: End-to-end test results with PNG file
+
+- For PNG files, the file is sent in raw format (base64) for `document-processor` to run Textract OCR — text content cannot be displayed directly in the upload dialog box.
+
+![End-to-end test results with PNG file](/images/5-Workshop/5.3-Data-Ingestion/image5.3.6-3.png)
+
+##### Figure 4: End-to-end test results with MD file
+
+- For MD files, the document text is extracted directly in the dialog box so you can click "Upload & Process".
+
+![End-to-end test results with MD file](/images/5-Workshop/5.3-Data-Ingestion/image5.3.6-4.png)
 
 #### Key Outcomes Achieved
 
@@ -30,17 +49,3 @@ After each upload, verify in the following order:
 - Supports all 3 document types (plain text, PDFs with/without embedded text layers, scanned images) with an active OCR confirmation workflow instead of blindly OCR-ing all PDFs (reducing Textract costs).
 - Vectors and BM25 statistics stored efficiently in DynamoDB (Binary + JSON string), eliminating the operational overhead of a separate OpenSearch Serverless cluster.
 - Least-privilege IAM Role adherence, explicitly documenting exceptions (Textract) to prevent misunderstandings during security reviews.
-
-#### Pipeline 1 Completion Checklist
-
-- [ ] S3 bucket `raw_documents` has versioning enabled, SSE-S3 encryption, and 90-day Glacier lifecycle rule
-- [ ] SQS `ingestion_queue` + 2 DLQs (`ingestion_dlq`, `document_processor_fn_dlq`) working as expected with `batch_size = 1`
-- [ ] 3 DynamoDB tables (`parent_chunks`, `child_chunks`, `ingestion_status`) created
-- [ ] IAM Role `document_processor` scoped strictly to 4 least-privilege permission statements
-- [ ] PDF/image/text processing branches operating properly; `awaiting_ocr_confirmation` workflow testable via `/documents-decision`
-- [ ] Direct invoke entrypoints (`resume_ocr`/`cancel`) called from `chat_engine` functioning correctly
-- [ ] End-to-end testing verified across all 4 file types, with data correctly populated in DynamoDB
-
-{{% notice warning %}}
-Since Pipeline 1 no longer uses OpenSearch, **Pipeline 2 (Realtime Q&A)** must also be updated: instead of querying OpenSearch, it will directly read `child_chunks` from DynamoDB, calculate cosine similarity with the query vector + BM25 score, and combine them using RRF.
-{{% /notice %}}
