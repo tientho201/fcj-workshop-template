@@ -1,6 +1,6 @@
 ---
 title: "Building CI/CD"
-date: 2024-01-01
+date: 2026-08-09
 weight: 9
 chapter: false
 pre: " <b> 5.9. </b> "
@@ -16,7 +16,7 @@ The infrastructure runs on **HCP Terraform** (workspace `RAGonAWS/RAG-app`, exec
 
 2 workflows in `.github/workflows/`, running on GitHub Actions:
 
-- **`ci.yml`** — runs on every PR and every push to `main`, consisting of 4 parallel validation jobs, modifying nothing on AWS.
+- **`ci.yml`** — runs on every PR and every push to `main`, consisting of **5 jobs** (4 run in parallel; `terraform-plan` waits on `terraform-checks` and only on PRs). Nothing is changed on AWS.
 - **`deploy.yml`** — triggered **manually** (`workflow_dispatch`), which is where `terraform apply` actually runs.
 
 #### Detailed Contents
