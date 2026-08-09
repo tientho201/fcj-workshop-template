@@ -6,9 +6,13 @@ chapter: false
 pre: " <b> 5.7.3. </b> "
 ---
 
-This stack does **not** deploy the frontend to Amplify, S3 static website hosting, or CloudFront. The UI is a local file under `ui/index.html`, opened in a browser against the API Gateway + Cognito resources created by Terraform.
+#### No hosting infrastructure
 
-#### Open the UI
+{{% notice warning %}}
+📌 Unlike a typical S3 + CloudFront + OAC SPA design, this project **does not provision any hosting for the UI** — nothing in the `.tf` files (no `cloudfront` / OAC resources for the console).
+{{% /notice %}}
+
+Because `ui/index.html` is a self-contained static file with no build step, the simplest — and current — “deploy” path is to open the file in a browser:
 
 ```bash
 # from the RAGonAWS repo root
@@ -16,20 +20,27 @@ open ui/index.html          # macOS
 # or double-click the file / start ui/index.html on Windows
 ```
 
-No build step. No local Node server required for the default flow.
+No local Node server, no domain, no SPA routing (one page, nothing to 404).
 
-#### Wire config after apply
+#### Runtime config
 
-After `terraform apply` (or `scripts/up.sh`), refresh outputs — API Gateway and Cognito App Client IDs change when the stack is recreated:
+With no build step, environment values (API endpoint, Cognito Client ID, region) are **not baked in at build time**. Fill section **1 · Kết nối** whenever those values change (API Gateway and Cognito App Client get new IDs after a full recreate). Values persist in `localStorage` for the next open:
 
 ```bash
 terraform output api_gateway_endpoint_url
 terraform output cognito_app_client_id
-# only if api_require_api_key = true (UI does not send this yet by default):
+# only if api_require_api_key = true (UI does not send this by default):
 # terraform output -raw api_key_value
 ```
 
-Paste into section **1 · Kết nối** together with the region (e.g. `ap-southeast-1`). Non-password fields persist in `localStorage` for the next open. If API key is required, either disable it in `terraform.tfvars` or extend the UI (see [5.7.1](../5.7.1-Frontend-Architecture-Authentication/)).
+![Connection panel for API endpoint and Cognito Client ID](../images/06-connection-panel.png)
+*Panel **1 · Kết nối**: API URL, Client ID, Region, email/password.*
+
+{{% notice tip %}}
+API Gateway / Cognito Client IDs change whenever you `terraform apply` from a full recreate (destroy + create, not an in-place update). **Always re-run the two `terraform output` commands above after a full stack rebuild**, then update the Connection panel — otherwise the UI calls a dead endpoint.
+{{% /notice %}}
+
+If API key is required, either set `api_require_api_key = false` in `terraform.tfvars` or extend the UI (see [5.7.1](../5.7.1-Frontend-Architecture-Authentication/)).
 
 #### Create a Cognito test user
 
@@ -57,9 +68,14 @@ aws cognito-idp admin-set-user-password \
 | Multi-page PDF | Sync Textract (`detect_document_text`) handles **1 page** only — multi-page fails with a clear error |
 | Bedrock quota | Bursting requests can return HTTP 429 (`retryable`) — wait and retry |
 | Hosting | Frontend is not part of the Terraform destroy/apply surface; only open the file locally |
+| Layout | Below ~900px width the grid collapses to one column |
+
+#### Possible follow-up (not built)
+
+If the UI must be shared with people who cannot run `terraform output`, a reasonable path is **one S3 bucket** (static website or CloudFront + OAC origin) hosting this single HTML file — no build pipeline needed.
 
 {{% notice note %}}
-If the team later hosts this file on S3/CloudFront, CORS and Cognito app client callback settings would need an explicit follow-up — that path is **out of scope** for the current internship stack.
+That path is **out of scope** for the current internship stack. In a report, treat it as a possible next step — not as completed work. Hosting later would also need explicit CORS and Cognito app-client settings.
 {{% /notice %}}
 
 ---

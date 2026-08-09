@@ -6,93 +6,73 @@ chapter: false
 pre: " <b> 5.7.1. </b> "
 ---
 
-Frontend nằm trong `ui/index.html` — một file HTML/CSS/JS tự chứa. Không React, không bundler, không `package.json`. Trang này trình bày bố cục và cách trình duyệt đăng nhập Cognito trước khi gọi API Luồng 2.
+Frontend nằm trong `ui/index.html` — một file HTML/CSS/JS tự chứa. Không React, không bundler, không `package.json`. Trang này trình bày cơ chế đăng nhập và cách trình duyệt gắn JWT Cognito trước khi gọi API Luồng 2.
 
-#### Bố cục
+#### Cơ chế đăng nhập
 
-Giao diện chia 2 pane:
+**Không dùng AWS Amplify hay SDK Cognito nào** — giao diện gọi thẳng API `InitiateAuth` của Cognito Identity Provider qua `fetch()` thuần:
 
-| Pane | Vai trò |
-|---|---|
-| Trái | Cấu hình kết nối, upload tài liệu, chat |
-| Phải | Animation từng bước pipeline + nhật ký chi tiết |
+```javascript
+fetch(`https://cognito-idp.${region}.amazonaws.com/`, {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/x-amz-json-1.1",
+    "X-Amz-Target": "AWSCognitoIdentityProviderService.InitiateAuth",
+  },
+  body: JSON.stringify({
+    AuthFlow: "USER_PASSWORD_AUTH",
+    ClientId: clientId,
+    AuthParameters: { USERNAME: username, PASSWORD: password },
+  }),
+});
+```
 
-Màn hẹp (`max-width: 900px`) xếp thành một cột.
+App Client phía Terraform là **public client** (`generate_secret = false`) — phù hợp vì code chạy hoàn toàn ở trình duyệt, không có nơi nào an toàn để giữ client secret.
 
-#### Cấu hình kết nối
+![Gọi trực tiếp InitiateAuth qua fetch, xem trong DevTools Network](../images/01-initiate-auth-network-tab.png)
+*Tab Network: POST tới `cognito-idp.<region>.amazonaws.com` với header `X-Amz-Target`.*
 
-Mục **1 · Kết nối** lấy giá trị từ Terraform output:
+#### Vòng đời token — không có refresh flow
+
+```javascript
+// Thành công → lưu IdToken trong biến JS state, chỉ tồn tại trong bộ nhớ tab hiện tại
+state.token = response.AuthenticationResult.IdToken;
+
+// Gắn vào header Authorization của mọi request tới API Gateway
+fetch(apiUrl, { headers: { Authorization: state.token } });
+```
+
+{{% notice warning %}}
+**Đây là điểm đơn giản hóa có chủ đích, không phải thiếu sót:** giao diện **không triển khai refresh token flow**. `access_token_validity` / `id_token_validity` = 60 phút (cấu hình Terraform ở Luồng 2) — khi hết hạn, **người dùng phải đăng nhập lại thủ công**. Với bảng điều khiển nội bộ dùng để demo/test, đây là đánh đổi hợp lý giữa độ phức tạp code và trải nghiệm.
+{{% /notice %}}
+
+**`state.token` chỉ tồn tại trong bộ nhớ (biến JS), không lưu vào `localStorage`/cookie** — refresh trang là mất token, phải đăng nhập lại. Ngược lại, **cấu hình kết nối** (API URL, Client ID, Region, email) được lưu ở `localStorage` để lần sau khỏi gõ lại; **mật khẩu không bao giờ được lưu**, chỉ tồn tại trong ô input lúc gõ.
+
+| Dữ liệu | Nơi lưu | Tồn tại tới khi nào |
+|---|---|---|
+| `IdToken` | Biến JS (`state.token`) | Đóng tab hoặc reload trang |
+| API URL, Client ID, Region, email | `localStorage` (`rag.*`) | Người dùng tự xóa hoặc đổi giá trị mới |
+| Mật khẩu | Không lưu | Chỉ trong lúc gõ vào ô input |
+
+Mục **1 · Kết nối** điền từ Terraform output sau apply:
 
 ```bash
 terraform output api_gateway_endpoint_url
 terraform output cognito_app_client_id
 ```
 
-| Trường | Nguồn |
-|---|---|
-| API endpoint URL | `api_gateway_endpoint_url` |
-| Cognito App Client ID | `cognito_app_client_id` |
-| Region | ví dụ `ap-southeast-1` |
-| Email / mật khẩu | user Cognito |
-
-`apiUrl`, `clientId`, `region`, `username` được lưu trong `localStorage` (khóa `rag.*`). Mật khẩu **không** lưu — ô password được xóa sau khi đăng nhập thành công.
-
 {{% notice warning %}}
-File example Terraform đặt `api_require_api_key = true`, nghĩa là mọi route cần header `x-api-key`. UI hiện **không có ô API key** và không gửi header đó. Đặt `api_require_api_key = false`, hoặc bổ sung key từ `terraform output -raw api_key_value` vào `api()` trước khi gọi backend.
+File example Terraform đặt `api_require_api_key = true`, nghĩa là mọi route cần header `x-api-key`. UI hiện **không có ô API key** và không gửi header đó. Đặt `api_require_api_key = false`, hoặc bổ sung key từ `terraform output -raw api_key_value` vào helper `api()` trước khi gọi backend.
 {{% /notice %}}
 
-#### Đăng nhập Cognito (browser → Cognito API)
+#### API Gateway phía nhận
 
-Đăng nhập gọi thẳng Cognito Identity Provider từ trình duyệt — không Hosted UI, không Amplify SDK:
+4 route (`/chat`, `/documents`, `/status`, `/documents-decision`) đều gắn `COGNITO_USER_POOLS` authorizer; chỉ preflight `OPTIONS` là `authorization = "NONE"` (bắt buộc — trình duyệt gửi preflight không kèm `Authorization`). `OPTIONS` chỉ trả header CORS qua tích hợp `MOCK`, không chạm Lambda hay dữ liệu thật (chi tiết hạ tầng: [5.4.1](../../5.4-Realtime-QA/5.4.1-API-Gateway-Cognito/)).
 
-```javascript
-async function cognitoLogin(region, clientId, username, password) {
-  const res = await fetch(`https://cognito-idp.${region}.amazonaws.com/`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/x-amz-json-1.1",
-      "X-Amz-Target": "AWSCognitoIdentityProviderService.InitiateAuth",
-    },
-    body: JSON.stringify({
-      AuthFlow: "USER_PASSWORD_AUTH",
-      ClientId: clientId,
-      AuthParameters: { USERNAME: username, PASSWORD: password },
-    }),
-  });
-  const data = await res.json();
-  if (!data.AuthenticationResult?.IdToken) {
-    throw new Error(`Cognito yêu cầu bước bổ sung: ${data.ChallengeName || "không rõ"}`);
-  }
-  return data.AuthenticationResult.IdToken;
-}
-```
+Mọi request backend đi qua helper `api()` — ghép endpoint đã cấu hình và gắn `Authorization: state.token`. Nút Upload / Gửi câu hỏi chỉ mở sau khi login. Challenge phụ (MFA, …) báo lỗi rõ — MFA mặc định tắt trong stack này.
 
-Thành công thì UI giữ **ID token** trong bộ nhớ (`state.token`) và bật đèn auth xanh. Nút Upload / Gửi câu hỏi chỉ mở sau khi login. Challenge phụ (MFA, …) báo lỗi rõ — MFA mặc định tắt trong stack này (xem cấu hình Cognito Luồng 2).
-
-#### Helper gọi API đã xác thực
-
-Mọi request backend đi qua `api()` — ghép endpoint đã cấu hình và gắn JWT Cognito:
-
-```javascript
-async function api(path, { method = "POST", body, query } = {}) {
-  const base = $("apiUrl").value.trim().replace(/\/+$/, "");
-  let url = `${base}${path}`;
-  if (query) url += "?" + new URLSearchParams(query).toString();
-
-  const res = await fetch(url, {
-    method,
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: state.token, // Cognito ID token (API Gateway Cognito authorizer)
-    },
-    body: body ? JSON.stringify(body) : undefined,
-  });
-  // …parse JSON, throw khi !res.ok
-  return data;
-}
-```
-
-Bốn route dùng sau (`/chat`, `/documents`, `/status`, `/documents-decision`) đều dùng helper này. Hạ tầng API Gateway / Cognito: [5.4.1](../../5.4-Realtime-QA/5.4.1-API-Gateway-Cognito/).
+![Token hết hạn, giao diện báo lỗi rõ ràng yêu cầu đăng nhập lại](../images/02-token-expired-message.png)
+*Sau ~60 phút, thao tác tiếp theo trả 401; UI yêu cầu đăng nhập lại thay vì treo im lặng.*
 
 ---
 
