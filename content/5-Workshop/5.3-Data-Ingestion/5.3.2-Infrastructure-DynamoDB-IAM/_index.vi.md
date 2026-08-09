@@ -132,5 +132,6 @@ resource "aws_iam_role_policy" "document_processor" {
 *Ảnh minh họa: IAM Role trên Console với inline policy hiển thị 4 statement (`ReadRawDocuments`, `WriteScopedDynamoTables`, `InvokeEmbeddingModelOnly`, `TextractOcr`).*
 
 ---
+#### Nội dung tiếp theo
 
-Tiếp theo: [5.3.3 - Trích xuất văn bản theo loại file](../5.3.3-Trich-xuat-van-ban/)
+Tiếp theo: [5.3.3 - Trích xuất văn bản theo loại file](../5.3.3-Text-Extraction/)

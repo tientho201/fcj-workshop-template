@@ -169,7 +169,7 @@ def _write_status(document_id, key, status, tracer, **extra):
 
 #### Luồng xác nhận OCR thủ công cho PDF scan
 
-Khi `pypdf` trả về chuỗi rỗng, Lambda **cố tình không raise exception** để SQS không coi đây là lỗi và không retry vô ích — thay vào đó ghi status `awaiting_ocr_confirmation` và dừng xử lý. Người dùng sẽ xác nhận có muốn OCR tài liệu này hay không thông qua endpoint `/documents-decision`, trước khi Lambda được gọi lại để tiếp tục (chi tiết cơ chế gọi lại này ở trang [5.3.5 - Cơ chế Resume OCR và xử lý lỗi](../5.3.5-Resume-OCR-Xu-ly-loi/)).
+Khi `pypdf` trả về chuỗi rỗng, Lambda **cố tình không raise exception** để SQS không coi đây là lỗi và không retry vô ích — thay vào đó ghi status `awaiting_ocr_confirmation` và dừng xử lý. Người dùng sẽ xác nhận có muốn OCR tài liệu này hay không thông qua endpoint `/documents-decision`, trước khi Lambda được gọi lại để tiếp tục (chi tiết cơ chế gọi lại này ở trang [5.3.5 - Cơ chế Resume OCR và xử lý lỗi](../5.3.5-Resume-OCR-Error-Handling/)).
 
 ![Log CloudWatch khi PDF scan chờ xác nhận OCR](../images/06-awaiting-ocr-status.png)
 *Ảnh minh họa: log Lambda ghi status `awaiting_ocr_confirmation`, và bảng `ingestion_status` cập nhật tương ứng.*
@@ -178,5 +178,6 @@ Khi `pypdf` trả về chuỗi rỗng, Lambda **cố tình không raise exceptio
 *Ảnh minh họa: log Lambda in ra nội dung text đã trích xuất từ file ảnh scan qua Textract.*
 
 ---
+#### Nội dung tiếp theo
 
 Tiếp theo: [5.3.4 - Parent-Child Chunking và Embedding](../5.3.4-Chunking-Embedding/)
