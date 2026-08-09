@@ -20,8 +20,26 @@ Sau mỗi lần, kiểm tra theo đúng thứ tự:
 
 **SQS** (message đã tiêu thụ) → **CloudWatch Logs** (không lỗi, hoặc thấy log `_report_to_function_dlq` nếu có bug) → **bảng `ingestion_status`** (status cuối = `completed`) → **bảng `parent_chunks`/`child_chunks`** (đã có item mới).
 
-![Kết quả test end-to-end với cả 4 loại file](../images/11-end-to-end-test-result.png)
-*Ảnh minh họa: bảng `ingestion_status` với 4 document ở trạng thái `completed`, và `child_chunks` tăng số lượng item tương ứng.*
+##### Hình 1: Kết quả test end-to-end với file pdf
+
+![Kết quả test end-to-end với file pdf](/images/5-Workshop/5.3-Data-Ingestion/image5.3.6-1.png)
+
+##### Hình 2: Kết quả test end-to-end với file txt
+
+- Với file txt thì tài liệu sẽ được trích xuất trong hộp thoại để có thể bấm "Tài lên & xử lý"
+
+![Kết quả test end-to-end với file txt](/images/5-Workshop/5.3-Data-Ingestion/image5.3.6-2.png)
+
+##### Hình 3: Kết quả test end-to-end với file png
+
+- Với file png thì  sẽ gửi nguyên dạng (base64) để document-processor chạy Textract OCR — không hiển thị được dạng text ở hộp thoại upload
+![Kết quả test end-to-end với file png](/images/5-Workshop/5.3-Data-Ingestion/image5.3.6-3.png)
+
+##### Hình 4: Kết quả test end-to-end với file md
+
+- Với file md thì tài liệu sẽ được trích xuất trong hộp thoại để có thể bấm "Tài lên & xử lý"
+
+![Kết quả test end-to-end với file md](/images/5-Workshop/5.3-Data-Ingestion/image5.3.6-4.png)
 
 #### Kết quả đạt được
 
@@ -31,16 +49,3 @@ Sau mỗi lần, kiểm tra theo đúng thứ tự:
 - Toàn bộ vector và chỉ số BM25 lưu gọn trong DynamoDB (dạng Binary + JSON string), loại bỏ hoàn toàn nhu cầu vận hành thêm một cụm OpenSearch Serverless riêng.
 - IAM Role tuân thủ least-privilege, có ghi chú rõ ngoại lệ (Textract) để tránh hiểu nhầm khi review bảo mật.
 
-#### Checklist hoàn thành Luồng 1
-
-- [ ] S3 bucket `raw_documents` đã bật versioning, SSE-S3, lifecycle Glacier 90 ngày
-- [ ] SQS `ingestion_queue` + 2 DLQ (`ingestion_dlq`, `document_processor_fn_dlq`) hoạt động đúng, `batch_size = 1`
-- [ ] 3 bảng DynamoDB (`parent_chunks`, `child_chunks`, `ingestion_status`) đã tạo
-- [ ] IAM Role `document_processor` chỉ có đúng 4 nhóm quyền least-privilege
-- [ ] Nhánh xử lý PDF/ảnh/text đều hoạt động đúng, luồng `awaiting_ocr_confirmation` test được qua `/documents-decision`
-- [ ] Lối vào `resume_ocr`/`cancel` gọi trực tiếp từ `chat_engine` hoạt động đúng
-- [ ] Test end-to-end cả 4 loại file, dữ liệu xuất hiện đúng trong DynamoDB
-
-{{% notice warning %}}
-Vì Luồng 1 không còn dùng OpenSearch, **Luồng 2 (Hỏi đáp Realtime)** cũng cần cập nhật lại: thay vì query OpenSearch, sẽ đọc trực tiếp `child_chunks` từ DynamoDB, tính cosine similarity với vector câu hỏi + BM25 score, rồi kết hợp bằng RRF.
-{{% /notice %}}
