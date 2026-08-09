@@ -1,6 +1,6 @@
 ---
 title: "Xây dựng CI/CD"
-date: 2024-01-01
+date: 2026-08-09
 weight: 9
 chapter: false
 pre: " <b> 5.9. </b> "
@@ -16,7 +16,7 @@ Hạ tầng chạy trên **HCP Terraform** (workspace `RAGonAWS/RAG-app`, execut
 
 2 workflow trong `.github/workflows/`, chạy trên GitHub Actions:
 
-- **`ci.yml`** — chạy trên mọi PR và mọi push vào `main`, gồm 4 job kiểm tra song song, không đổi gì trên AWS.
+- **`ci.yml`** — chạy trên mọi PR và mọi push vào `main`, gồm **5 job** (4 chạy song song; `terraform-plan` chờ `terraform-checks` và chỉ chạy trên PR). Không đổi gì trên AWS.
 - **`deploy.yml`** — kích hoạt **thủ công** (`workflow_dispatch`), là nơi thực sự chạy `terraform apply`.
 
 #### Nội dung chi tiết
