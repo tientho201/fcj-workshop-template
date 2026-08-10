@@ -25,7 +25,7 @@ CI/CD only handles the **trigger** — initial setup still requires manual steps
 The following points are **intentionally not automated** — documented clearly as scope limitations, not forgotten work:
 
 - **`scripts/up.sh` / `scripts/down.sh`** (recreating Cognito accounts, seeding document backups when toggling infrastructure for cost constraints — see [overview page](../)) **still run manually**. CI/CD only manages infrastructure `terraform apply`, not re-initializing data/accounts after rebuilding the stack.
-- **`handler.py` of both Lambdas** (real `boto3` / Bedrock / Cognito / S3 / SQS paths) is **not yet** in the unit suite. `python-test` covers **33** tests over pure modules + duplicate copy drift prevention (`chunking`, `bm25`, `vector_store`, `retrieval` with fake DynamoDB, `tracing`/`embeddings` sync) — see [5.9.1](../5.9.1-CI-Workflow/) and [5.10.3](../../5.10-System-Testing/5.10.3-Layer-3-Automated-Unit-Testing/).
+- **`handler.py` of both Lambdas** (real `boto3` / Bedrock / Cognito / S3 / SQS paths) is **not yet** in the unit suite. `python-test` covers **33** tests over pure modules + duplicate copy drift prevention (`chunking`, `bm25`, `vector_store`, `retrieval` with fake DynamoDB, `tracing`/`embeddings` sync) — see [5.9.1](../5.9.1-CI-Workflow/).
   {{% /notice %}}
 
 #### CI/CD Flow Summary

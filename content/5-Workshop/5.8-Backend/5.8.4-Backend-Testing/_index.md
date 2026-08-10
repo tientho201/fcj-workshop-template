@@ -36,7 +36,7 @@ def load_module(file_path, module_name):
 
 #### Completed: Manual/Real E2E Testing During Development (Not Automatically Repeatable)
 
-Full details on [5.10.2](../../5.10-System-Testing/5.10.2-Layer-2-Manual-E2E-Testing/), summarized:
+Full details on [5.10.1](../../5.10-System-Testing/5.10.1-Manual-E2E-Testing/), summarized:
 
 - Manually constructed 3 PDF types (with text layer / image-only / image with rendered text) to test all 3 extraction branches of `document_processor`.
 - Invoked real APIs (Cognito `InitiateAuth` + `requests`) to test end-to-end `/documents`, `/status`, `/documents-decision`, `/chat`.

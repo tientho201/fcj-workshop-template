@@ -25,7 +25,7 @@ CI/CD chỉ lo phần **trigger** — thiết lập ban đầu vẫn cần thao 
 Các điểm sau **cố tình chưa tự động hóa** — ghi rõ như giới hạn phạm vi, không phải quên:
 
 - **`scripts/up.sh` / `scripts/down.sh`** (tạo lại tài khoản Cognito, nạp backup tài liệu khi bật/tắt hạ tầng theo ràng buộc chi phí — xem [trang tổng quan](../)) **vẫn chạy thủ công**. CI/CD chỉ lo `terraform apply` hạ tầng, không lo khởi tạo lại dữ liệu/tài khoản sau khi dựng lại stack.
-- **`handler.py` của cả hai Lambda** (đường `boto3` / Bedrock / Cognito / S3 / SQS thật) **chưa** nằm trong unit suite. `python-test` cover **33** test trên module thuần + chống drift bản sao (`chunking`, `bm25`, `vector_store`, `retrieval` với DynamoDB fake, đồng bộ `tracing`/`embeddings`) — xem [5.9.1](../5.9.1-CI-Workflow/) và [5.10.3](../../5.10-System-Testing/5.10.3-Layer-3-Automated-Unit-Testing/).
+- **`handler.py` của cả hai Lambda** (đường `boto3` / Bedrock / Cognito / S3 / SQS thật) **chưa** nằm trong unit suite. `python-test` cover **33** test trên module thuần + chống drift bản sao (`chunking`, `bm25`, `vector_store`, `retrieval` với DynamoDB fake, đồng bộ `tracing`/`embeddings`) — xem [5.9.1](../5.9.1-CI-Workflow/).
   {{% /notice %}}
 
 #### Tổng kết luồng CI/CD

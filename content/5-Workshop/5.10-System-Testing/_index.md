@@ -6,42 +6,37 @@ chapter: false
 pre: " <b> 5.10. </b> "
 ---
 
-#### Backend Test Scenarios
-
-| #   | Scenario                                                      | Expected Outcome                                                                                                        |
-| --- | ------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
-| 1   | `terraform fmt -check` + `terraform validate`                 | Pass — runs automatically in CI (`ci.yml`) on every PR                                                                  |
-| 2   | `ruff check modules`                                          | Pass — lints Lambda code, excluding vendored `pypdf`                                                                    |
-| 3   | Ingest plain text file                                        | Direct text extraction, bypassing Textract                                                                              |
-| 4   | Ingest PDF with text layer                                    | Readable by `pypdf`, incurring no Textract costs                                                                        |
-| 5   | Ingest scanned PDF                                            | Pauses at `awaiting_ocr_confirmation`; confirming Yes → Textract OCR runs correctly, confirming No → status `cancelled` |
-| 6   | Re-upload the same file                                       | Old chunks deleted before re-indexing, preventing duplicate data                                                        |
-| 7   | Ask semantically equivalent question with different words     | Cosine captures it (vector branch), even when BM25 matches no words                                                     |
-| 8   | Ask for exact code/proper name present in document            | BM25 pulls exact chunk containing that term to top, even if cosine ranks lower                                          |
-| 9   | Call `/chat` twice with identical question, different session | Request 2 does **not** hit request 1's cache if request 1's session has history (cache bypassed when history exists)    |
-| 10  | Remove `lambda` VPC endpoint then call `/documents-decision`  | Reproduces exact 504 error encountered during real development — confirming endpoint issue, not code bug                |
-| 11  | Send rapid concurrent questions                               | Bedrock returns `ThrottlingException`, backend returns `429 {retryable:true}`, Lambda does not crash                    |
-
-![CI run results (fmt/validate/lint) and manual test scenarios above](../images/05-backend-test-results.png)
-_Illustration: `terraform validate`, `ruff check` results, and CloudWatch logs for test scenarios 7-8 (cosine vs BM25)._
-
-#### Real Tests Conducted During Development (Not Assumptions)
-
 {{% notice note %}}
-📌 Items **5, 6, and 10** above are actual bugs/scenarios that **occurred and were fixed** during project development history:
-
-- **Missing VPC endpoint bug** for Lambda control-plane API caused 504 errors when `chat_engine` directly invoked `document_processor` — discovered during real E2E testing, fixed by adding `aws_vpc_endpoint "lambda"` (`modules/networking/main.tf`).
-- **OCR confirmation flow** (item 5) was tested on both branches (accept/reject) using a manually crafted image-only PDF (no text layer), confirming correct pause behavior — neither silently running OCR nor silently ignoring the document.
-  {{% /notice %}}
-
-#### Untested Automations (Gaps to Highlight in Report)
-
-{{% notice note %}}
-📌 **Update:** see [System Testing, page 5.10.3](../../5.10-Testing/5.10.3-Khoang-trong-va-De-xuat/): 33 unit tests (`pytest`) written for the exact modules mentioned above (`chunking.py`, `bm25.py`, `retrieval.py`, `vector_store.py`), running automatically in CI. Remaining **gap**: `handler.py` for both Lambdas (code making direct `boto3`/AWS calls) still lacks automated unit testing.
+📌 **This is a summary page**, which does not repeat details already present in individual sections — each row in the table below links directly to where it is described in full. If an independent "Testing" section is required for a report, this is the exact page to reference: it provides a comprehensive overview without needing to re-read 8 separate pages.
 {{% /notice %}}
 
-#### Detailed Contents
+#### Summary: What was tested in each section and how
 
-1. [Layer 1 — Automated Static Analysis (CI)](5.10.1-Layer-1-Automated-Static-Analysis/)
-2. [Layer 2 — Manual/E2E Testing](5.10.2-Layer-2-Manual-E2E-Testing/)
-3. [Layer 3 — Automated Unit Tests for Pure Logic](5.10.3-Layer-3-Automated-Unit-Testing/)
+| Section | What was tested | How it was tested | View Details |
+| --- | --- | --- | --- |
+| Stream 1 — Ingestion | 4 file types (text/PDF text/PDF scan/image), OCR confirmation, resume/cancel | Manual via UI | [5.3.6](../5.3-Data-Ingestion/5.3.6-End-To-End-Testing/) |
+| Stream 2 — Realtime QA | 11 scenarios: cache, rewrite, retrieval, guardrail, throttle, feedback | Manual via UI + DevTools + script | [5.4.8](../5.4-Realtime-QA/5.4.8-End-To-End-Testing/) |
+| Stream 3 — Monitoring | 8 scenarios: 4 two-way alarms (ALARM↔OK), subscription, Slack OAuth | Manual, simulated errors | [5.5.4](../5.5-Monitoring/5.5.4-End-to-End-Testing/) |
+| Stream 4 — RAGAS | Data architecture (GSI, IAM) verified; **RAGAS logic not tested with real data, not deployed** | Not testable yet (not deployed) | [5.6.4](../5.6-RAGAS/5.6.4-Testing-Deployment-Notes/) |
+| Frontend | 11 scenarios: login, upload, OCR dialog, responsive | Manual via browser | [5.7.4](../5.7-Frontend/5.7.4-Test-end-to-end/) |
+| Backend (pure logic) | **33 unit tests** (chunking, BM25, vector store, RRF, 4 shared-file drift) | **Automated**, runs in CI | [5.8.4](../5.8-Backend/5.8.4-Backend-Testing/) |
+| CI — static analysis | Linting (`ruff`), Terraform syntax (`fmt`/`validate`), secret scanning (`gitleaks`) | **Automated**, every PR/push | [5.9.1](../5.9-CICD/5.9.1-CI-Workflow/) |
+| Manual/E2E Testing | 3 hand-crafted PDF types, real API invocation script, **1 real bug caught** (504 → missing VPC endpoint) | Manual, not automatically repeatable | [5.10.1](5.10.1-Manual-E2E-Testing/) |
+
+#### At a Glance: Two Fundamentally Different Testing Types
+
+Looking across the table above, all testing in the project falls into exactly 2 types — which must be clearly distinguished when presenting a report, rather than grouped under "fully tested":
+
+| | Automated (Repeatable) | Manual (Non-repeatable) |
+| --- | --- | --- |
+| **Includes** | Lint/validate/secret-scan (CI) + 33 unit tests (pytest) | All remaining 11+8+11+4 scenarios in the table above, plus E2E story in [5.10.1](5.10.1-Manual-E2E-Testing/) |
+| **Re-run on every push?** | ✅ | ❌ |
+| **Verifies real business logic?** | Partial — pure Python logic only, no `boto3`/AWS calls | ✅ — runs on real AWS infrastructure |
+
+{{% notice warning %}}
+**Actual Remaining Gap** (not speculation, confirmed in [5.8.4](../5.8-Backend/5.8.4-Backend-Testing/)): `handler.py` in both Lambdas — the portion **directly calling `boto3`/AWS** — lacks automated testing at any layer, verified only through manual (non-repeatable) testing. The `/feedback` route and GSI join via `message_id-index` share the same status. This is a point to state directly under the "Limitations" section of any report.
+{{% /notice %}}
+
+#### Detailed Contents (Non-overlapping with above)
+
+1. [Manual/E2E Testing](5.10.1-Manual-E2E-Testing/)

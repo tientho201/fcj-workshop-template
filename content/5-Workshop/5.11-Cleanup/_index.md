@@ -5,6 +5,7 @@ weight: 11
 chapter: false
 pre: " <b> 5.11. </b> "
 ---
+
 {{% notice note %}}
 📌 **Correction regarding previous assumption:** `scripts/down.sh` is **not** a "temporary pause while preserving AWS data" — it is a **true destruction** of the entire infrastructure (intended to save the ~$2.5/day cost mentioned in [5.9](../5.9-CICD/)). The only difference from a raw `terraform destroy` is that it includes safety cleanup steps before destroying, and retains **1 local backup** so `scripts/up.sh` can restore data when rebuilding from scratch.
 {{% /notice %}}
@@ -62,14 +63,11 @@ empty_bucket "$EVAL_BUCKET"
 terraform destroy -auto-approve
 ```
 
-![Running down.sh: sync backup, empty versions, then destroy successfully](../images/01-down-sh-run-sequence.png)
-*Illustration: Terminal running `scripts/down.sh`, displaying all 4 steps in order, ending with `Destroy complete!`.*
-
 #### What Is Intentionally NOT Deleted
 
-| Component | Reason Retained |
-|---|---|
-| **Budget alert `rag-app-monthly-cost`** | Defined outside the main Terraform stack scope (created once, unchanged), so cost monitoring continues even when infrastructure is shut down |
+| Component                               | Reason Retained                                                                                                                                                                                 |
+| --------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Budget alert `rag-app-monthly-cost`** | Defined outside the main Terraform stack scope (created once, unchanged), so cost monitoring continues even when infrastructure is shut down                                                    |
 | **Documents in `backup-s3-documents/`** | Not leftover data — this is the explicit goal of step 2: `scripts/up.sh` automatically performs an `aws s3 sync` back from this directory when rebuilding the stack, avoiding manual re-uploads |
 
 #### Prevented Risk: Stream 4 ECR Repository
@@ -113,14 +111,3 @@ terraform state list          # Empty or "no state" error indicates successful d
 aws s3 ls                     # No remaining rag-app-dev-* buckets
 aws ecr describe-repositories # No remaining rag-app-dev-evaluation-runner repo
 ```
-
-![Verification command results after successful destroy](../images/02-verify-cleanup-commands.png)
-*Illustration: Terminal executing all 3 verification commands, confirming no orphan resources remain.*
-
-#### Completion Checklist
-
-- [ ] Clear understanding of why raw `terraform destroy` fails (bucket versioning → `BucketNotEmpty`)
-- [ ] Successfully ran `scripts/down.sh` test and verified document backup created in `backup-s3-documents/`
-- [ ] Verified `force_delete = true` is configured on `aws_ecr_repository.evaluation_runner` (especially critical if `evaluation_image_pushed = true` was previously set)
-- [ ] Executed all 3 verification commands, confirming zero leftover buckets/repos/state files
-- [ ] Checked Billing Console — confirmed no hidden resources incurring costs (keeping budget alert `rag-app-monthly-cost` active for continuous monitoring)

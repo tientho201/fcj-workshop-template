@@ -36,7 +36,7 @@ def load_module(file_path, module_name):
 
 #### Đã kiểm thử tay/E2E thật trong lúc phát triển (không lặp lại tự động được)
 
-Chi tiết đầy đủ ở [5.10.2](../../5.10-System-Testing/5.10.2-Layer-2-Manual-E2E-Testing/), tóm tắt lại:
+Chi tiết đầy đủ ở [5.10.1](../../5.10-System-Testing/5.10.1-Manual-E2E-Testing/), tóm tắt lại:
 
 - Dựng tay 3 loại PDF (có text layer / chỉ ảnh / ảnh có chữ vẽ) để test đúng 3 nhánh trích xuất của `document_processor`.
 - Gọi API thật (Cognito `InitiateAuth` + `requests`) để test end-to-end `/documents`, `/status`, `/documents-decision`, `/chat`.

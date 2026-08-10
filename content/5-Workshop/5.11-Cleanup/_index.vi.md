@@ -5,6 +5,7 @@ weight: 11
 chapter: false
 pre: " <b> 5.11. </b> "
 ---
+
 {{% notice note %}}
 📌 **Đính chính so với suy đoán trước đó:** `scripts/down.sh` **không phải** "tắt tạm giữ nguyên dữ liệu trên AWS" — đây là **destroy thật sự** toàn bộ hạ tầng (đúng mục đích tiết kiệm chi phí ~$2.5/ngày đã nhắc ở [5.9](../5.9-CICD/)), chỉ khác `terraform destroy` trần ở chỗ có thêm các bước dọn dẹp an toàn trước khi destroy, và giữ lại **1 bản backup cục bộ** để `scripts/up.sh` phục hồi dữ liệu khi dựng lại từ đầu.
 {{% /notice %}}
@@ -62,15 +63,12 @@ empty_bucket "$EVAL_BUCKET"
 terraform destroy -auto-approve
 ```
 
-![Chạy down.sh: sync backup, dọn version, rồi destroy thành công](../images/01-down-sh-run-sequence.png)
-*Ảnh minh họa: terminal chạy `scripts/down.sh`, hiển thị đủ 4 bước theo thứ tự, kết thúc bằng `Destroy complete!`.*
-
 #### Cái gì KHÔNG bị xóa (có chủ đích)
 
-| Thành phần | Vì sao giữ lại |
-|---|---|
-| **Budget alert `rag-app-monthly-cost`** | Nằm ngoài phạm vi Terraform stack chính (tạo 1 lần, không đổi), nên vẫn tiếp tục theo dõi chi phí kể cả khi hạ tầng đã tắt |
-| **Tài liệu ở `backup-s3-documents/`** | Không phải "sót lại" — đây chính là mục đích của bước 2: `scripts/up.sh` sẽ tự động `aws s3 sync` ngược lại từ thư mục này khi dựng lại stack, không cần upload tay lại từ đầu |
+| Thành phần                              | Vì sao giữ lại                                                                                                                                                                 |
+| --------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Budget alert `rag-app-monthly-cost`** | Nằm ngoài phạm vi Terraform stack chính (tạo 1 lần, không đổi), nên vẫn tiếp tục theo dõi chi phí kể cả khi hạ tầng đã tắt                                                     |
+| **Tài liệu ở `backup-s3-documents/`**   | Không phải "sót lại" — đây chính là mục đích của bước 2: `scripts/up.sh` sẽ tự động `aws s3 sync` ngược lại từ thư mục này khi dựng lại stack, không cần upload tay lại từ đầu |
 
 #### Rủi ro đã phòng ngừa: ECR repository của Luồng 4
 
@@ -113,15 +111,3 @@ terraform state list          # rỗng hoặc lỗi "no state" nghĩa là đã d
 aws s3 ls                     # không còn bucket rag-app-dev-* nào
 aws ecr describe-repositories # không còn repo rag-app-dev-evaluation-runner
 ```
-
-![Kết quả 3 lệnh xác minh sau khi destroy thành công](../images/02-verify-cleanup-commands.png)
-*Ảnh minh họa: terminal chạy đủ 3 lệnh, xác nhận không còn resource nào sót lại.*
-
-#### Checklist hoàn thành
-
-- [ ] Hiểu rõ vì sao không thể `terraform destroy` trần (bucket versioning → `BucketNotEmpty`)
-- [ ] Đã chạy thử `scripts/down.sh`, xác nhận backup tài liệu xuất hiện ở `backup-s3-documents/`
-- [ ] Xác nhận `force_delete = true` đã có trên `aws_ecr_repository.evaluation_runner` (đặc biệt quan trọng nếu đã từng bật `evaluation_image_pushed = true` và push image thật)
-- [ ] Chạy đủ 3 lệnh xác minh, xác nhận không còn bucket/repo/state sót lại
-- [ ] Kiểm tra lại Billing Console — xác nhận không còn resource nào âm thầm tính phí (budget alert `rag-app-monthly-cost` vẫn nên giữ hoạt động để cảnh báo nếu có)
-
