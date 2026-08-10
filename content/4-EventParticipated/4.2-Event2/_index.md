@@ -6,121 +6,45 @@ chapter: false
 pre: " <b> 4.2. </b> "
 ---
 
-{{% notice warning %}}
-⚠️ **Note:** The information below is for reference purposes only. Please **do not copy it verbatim** into your report, including this warning.
-{{% /notice %}}
+# Summary Report: “Agent Forge - Deepdive Day 1”
 
-# Summary Report: “GenAI-powered App-DB Modernization workshop”
+### 1. Event Overview
+- **Date & Time**: 9:00 AM - 12:00 PM, Saturday, August 1, 2026
+- **Location**: 26th Floor, Bitexco Financial Tower, 2 Hai Trieu St., Saigon, Ho Chi Minh City 700000, Vietnam.
+- **Role**: Attendee
 
-### Event Objectives
+### 2. Speaker List
+- **Nghia Tran** - Agentic SA
+- **Anh Pham** - Cloud Consultant G-AsiaPacific Vietnam
 
-- Share best practices in modern application design
-- Introduce Domain-Driven Design (DDD) and event-driven architecture
-- Provide guidance on selecting the right compute services
-- Present AI tools to support the development lifecycle
+---
 
-### Speakers
+### 3. Key Content
+This is an advanced workshop (L300) on Amazon Bedrock Agent Core, designed for enterprises aiming to build autonomous AI systems (Agentic AI) at production-ready scale.
 
-- **Jignesh Shah** – Director, Open Source Databases
-- **Erica Liu** – Sr. GTM Specialist, AppMod
-- **Fabrianne Effendi** – Assc. Specialist SA, Serverless Amazon Web Services
+#### Theoretical Part
+The theoretical session covers the following main topics:
 
-### Key Highlights
+- **Introduction to Agentic AI**: Explaining autonomous AI concepts, step-by-step planning and execution capabilities, as well as autonomy levels ranging from *deterministic workflow* to *fully autonomous*.
+- **Amazon Bedrock Agent Core**: A service that helps manage, deploy, and operate AI agents. This system complies with industry standards regarding performance, scalability, and security.
+- **Core Components of Agent Core**:
+  - **Runtime Environment**: A serverless environment for running agents, utilizing Firecracker MicroVM technology for resource isolation.
+  - **Identity**: Authentication and authorization management layer using JSON Web Tokens (JWT) and Workload Access Token.
+  - **Gateway**: A middleware layer connecting agents to various tools via the Model Context Protocol (MCP), supporting centralized control and human-in-the-loop features.
+- **Security & Connectivity**: Discussing how to connect agents to VPC networks using AWS PrivateLink to ensure internal data is not exposed to the public internet.
 
-#### Identifying the drawbacks of legacy application architecture
+#### Practical Hands-on Part
+Focuses on guiding participants through hands-on practice with Runtime, Gateway, and Identity services introduced in the theory session, as well as setting up necessary environments for hands-on exercises.
 
-- Long product release cycles → Lost revenue/missed opportunities  
-- Inefficient operations → Reduced productivity, higher costs  
-- Non-compliance with security regulations → Security breaches, loss of reputation  
+---
 
-#### Transitioning to modern application architecture – Microservices
+### 4. Key Takeaways
+Through the **Agent Forge - Deepdive Day 1** event, I gained a clearer understanding of Agentic AI concepts and how to build AI Agents capable of autonomous planning, task execution, and interaction with external services. I also grasped the architecture of Amazon Bedrock Agent Core, including Runtime, Identity, and Gateway components, as well as their respective roles in deploying and operating AI Agents. Furthermore, I recognized the critical importance of security in AI system deployment by combining Amazon VPC and AWS PrivateLink. The practical session helped me become familiar with environment configuration workflows and Bedrock Agent Core service deployment, bridging the gap between theory and real-world applications.
 
-Migrating to a modular system — each function is an **independent service** communicating via **events**, built on three core pillars:
+#### Event Photos
 
-- **Queue Management**: Handle asynchronous tasks  
-- **Caching Strategy**: Optimize performance  
-- **Message Handling**: Flexible inter-service communication  
-
-#### Domain-Driven Design (DDD)
-
-- **Four-step method**: Identify domain events → arrange timeline → identify actors → define bounded contexts  
-- **Bookstore case study**: Demonstrates real-world DDD application  
-- **Context mapping**: 7 patterns for integrating bounded contexts  
-
-#### Event-Driven Architecture
-
-- **3 integration patterns**: Publish/Subscribe, Point-to-point, Streaming  
-- **Benefits**: Loose coupling, scalability, resilience  
-- **Sync vs async comparison**: Understanding the trade-offs  
-
-#### Compute Evolution
-
-- **Shared Responsibility Model**: EC2 → ECS → Fargate → Lambda  
-- **Serverless benefits**: No server management, auto-scaling, pay-for-value  
-- **Functions vs Containers**: Criteria for appropriate choice  
-
-#### Amazon Q Developer
-
-- **SDLC automation**: From planning to maintenance  
-- **Code transformation**: Java upgrade, .NET modernization  
-- **AWS Transform agents**: VMware, Mainframe, .NET migration  
-
-### Key Takeaways
-
-#### Design Mindset
-
-- **Business-first approach**: Always start from the business domain, not the technology  
-- **Ubiquitous language**: Importance of a shared vocabulary between business and tech teams  
-- **Bounded contexts**: Identifying and managing complexity in large systems  
-
-#### Technical Architecture
-
-- **Event storming technique**: Practical method for modeling business processes  
-- Use **event-driven communication** instead of synchronous calls  
-- **Integration patterns**: When to use sync, async, pub/sub, streaming  
-- **Compute spectrum**: Criteria for choosing between VM, containers, and serverless  
-
-#### Modernization Strategy
-
-- **Phased approach**: No rushing — follow a clear roadmap  
-- **7Rs framework**: Multiple modernization paths depending on the application  
-- **ROI measurement**: Cost reduction + business agility  
-
-### Applying to Work
-
-- **Apply DDD** to current projects: Event storming sessions with business teams  
-- **Refactor microservices**: Use bounded contexts to define service boundaries  
-- **Implement event-driven patterns**: Replace some sync calls with async messaging  
-- **Adopt serverless**: Pilot AWS Lambda for suitable use cases  
-- **Try Amazon Q Developer**: Integrate into the dev workflow to boost productivity  
-
-### Event Experience
-
-Attending the **“GenAI-powered App-DB Modernization”** workshop was extremely valuable, giving me a comprehensive view of modernizing applications and databases using advanced methods and tools. Key experiences included:
-
-#### Learning from highly skilled speakers
-- Experts from AWS and major tech organizations shared **best practices** in modern application design.  
-- Through real-world case studies, I gained a deeper understanding of applying **DDD** and **Event-Driven Architecture** to large projects.  
-
-#### Hands-on technical exposure
-- Participating in **event storming** sessions helped me visualize how to **model business processes** into domain events.  
-- Learned how to **split microservices** and define **bounded contexts** to manage large-system complexity.  
-- Understood trade-offs between **synchronous and asynchronous communication** and integration patterns like **pub/sub, point-to-point, streaming**.  
-
-#### Leveraging modern tools
-- Explored **Amazon Q Developer**, an AI tool for SDLC support from planning to maintenance.  
-- Learned to **automate code transformation** and pilot serverless with **AWS Lambda** to improve productivity.  
-
-#### Networking and discussions
-- The workshop offered opportunities to exchange ideas with experts, peers, and business teams, enhancing the **ubiquitous language** between business and tech.  
-- Real-world examples reinforced the importance of the **business-first approach** rather than focusing solely on technology.  
-
-#### Lessons learned
-- Applying DDD and event-driven patterns reduces **coupling** while improving **scalability** and **resilience**.  
-- Modernization requires a **phased approach** with **ROI measurement**; rushing the process can be risky.  
-- AI tools like Amazon Q Developer can significantly **boost productivity** when integrated into the current workflow.  
-
-#### Some event photos
-*Add your event photos here*  
-
-> Overall, the event not only provided technical knowledge but also helped me reshape my thinking about application design, system modernization, and cross-team collaboration.
+<div style="display: flex; gap: 12px; justify-content: space-between; align-items: center; margin: 15px 0;">
+  <img src="/images/4-EventParticipated/event2_01.jpg" alt="Event photo 1" style="width: 32%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); object-fit: cover;" />
+  <img src="/images/4-EventParticipated/event2_02.jpg" alt="Event photo 2" style="width: 32%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); object-fit: cover;" />
+  <img src="/images/4-EventParticipated/event2_03.jpg" alt="Event photo 3" style="width: 32%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); object-fit: cover;" />
+</div>
