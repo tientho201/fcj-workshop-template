@@ -5,40 +5,38 @@ weight: 7
 chapter: false
 pre: " <b> 7. </b> "
 ---
-{{% notice warning %}}
-⚠️ **Lưu ý:** Các thông tin dưới đây chỉ nhằm mục đích tham khảo, vui lòng **không sao chép nguyên văn** cho bài báo cáo của bạn kể cả warning này.
-{{% /notice %}}
 
->Tại đây bạn có thể tự do đóng góp ý kiến cá nhân về những trải nghiệm khi tham gia chương trình First Cloud AI Journey, giúp team FCAJ cải thiện những vấn đề còn thiếu sót dựa trên các hạng mục sau:
+> Nhìn chung, mình thực sự hài lòng với trải nghiệm khi tham gia chương trình First Cloud AI Journey. Dưới đây là những chia sẻ thật của mình theo các hạng mục sau:
 
 ### Đánh giá chung
 
-**1. Môi trường làm việc**  
-Môi trường làm việc rất thân thiện và cởi mở. Các thành viên trong FCAJ luôn sẵn sàng hỗ trợ khi mình gặp khó khăn, kể cả ngoài giờ làm việc. Không gian làm việc gọn gàng, thoải mái, giúp mình tập trung tốt hơn. Tuy nhiên, mình nghĩ có thể bổ sung thêm một số buổi giao lưu hoặc team bonding để mọi người hiểu nhau hơn.
+**1. Môi trường làm việc**
+Môi trường làm việc thân thiện và dễ hòa nhập ngay từ những ngày đầu. Các thành viên trong FCAJ luôn sẵn sàng giải đáp mỗi khi mình có thắc mắc, dù là trong giờ làm việc hay lúc mình loay hoay với lỗi Lambda vào buổi tối muộn. Việc trao đổi thông tin diễn ra khá thuận lợi nhờ thói quen check-in định kỳ của nhóm, giúp mọi người luôn nắm được tiến độ mà không cảm thấy bị kiểm soát quá mức.
 
-**2. Sự hỗ trợ của mentor / team admin**  
-Mentor hướng dẫn rất chi tiết, giải thích rõ ràng khi mình chưa hiểu và luôn khuyến khích mình đặt câu hỏi. Team admin hỗ trợ các thủ tục, tài liệu và tạo điều kiện để mình làm việc thuận lợi. Mình đánh giá cao việc mentor cho phép mình thử và tự xử lý vấn đề thay vì chỉ đưa đáp án.
+**2. Sự hỗ trợ của mentor / team admin**
+Mentor hướng dẫn rõ ràng và kiên nhẫn xuyên suốt, đặc biệt là giai đoạn chuyển từ học nền tảng AWS (tuần 1-2) sang bắt tay xây dựng project RAG Knowledge Assistant thực tế. Thay vì đưa đáp án ngay, mentor thường chỉ hướng đi và tài liệu tham khảo phù hợp, để mình tự mày mò xử lý — cách này giúp mình nhớ kiến thức lâu hơn. Phần hỗ trợ hành chính cũng khá suôn sẻ, các yêu cầu như xin quyền truy cập model trên Bedrock hay setup tài khoản đều được xử lý nhanh, không bị trì hoãn.
 
-**3. Sự phù hợp giữa công việc và chuyên ngành học**  
-Công việc mình được giao phù hợp với kiến thức mình đã học ở trường, đồng thời mở rộng thêm những mảng mới mà mình chưa từng được tiếp cận. Nhờ vậy, mình vừa củng cố kiến thức nền tảng, vừa học thêm kỹ năng thực tế.
+**3. Sự phù hợp giữa công việc và chuyên ngành học**
+Công việc được giao khá phù hợp với những gì mình đã học, đồng thời mở rộng thêm những mảng mới mình chưa từng tiếp cận trước đó, như kiến trúc Retrieval-Augmented Generation, Infrastructure as Code, và đánh giá chất lượng AI bằng số liệu (RAGAS). Đây là sự cân bằng tốt giữa việc áp dụng kiến thức cũ và học thêm kỹ năng thật sự mới.
 
-**4. Cơ hội học hỏi & phát triển kỹ năng**  
-Trong quá trình thực tập, mình học được nhiều kỹ năng mới như sử dụng công cụ quản lý dự án, kỹ năng làm việc nhóm, và cả cách giao tiếp chuyên nghiệp trong môi trường công ty. Mentor cũng chia sẻ nhiều kinh nghiệm thực tế giúp mình định hướng tốt hơn cho sự nghiệp.
+**4. Văn hóa & tinh thần đồng đội**
+Văn hóa nhóm mang tính hợp tác hơn là phân cấp — bất kể vai trò, mọi người đều sẵn sàng hỗ trợ khi có việc cần xử lý gấp. Dù chỉ là thực tập sinh, mình chưa bao giờ cảm thấy mình đứng ngoài cuộc.
 
-**5. Văn hóa & tinh thần đồng đội**  
-Văn hóa công ty rất tích cực: mọi người tôn trọng lẫn nhau, làm việc nghiêm túc nhưng vẫn vui vẻ. Khi có dự án gấp, mọi người cùng nhau cố gắng, hỗ trợ không phân biệt vị trí. Điều này giúp mình cảm thấy mình là một phần của tập thể, dù chỉ là thực tập sinh.
+**5. Chính sách / phúc lợi cho thực tập sinh**
+Các điều khoản thực tập được thông báo rõ ràng ngay từ đầu, và mình đánh giá cao việc được tiếp cận các tài liệu học tập nội bộ trong suốt quá trình thực tập.
 
-**6. Chính sách / phúc lợi cho thực tập sinh**  
-Công ty có hỗ trợ phụ cấp thực tập và tạo điều kiện về thời gian linh hoạt khi cần thiết. Ngoài ra, việc được tham gia các buổi đào tạo nội bộ là một điểm cộng lớn.
-
+---
 
 ### Một số câu hỏi khác
-- Điều bạn **hài lòng nhất** trong thời gian thực tập?  
-- Điều bạn nghĩ công ty **cần cải thiện** cho các thực tập sinh sau?  
-- Nếu giới thiệu cho bạn bè, bạn có **khuyên họ thực tập ở đây không**? Vì sao?  
 
+- **Điều bạn hài lòng nhất trong thời gian thực tập?** Được chứng kiến dự án RAG Knowledge Assistant đi từ một bản đề xuất trên giấy (tuần 3) trở thành một hệ thống ổn định, tự giám sát vào tuần 7 — và tự tin giải thích được cách vận hành của từng thành phần trong đó.
+- **Điều bạn nghĩ công ty cần cải thiện cho các thực tập sinh sau?** Mình không thấy điểm nào đáng kể cần cải thiện — cấu trúc chương trình và sự hỗ trợ đều rất ổn.
+- **Nếu giới thiệu cho bạn bè, bạn có khuyên họ thực tập ở đây không? Vì sao?** Có, không cần đắn đo. Chương trình cân bằng tốt giữa việc học có định hướng và được thực sự sở hữu, chịu trách nhiệm cho một dự án của riêng mình.
+
+---
 
 ### Đề xuất & mong muốn
-- Bạn có đề xuất gì để cải thiện trải nghiệm trong kỳ thực tập?  
-- Bạn có muốn tiếp tục chương trình này trong tương lai?
-- Góp ý khác (tự do chia sẻ):
+
+- Không có góp ý cụ thể nào — chương trình vận hành tốt với cấu trúc hiện tại.
+- Mình rất sẵn lòng tiếp tục đồng hành với chương trình hoặc cộng đồng FCAJ trong tương lai.
+- Nhìn chung, đây là một kỳ thực tập đáng giá và được hỗ trợ tốt từ đầu đến cuối.

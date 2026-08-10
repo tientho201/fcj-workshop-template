@@ -6,42 +6,37 @@ chapter: false
 pre: " <b> 7. </b> "
 ---
 
-{{% notice warning %}}
-⚠️ **Note:** The information below is for reference purposes only. Please **do not copy verbatim** for your report, including this warning.
-{{% /notice %}}
-
-> Here, you can freely share your personal opinions about your experience participating in the First Cloud AI Journey program. This will help the FCAJ team improve any shortcomings based on the following aspects:
+> Overall, I'm genuinely happy with my experience in the First Cloud AI Journey program. Below is my honest feedback across the following aspects:
 
 ### Overall Evaluation
 
-**1. Working Environment**  
-The working environment is very friendly and open. FCAJ members are always willing to help whenever I encounter difficulties, even outside working hours. The workspace is tidy and comfortable, helping me focus better. However, I think it would be nice to have more social gatherings or team bonding activities to strengthen relationships.
+**1. Working Environment**
+The working environment was friendly and easy to settle into from day one. FCAJ members were always approachable whenever I had questions, whether during working hours or when I got stuck late at night on a Lambda bug. Communication happened smoothly through the team's regular check-ins, which made it easy to stay aligned without feeling micromanaged.
 
-**2. Support from Mentor / Team Admin**  
-The mentor provides very detailed guidance, explains clearly when I don’t understand, and always encourages me to ask questions. The admin team supports administrative tasks, provides necessary documents, and creates favorable conditions for me to work effectively. I especially appreciate that the mentor allows me to try and solve problems myself instead of just giving the answer.
+**2. Support from Mentor / Team Admin**
+The mentor's guidance was consistently clear and patient, especially during the transition from learning AWS fundamentals (Weeks 1-2) to building the actual RAG Knowledge Assistant project. Rather than handing me answers, the mentor pointed me toward the right documentation and let me work through issues myself, which helped the learning stick. Administrative support was smooth as well — access requests (like Bedrock model access) and account setup were handled without unnecessary delays.
 
-**3. Relevance of Work to Academic Major**  
-The tasks I was assigned align well with the knowledge I learned at university, while also introducing me to new areas I had never encountered before. This allowed me to both strengthen my foundational knowledge and gain practical skills.
+**3. Relevance of Work to Academic Major**
+The project matched well with what I had studied, while also pushing me into areas I hadn't touched before, like Retrieval-Augmented Generation architecture, Infrastructure as Code, and quantitative AI quality evaluation (RAGAS). It struck a good balance between applying existing knowledge and picking up genuinely new skills.
 
-**4. Learning & Skill Development Opportunities**  
-During the internship, I learned many new skills such as using project management tools, teamwork skills, and professional communication in a corporate environment. The mentor also shared valuable real-world experiences that helped me better plan my career path.
+**4. Company Culture & Team Spirit**
+The team culture felt collaborative rather than hierarchical — everyone, regardless of role, was willing to jump in when something needed fixing. Even as an intern, I never felt like an outsider on the team.
 
-**5. Company Culture & Team Spirit**  
-The company culture is very positive: everyone respects each other, works seriously but still keeps things enjoyable. When there are urgent projects, everyone works together and supports one another regardless of their position. This made me feel like a real part of the team, even as an intern.
-
-**6. Internship Policies / Benefits**  
-The company provides an internship allowance and offers flexible working hours when needed. In addition, having the opportunity to join internal training sessions is a big plus.
+**5. Internship Policies / Benefits**
+The internship terms were fair and clearly communicated from the start, and I appreciated having access to internal learning resources throughout the program.
 
 ---
 
 ### Additional Questions
-- What did you find **most satisfying** during your internship?  
-- What do you think the company **should improve** for future interns?  
-- If recommending to a friend, would you **suggest they intern here**? Why or why not?  
+
+- **What did you find most satisfying during your internship?** Seeing the RAG Knowledge Assistant go from a proposal on paper (Week 3) to a stable, self-monitoring system by Week 7 — and being able to explain confidently how every piece of it works.
+- **What do you think the company should improve for future interns?** Nothing major comes to mind — the structure and support were solid throughout.
+- **If recommending to a friend, would you suggest they intern here? Why or why not?** Yes, without hesitation. It's a good mix of structured learning and real ownership over a project.
 
 ---
 
 ### Suggestions & Expectations
-- Do you have any suggestions to improve the internship experience?  
-- Would you like to continue this program in the future?  
-- Any other comments (free sharing):
+
+- No specific complaints — the program worked well as structured.
+- I'd be glad to continue being involved with the program or community in the future.
+- Overall, this was a valuable, well-supported internship experience from start to finish.
