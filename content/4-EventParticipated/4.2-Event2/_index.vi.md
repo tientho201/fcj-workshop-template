@@ -6,120 +6,45 @@ chapter: false
 pre: " <b> 4.2. </b> "
 ---
 
-{{% notice warning %}}
-⚠️ **Lưu ý:** Các thông tin dưới đây chỉ nhằm mục đích tham khảo, vui lòng **không sao chép nguyên văn** cho bài báo cáo của bạn kể cả warning này.
-{{% /notice %}}
+# Bài thu hoạch: “Agent Forge - Deepdive Day 1”
 
-# Bài thu hoạch “GenAI-powered App-DB Modernization workshop”
+### 1. Tổng quan về sự kiện
+- **Thời gian**: 9:00AM - 12:00PM, Thứ 7, 01/08/2026
+- **Địa điểm**: Tầng 26, Bitexco Financial Tower, 2 Đ. Hải Triều, Sài Gòn, Hồ Chí Minh 700000, Việt Nam.
+- **Vai trò**: Người tham dự
 
-### Mục Đích Của Sự Kiện
+### 2. Danh sách diễn giả
+- **Nghia Tran** - Agentic SA
+- **Anh Pham** - Cloud Consultant G-AsiaPacific Vietnam
 
-- Chia sẻ best practices trong thiết kế ứng dụng hiện đại
-- Giới thiệu phương pháp DDD và event-driven architecture
-- Hướng dẫn lựa chọn compute services phù hợp
-- Giới thiệu công cụ AI hỗ trợ development lifecycle
+---
 
-### Danh Sách Diễn Giả
+### 3. Nội dung chính
+Đây là buổi workshop chuyên sâu (L300) về Amazon Bedrock Agent Core, dành cho các doanh nghiệp muốn xây dựng hệ thống AI tự chủ (Agentic AI) ở quy mô sản xuất (production-ready).
 
-- **Jignesh Shah** - Director, Open Source Databases
-- **Erica Liu** - Sr. GTM Specialist, AppMod
-- **Fabrianne Effendi** - Assc. Specialist SA, Serverless Amazon Web Services
+#### Phần lý thuyết
+Phần lý thuyết bao gồm các phần chính sau:
 
-### Nội Dung Nổi Bật
+- **Giới thiệu về Agentic AI**: Giải thích khái niệm AI tự chủ, khả năng lập kế hoạch và thực thi công việc theo từng bước, cũng như mức độ tự chủ từ *deterministic workflow* (quy trình định sẵn) đến *fully autonomous*.
+- **Amazon Bedrock Agent Core**: Dịch vụ giúp quản lý, triển khai và vận hành các tác nhân AI (agents). Hệ thống này tuân thủ các tiêu chuẩn công nghiệp về hiệu năng, khả năng mở rộng (scalability) và bảo mật.
+- **Các thành phần cốt lõi của Agent Core**:
+  - **Runtime Environment**: Môi trường serverless để chạy agent, sử dụng công nghệ Firecracker MicroVM để cách ly tài nguyên.
+  - **Identity**: Lớp quản lý xác thực (authentication) và phân quyền (authorization) bằng JSON Web Tokens (JWT) và Workload Access Token.
+  - **Gateway**: Lớp trung gian (middleware) để kết nối agent với các công cụ (tools) khác nhau thông qua giao thức MCP (Model Context Protocol), hỗ trợ kiểm soát tập trung và tính năng human-in-the-loop.
+- **Bảo mật và Kết nối**: Thảo luận về việc kết nối agent với mạng VPC, sử dụng AWS PrivateLink để đảm bảo dữ liệu nội bộ không bị lộ ra ngoài mạng công cộng.
 
-#### Đưa ra các ảnh hưởng tiêu cực của kiến trúc ứng dụng cũ
+#### Phần thực hành
+Tập trung vào việc hướng dẫn mọi người thực hành các dịch vụ Runtime, Gateway, Identity đã được đề cập về lý thuyết ở trước cũng như chỉ người tham dự cách cài đặt các môi trường cần thiết cho phần thực hành.
 
-- Thời gian release sản phẩm lâu → Mất doanh thu/bỏ lỡ cơ hội
-- Hoạt động kém hiệu quả → Mất năng suất, tốn kém chi phí
-- Không tuân thủ các quy định về bảo mật → Mất an ninh, uy tín
+---
 
-#### Chuyển đổi sang kiến trúc ứng dụng mới - Microservice Architecture
-
-Chuyển đổi thành hệ thống modular – từng chức năng là một **dịch vụ độc lập** giao tiếp với nhau qua **sự kiện** với 3 trụ cột cốt lõi:
-
-- **Queue Management**: Xử lý tác vụ bất đồng bộ
-- **Caching Strategy:** Tối ưu performance
-- **Message Handling:** Giao tiếp linh hoạt giữa services
-
-#### Domain-Driven Design (DDD)
-
-- **Phương pháp 4 bước**: Xác định domain events → sắp xếp timeline → identify actors → xác định bounded contexts
-- **Case study bookstore**: Minh họa cách áp dụng DDD thực tế
-- **Context mapping**: 7 patterns tích hợp bounded contexts
-
-#### Event-Driven Architecture
-
-- **3 patterns tích hợp**: Publish/Subscribe, Point-to-point, Streaming
-- **Lợi ích**: Loose coupling, scalability, resilience
-- **So sánh sync vs async**: Hiểu rõ trade-offs (sự đánh đổi)
-
-#### Compute Evolution
-
-- **Shared Responsibility Model**: Từ EC2 → ECS → Fargate → Lambda
-- **Serverless benefits**: No server management, auto-scaling, pay-for-value
-- **Functions vs Containers**: Criteria lựa chọn phù hợp
-
-#### Amazon Q Developer
-
-- **SDLC automation**: Từ planning đến maintenance
-- **Code transformation**: Java upgrade, .NET modernization
-- **AWS Transform agents**: VMware, Mainframe, .NET migration
-
-### Những Gì Học Được
-
-#### Tư Duy Thiết Kế
-
-- **Business-first approach**: Luôn bắt đầu từ business domain, không phải technology
-- **Ubiquitous language**: Importance của common vocabulary giữa business và tech teams
-- **Bounded contexts**: Cách identify và manage complexity trong large systems
-
-#### Kiến Trúc Kỹ Thuật
-
-- **Event storming technique**: Phương pháp thực tế để mô hình hóa quy trình kinh doanh
-- Sử dụng **Event-driven communication** thay vì synchronous calls
-- **Integration patterns**: Hiểu khi nào dùng sync, async, pub/sub, streaming
-- **Compute spectrum**: Criteria chọn từ VM → containers → serverless
-
-#### Chiến Lược Hiện Đại Hóa
-
-- **Phased approach**: Không rush, phải có roadmap rõ ràng
-- **7Rs framework**: Nhiều con đường khác nhau tùy thuộc vào đặc điểm của mỗi ứng dụng
-- **ROI measurement**: Cost reduction + business agility
-
-### Ứng Dụng Vào Công Việc
-
-- **Áp dụng DDD** cho project hiện tại: Event storming sessions với business team
-- **Refactor microservices**: Sử dụng bounded contexts để identify service boundaries
-- **Implement event-driven patterns**: Thay thế một số sync calls bằng async messaging
-- **Serverless adoption**: Pilot AWS Lambda cho một số use cases phù hợp
-- **Try Amazon Q Developer**: Integrate vào development workflow để boost productivity
-
-### Trải nghiệm trong event
-
-Tham gia workshop **“GenAI-powered App-DB Modernization”** là một trải nghiệm rất bổ ích, giúp tôi có cái nhìn toàn diện về cách hiện đại hóa ứng dụng và cơ sở dữ liệu bằng các phương pháp và công cụ hiện đại. Một số trải nghiệm nổi bật:
-
-#### Học hỏi từ các diễn giả có chuyên môn cao
-- Các diễn giả đến từ AWS và các tổ chức công nghệ lớn đã chia sẻ **best practices** trong thiết kế ứng dụng hiện đại.
-- Qua các case study thực tế, tôi hiểu rõ hơn cách áp dụng **Domain-Driven Design (DDD)** và **Event-Driven Architecture** vào các project lớn.
-
-#### Trải nghiệm kỹ thuật thực tế
-- Tham gia các phiên trình bày về **event storming** giúp tôi hình dung cách **mô hình hóa quy trình kinh doanh** thành các domain events.
-- Học cách **phân tách microservices** và xác định **bounded contexts** để quản lý sự phức tạp của hệ thống lớn.
-- Hiểu rõ trade-offs giữa **synchronous và asynchronous communication** cũng như các pattern tích hợp như **pub/sub, point-to-point, streaming**.
-
-#### Ứng dụng công cụ hiện đại
-- Trực tiếp tìm hiểu về **Amazon Q Developer**, công cụ AI hỗ trợ SDLC từ lập kế hoạch đến maintenance.
-- Học cách **tự động hóa code transformation** và pilot serverless với **AWS Lambda**, từ đó nâng cao năng suất phát triển.
-
-#### Kết nối và trao đổi
-- Workshop tạo cơ hội trao đổi trực tiếp với các chuyên gia, đồng nghiệp và team business, giúp **nâng cao ngôn ngữ chung (ubiquitous language)** giữa business và tech.
-- Qua các ví dụ thực tế, tôi nhận ra tầm quan trọng của **business-first approach**, luôn bắt đầu từ nhu cầu kinh doanh thay vì chỉ tập trung vào công nghệ.
-
-#### Bài học rút ra
-- Việc áp dụng DDD và event-driven patterns giúp giảm **coupling**, tăng **scalability** và **resilience** cho hệ thống.
-- Chiến lược hiện đại hóa cần **phased approach** và đo lường **ROI**, không nên vội vàng chuyển đổi toàn bộ hệ thống.
-- Các công cụ AI như Amazon Q Developer có thể **boost productivity** nếu được tích hợp vào workflow phát triển hiện tại.
+### 4. Bài học rút ra
+Qua sự kiện **Agent Forge - Deepdive Day 1** này, em hiểu rõ hơn về khái niệm Agentic AI và cách xây dựng các AI Agent có khả năng tự lập kế hoạch, thực thi nhiệm vụ và tương tác với các dịch vụ bên ngoài. Em cũng nắm được kiến trúc của Amazon Bedrock Agent Core, bao gồm các thành phần Runtime, Identity và Gateway, cùng vai trò của từng thành phần trong quá trình triển khai và vận hành AI Agent. Bên cạnh đó, em nhận thức được tầm quan trọng của bảo mật khi triển khai hệ thống AI thông qua việc kết hợp Amazon VPC và AWS PrivateLink. Phần thực hành giúp em làm quen với quy trình cấu hình môi trường và triển khai các dịch vụ của Bedrock Agent Core, từ đó hiểu rõ hơn mối liên hệ giữa lý thuyết và ứng dụng thực tế.
 
 #### Một số hình ảnh khi tham gia sự kiện
-* Thêm các hình ảnh của các bạn tại đây
-> Tổng thể, sự kiện không chỉ cung cấp kiến thức kỹ thuật mà còn giúp tôi thay đổi cách tư duy về thiết kế ứng dụng, hiện đại hóa hệ thống và phối hợp hiệu quả hơn giữa các team.
+
+<div style="display: flex; gap: 12px; justify-content: space-between; align-items: center; margin: 15px 0;">
+  <img src="/images/4-EventParticipated/event2_01.jpg" alt="Hình ảnh tham gia sự kiện 1" style="width: 32%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); object-fit: cover;" />
+  <img src="/images/4-EventParticipated/event2_02.jpg" alt="Hình ảnh tham gia sự kiện 2" style="width: 32%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); object-fit: cover;" />
+  <img src="/images/4-EventParticipated/event2_03.jpg" alt="Hình ảnh tham gia sự kiện 3" style="width: 32%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); object-fit: cover;" />
+</div>
