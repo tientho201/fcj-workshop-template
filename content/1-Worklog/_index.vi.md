@@ -24,4 +24,4 @@ Thông thường và cũng là tiêu chuẩn, một worklog được thực hi�
 
 **Tuần 7:** [Rà soát lại toàn bộ 4 luồng dưới góc nhìn tổng thể, xử lý các điểm còn thô ráp phát hiện ở tuần trước (đặc biệt là chất lượng retrieval), viết tài liệu vận hành, và demo chính thức trước nhóm/mentor](1.7-week7/)
 
-**Tuần 8:** [Làm công việc H...](1.8-week8/)
+**Tuần 8:** [Rà soát và tổng hợp lại toàn bộ hành trình 7 tuần — từ kiến thức nền tảng AWS (Tuần 1-2) đến dự án RAG Knowledge Assistant (Tuần 3-7), đối chiếu kết quả với đề xuất ban đầu, và hoàn thiện tài liệu báo cáo thực tập](1.8-week8/)

@@ -5,53 +5,32 @@ weight: 1
 chapter: false
 pre: " <b> 1.8. </b> "
 ---
-{{% notice warning %}} 
-⚠️ **Note:** The following information is for reference purposes only. Please **do not copy verbatim** for your own report, including this warning.
-{{% /notice %}}
-
 
 ### Week 8 Objectives:
 
-* Connect and get acquainted with members of First Cloud AI Journey.
-* Understand basic AWS services, how to use the console & CLI.
+- Review and consolidate the entire 7-week journey: foundational AWS knowledge (Weeks 1-2) and the RAG Knowledge Assistant project (Weeks 3-7).
+- Re-verify that the whole system still runs end-to-end as intended, and compare the final result against the original Week 3 proposal.
+- Self-assess knowledge gained against the initial learning objectives, identifying strong points and remaining gaps.
+- Consolidate the worklog and finalize internship reporting documentation.
 
 ### Tasks to be carried out this week:
-| Day | Task                                                                                                                                                                                                   | Start Date | Completion Date | Reference Material                        |
-| --- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------- | --------------- | ----------------------------------------- |
-| 2   | - Get acquainted with FCAJ members <br> - Read and take note of internship unit rules and regulations                                                                                                   | 08/11/2025 | 08/11/2025      |
-| 3   | - Learn about AWS and its types of services <br>&emsp; + Compute <br>&emsp; + Storage <br>&emsp; + Networking <br>&emsp; + Database <br>&emsp; + ... <br>                                              | 08/12/2025 | 08/12/2025      | <https://cloudjourney.awsstudygroup.com/> |
-| 4   | - Create AWS Free Tier account <br> - Learn about AWS Console & AWS CLI <br> - **Practice:** <br>&emsp; + Create AWS account <br>&emsp; + Install & configure AWS CLI <br> &emsp; + How to use AWS CLI | 08/13/2025 | 08/13/2025      | <https://cloudjourney.awsstudygroup.com/> |
-| 5   | - Learn basic EC2: <br>&emsp; + Instance types <br>&emsp; + AMI <br>&emsp; + EBS <br>&emsp; + ... <br> - SSH connection methods to EC2 <br> - Learn about Elastic IP   <br>                            | 08/14/2025 | 08/15/2025      | <https://cloudjourney.awsstudygroup.com/> |
-| 6   | - **Practice:** <br>&emsp; + Launch an EC2 instance <br>&emsp; + Connect via SSH <br>&emsp; + Attach an EBS volume                                                                                     | 08/15/2025 | 08/15/2025      | <https://cloudjourney.awsstudygroup.com/> |
 
+| Day | Task                                                                                                                                                                                                                                                                        | Start Date | Completion Date | Reference Material |
+| --- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- | ---------------- | ------------------- |
+| 2   | **Review AWS foundations (Weeks 1-2):**<br>- Self-check core services covered: IAM, VPC, EC2, S3, RDS, Lightsail, Auto Scaling, CloudWatch, Route 53, DynamoDB, ElastiCache, CloudFront.<br>- Redo a few quick hands-on recalls (e.g., re-explain the VPC/Multi-AZ architecture from memory) to confirm retention rather than surface familiarity.                    | 08/10/2026 | 08/10/2026       | Personal Notes       |
+| 3   | **End-to-end project review:**<br>- Walk through the RAG Knowledge Assistant architecture flow by flow (Ingestion, Realtime QA, Monitoring, Evaluation).<br>- Re-test the live system: upload a new document, ask questions, verify Semantic Cache hits, and confirm the RAGAS evaluation job still runs on schedule.                  | 08/11/2026 | 08/11/2026       | Personal Project    |
+| 4   | **Gap analysis vs. original proposal:**<br>- Compare what was actually delivered against the Week 3 proposal and architecture diagrams.<br>- List completed items, partially completed items, and open items (e.g., API rate-limiting, expanded evaluation dataset) noted as feedback in Week 7.                                       | 08/12/2026 | 08/12/2026       | Personal Project    |
+| 5   | **Finalize documentation:**<br>- Consolidate the 8-week worklog into a coherent internship report.<br>- Update the architecture runbook and README with any changes made during the review.<br>- Draft a "lessons learned" section covering both AWS fundamentals and Serverless/GenAI architecture.                                    | 08/13/2026 | 08/13/2026       | Personal Project    |
+| 6   | **Retrospective & wrap-up:**<br>- Present the overall review to the team/mentor: what was learned, how the project evolved from proposal to production-ready state, and what would be done differently.<br>- Collect final feedback and outline potential next steps beyond the internship.                                            | 08/14/2026 | 08/14/2026       | Personal Project    |
 
 ### Week 8 Achievements:
 
-* Understood what AWS is and mastered the basic service groups: 
-  * Compute
-  * Storage
-  * Networking 
-  * Database
-  * ...
+- **Confirmed retention of AWS fundamentals:** Reviewing Weeks 1-2 material without referring back to notes confirmed solid understanding of core service groups (Compute, Storage, Networking, Database) and, more importantly, how they compose into a working architecture — this composability is exactly what made the Week 3-7 project possible.
 
-* Successfully created and configured an AWS Free Tier account.
+- **Verified the project still works end-to-end:** Re-running the full flow (document upload → OCR → Q&A → cache → monitoring → RAGAS evaluation) confirmed the system is stable beyond the original demo conditions, not just working once for presentation purposes.
 
-* Became familiar with the AWS Management Console and learned how to find, access, and use services via the web interface.
+- **Honest gap analysis completed:** Comparing the final state against the Week 3 proposal showed the four core flows were fully delivered, while secondary items (API rate-limiting, a larger evaluation dataset, horizontal scaling beyond current Lambda concurrency limits) remain as clearly documented next steps rather than silently dropped scope.
 
-* Installed and configured AWS CLI on the computer, including:
-  * Access Key
-  * Secret Key
-  * Default Region
-  * ...
+- **Consolidated project documentation:** The architecture runbook, deployment README, and 8-week worklog are now aligned and up to date, making it possible for someone else to pick up the project without relying on tribal knowledge.
 
-* Used AWS CLI to perform basic operations such as:
-
-  * Check account & configuration information
-  * Retrieve the list of regions
-  * View EC2 service
-  * Create and manage key pairs
-  * Check information about running services
-  * ...
-
-* Acquired the ability to connect between the web interface and CLI to manage AWS resources in parallel.
-* ...
+- **Overall reflection:** Looking back at the full internship — from AWS account setup in Week 1 to an automated, self-monitoring, quality-evaluated GenAI system in Week 7 — the biggest takeaway is not any single AWS service, but the shift from "making something work" to "making something operable": event-driven design, least-privilege IAM, observability, and metrics-driven iteration (RAGAS) all point in that same direction.

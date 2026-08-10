@@ -24,7 +24,7 @@ Typically, and as a standard, a worklog is carried out over about 3 months (thro
 
 **Week 7:** [Review all 4 system flows from a holistic perspective, resolve coarse edges identified in previous weeks (especially retrieval quality), write operational documentation, and deliver the official project demo to the team/mentor](1.7-week7/)
 
-**Week 8:** [Doing task H...](1.8-week8/)
+**Week 8:** [Review and consolidate the full 7-week journey — from AWS foundations (Weeks 1-2) to the RAG Knowledge Assistant project (Weeks 3-7), compare results against the original proposal, and finalize internship reporting documentation](1.8-week8/)
 
 **Week 9:** [Doing task I...](1.9-week9/)
 
