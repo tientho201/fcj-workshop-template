@@ -5,6 +5,7 @@ weight: 3
 chapter: false
 pre: " <b> 5.3.3 </b> "
 ---
+
 Với mỗi file rơi vào SQS, hàm `_process_s3_object` trong `handler.py` chạy tuần tự, **ghi trạng thái vào bảng `ingestion_status` sau mỗi bước** để UI poll qua endpoint `/status`. Bước đầu tiên trong chuỗi này là trích xuất văn bản — rẽ nhánh theo phần mở rộng của file.
 
 #### Khai báo extensions và các hàm trích xuất text
@@ -56,6 +57,7 @@ def _extract_text(bucket, key):
         f"Unsupported file type '{extension}' for key '{key}'..."
     )
 ```
+
 #### Logic rẽ nhánh theo định dạng file
 
 ```python
@@ -171,13 +173,8 @@ def _write_status(document_id, key, status, tracer, **extra):
 
 Khi `pypdf` trả về chuỗi rỗng, Lambda **cố tình không raise exception** để SQS không coi đây là lỗi và không retry vô ích — thay vào đó ghi status `awaiting_ocr_confirmation` và dừng xử lý. Người dùng sẽ xác nhận có muốn OCR tài liệu này hay không thông qua endpoint `/documents-decision`, trước khi Lambda được gọi lại để tiếp tục (chi tiết cơ chế gọi lại này ở trang [5.3.5 - Cơ chế Resume OCR và xử lý lỗi](../5.3.5-Resume-OCR-Error-Handling/)).
 
-![Log CloudWatch khi PDF scan chờ xác nhận OCR](../images/06-awaiting-ocr-status.png)
-*Ảnh minh họa: log Lambda ghi status `awaiting_ocr_confirmation`, và bảng `ingestion_status` cập nhật tương ứng.*
-
-![Test OCR trả về đúng nội dung từ file ảnh scan](../images/07-textract-ocr-result.png)
-*Ảnh minh họa: log Lambda in ra nội dung text đã trích xuất từ file ảnh scan qua Textract.*
-
 ---
+
 #### Nội dung tiếp theo
 
 Tiếp theo: [5.3.4 - Parent-Child Chunking và Embedding](../5.3.4-Chunking-Embedding/)

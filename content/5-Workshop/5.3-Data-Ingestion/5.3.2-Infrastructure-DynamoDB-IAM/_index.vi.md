@@ -5,6 +5,7 @@ weight: 2
 chapter: false
 pre: " <b> 5.3.2 </b> "
 ---
+
 {{% notice note %}}
 📌 So với sơ đồ kiến trúc ban đầu, luồng này **không dùng Amazon OpenSearch Serverless**. Toàn bộ vector và chỉ số BM25 được lưu trực tiếp trong **Amazon DynamoDB**, và Luồng 2 sẽ tự tính Hybrid Search (cosine similarity + BM25 → Reciprocal Rank Fusion) ở tầng ứng dụng thay vì dựa vào engine tìm kiếm chuyên dụng.
 {{% /notice %}}
@@ -13,11 +14,11 @@ pre: " <b> 5.3.2 </b> "
 
 Thay vì "Lưu Vectors → OpenSearch" như sơ đồ gốc, dự án dùng 3 bảng DynamoDB:
 
-| Bảng | Dữ liệu lưu | Mục đích |
-|---|---|---|
-| `ingestion_status` | Trạng thái xử lý theo `document_id` sau mỗi bước | Cho UI poll qua endpoint `/status` |
-| `parent_chunks` | Text thô của parent chunk (~1000-1500 token) | Tra cứu ngữ cảnh rộng bằng `parent_id` lúc trả lời câu hỏi |
-| `child_chunks` | Vector đóng gói nhị phân + BM25 term frequencies | Dữ liệu để Luồng 2 tính Hybrid Search (cosine + BM25 → RRF) |
+| Bảng               | Dữ liệu lưu                                      | Mục đích                                                    |
+| ------------------ | ------------------------------------------------ | ----------------------------------------------------------- |
+| `ingestion_status` | Trạng thái xử lý theo `document_id` sau mỗi bước | Cho UI poll qua endpoint `/status`                          |
+| `parent_chunks`    | Text thô của parent chunk (~1000-1500 token)     | Tra cứu ngữ cảnh rộng bằng `parent_id` lúc trả lời câu hỏi  |
+| `child_chunks`     | Vector đóng gói nhị phân + BM25 term frequencies | Dữ liệu để Luồng 2 tính Hybrid Search (cosine + BM25 → RRF) |
 
 ```hcl
 resource "aws_dynamodb_table" "parent_chunks" {
@@ -82,9 +83,6 @@ resource "aws_dynamodb_table" "ingestion_status" {
 }
 ```
 
-![3 bảng DynamoDB thay thế OpenSearch](../images/04-dynamodb-tables-console.png)
-*Ảnh minh họa: `parent-chunks`, `child-chunks`, `ingestion-status` trên DynamoDB Console.*
-
 #### IAM Role least-privilege cho document_processor
 
 Role của Lambda chỉ có đúng những quyền cần thiết — không dùng quyền rộng như policy deploy ở phần chuẩn bị môi trường (mục 5.2):
@@ -128,10 +126,8 @@ resource "aws_iam_role_policy" "document_processor" {
 `Textract` là ngoại lệ duy nhất dùng `resources = "*"` trong role này — vì `AnalyzeDocument` và `DetectDocumentText` không hỗ trợ scoping theo ARN. Đây là điểm nên ghi chú rõ trong code/báo cáo để người review không hiểu nhầm là thiếu sót về bảo mật.
 {{% /notice %}}
 
-![IAM Role document_processor với 4 nhóm quyền least-privilege](../images/05-iam-role-least-privilege.png)
-*Ảnh minh họa: IAM Role trên Console với inline policy hiển thị 4 statement (`ReadRawDocuments`, `WriteScopedDynamoTables`, `InvokeEmbeddingModelOnly`, `TextractOcr`).*
-
 ---
+
 #### Nội dung tiếp theo
 
 Tiếp theo: [5.3.3 - Trích xuất văn bản theo loại file](../5.3.3-Text-Extraction/)

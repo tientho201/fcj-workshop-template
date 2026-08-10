@@ -5,6 +5,7 @@ weight: 4
 chapter: false
 pre: " <b> 5.3.4 </b> "
 ---
+
 After extracting text (from page [5.3.3](../5.3.3-Text-Extraction/)), the next step is to chunk the document, generate vector embeddings, and store them into the 2 DynamoDB tables created on page [5.3.2](../5.3.2-Infrastructure-DynamoDB-IAM/).
 
 #### Parent-Child Chunking
@@ -119,9 +120,6 @@ def embed_texts(model_id, texts, input_type):
 
 The embedding model is retrieved from the `BEDROCK_EMBEDDING_MODEL_ID` environment variable, matching the exact ARN scoped in the IAM Role on page 5.3.2 — ensuring Lambda can only invoke this specific model and no other Bedrock models.
 
-![Test calling Bedrock Titan Embeddings returning vectors](../images/08-bedrock-embedding-test.png)
-*Illustration: Log or test results returning vectors with dimensions matching the model documentation.*
-
 #### Storing Child Chunks: Binary Vectors + BM25 Term Frequency
 
 ```python
@@ -162,10 +160,8 @@ def _index_children(children, vectors):
 `vector_store.pack_vector()` packs vectors into a **Binary attribute** (`embedding`) instead of a `List<Number>` — saving significant storage cost and read/write bandwidth on DynamoDB compared to raw numerical arrays. The `term_freq_json` field stores pre-computed term frequencies as a JSON string alongside `doc_length`, allowing Pipeline 2 to simply calculate cosine similarity + BM25 score and combine them using **Reciprocal Rank Fusion (RRF)** without invoking an external search engine. The entire pipeline no longer includes a "Store Vectors → OpenSearch" step as in the original diagram — that step now consists of the 2 DynamoDB writes (parent chunks and child chunks) on this page.
 {{% /notice %}}
 
-![Item in child_chunks table with embedding and term_freq_json](../images/09-dynamodb-child-chunks-item.png)
-*Illustration: An item in `child_chunks` with `embedding` (Binary) and `term_freq_json` (String JSON) attributes.*
-
 ---
+
 #### Next content
 
 Next: [5.3.5 - Resume OCR Mechanism and Error Handling](../5.3.5-Resume-OCR-Error-Handling/)

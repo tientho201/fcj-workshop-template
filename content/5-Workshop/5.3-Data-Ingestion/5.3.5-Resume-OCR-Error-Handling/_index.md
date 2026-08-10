@@ -5,11 +5,13 @@ weight: 5
 chapter: false
 pre: " <b> 5.3.5 </b> "
 ---
+
 This page presents 2 special mechanisms of the `document_processor` Lambda function: a secondary entrypoint for resuming/canceling documents awaiting OCR confirmation, and handling unexpected runtime errors.
 
 #### Secondary Entrypoint: Resume / Cancel OCR
 
 This Lambda function features **2 entrypoints**:
+
 - **Primary entrypoint via SQS** (`event["Records"]`): Asynchronously processes new files uploaded to S3.
 - **Secondary entrypoint bypassing SQS** (invoked directly when `event` contains key `"action"`): Receives direct commands from `chat_engine` (endpoint `/documents-decision`) to resume or cancel scanned PDF documents paused in the `awaiting_ocr_confirmation` state (see page [5.3.3 - Text Extraction by File Type](../5.3.3-Text-Extraction/)).
 
@@ -86,9 +88,6 @@ lambda_client.invoke(
 
 This mechanism allows users, via the chat UI (endpoint `/documents-decision`), to actively decide whether to accept the OCR cost for a scanned PDF file, instead of the system automatically OCR-ing every case.
 
-![Testing resume_ocr invoking Lambda directly bypassing SQS](../images/10-resume-ocr-invoke-test.png)
-*Illustration: Testing direct Lambda invocation with payload `{"action": "resume_ocr", "bucket": "...", "key": "..."}`.*
-
 #### Handling Unexpected Runtime Errors (Function DLQ)
 
 Unlike `ingestion_dlq` (automatically populated by SQS after 3 retries — see page [5.3.1 - Infrastructure: S3 and SQS](../5.3.1-Infrastructure-S3-SQS/)), the `document_processor_fn_dlq` queue is actively logged by application code when encountering unexpected runtime errors (code bugs, not corrupt files):
@@ -115,6 +114,7 @@ def _report_to_function_dlq(record, error):
 Separating these 2 DLQ tiers enables operations teams to quickly distinguish issue types: if a message lands in `ingestion_dlq` → inspect the source document; if it lands in `document_processor_fn_dlq` → examine the detailed traceback to fix source code.
 
 ---
+
 #### Next content
 
 Next: [5.3.6 - End-to-End Testing](../5.3.6-End-To-End-Testing/)

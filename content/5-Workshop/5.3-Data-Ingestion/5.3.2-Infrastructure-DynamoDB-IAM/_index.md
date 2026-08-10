@@ -5,6 +5,7 @@ weight: 2
 chapter: false
 pre: " <b> 5.3.2 </b> "
 ---
+
 {{% notice note %}}
 📌 Compared to the initial architecture diagram, this pipeline **does not use Amazon OpenSearch Serverless**. All vectors and BM25 indices are stored directly in **Amazon DynamoDB**, and Pipeline 2 calculates Hybrid Search (cosine similarity + BM25 → Reciprocal Rank Fusion) at the application layer instead of relying on a dedicated search engine.
 {{% /notice %}}
@@ -13,11 +14,11 @@ pre: " <b> 5.3.2 </b> "
 
 Instead of "Store Vectors → OpenSearch" as in the original diagram, the project uses 3 DynamoDB tables:
 
-| Table | Stored Data | Purpose |
-|---|---|---|
-| `ingestion_status` | Processing status per `document_id` after each step | Enables the UI to poll via the `/status` endpoint |
-| `parent_chunks` | Raw text of parent chunks (~1000-1500 tokens) | Broad context lookup using `parent_id` during Q&A |
-| `child_chunks` | Binary-packed vectors + BM25 term frequencies | Data for Pipeline 2 to calculate Hybrid Search (cosine + BM25 → RRF) |
+| Table              | Stored Data                                         | Purpose                                                              |
+| ------------------ | --------------------------------------------------- | -------------------------------------------------------------------- |
+| `ingestion_status` | Processing status per `document_id` after each step | Enables the UI to poll via the `/status` endpoint                    |
+| `parent_chunks`    | Raw text of parent chunks (~1000-1500 tokens)       | Broad context lookup using `parent_id` during Q&A                    |
+| `child_chunks`     | Binary-packed vectors + BM25 term frequencies       | Data for Pipeline 2 to calculate Hybrid Search (cosine + BM25 → RRF) |
 
 ```hcl
 resource "aws_dynamodb_table" "parent_chunks" {
@@ -82,9 +83,6 @@ resource "aws_dynamodb_table" "ingestion_status" {
 }
 ```
 
-![3 DynamoDB tables replacing OpenSearch](../images/04-dynamodb-tables-console.png)
-*Illustration: `parent-chunks`, `child-chunks`, `ingestion-status` on the DynamoDB Console.*
-
 #### Least-Privilege IAM Role for document_processor
 
 The Lambda role has strictly necessary permissions — avoid broad permissions like the policy deployed in the environment setup phase (section 5.2):
@@ -128,10 +126,10 @@ resource "aws_iam_role_policy" "document_processor" {
 `Textract` is the only exception using `resources = "*"` in this role — because `AnalyzeDocument` and `DetectDocumentText` do not support scoping by ARN. This should be explicitly noted in the code/report so reviewers do not mistake it for a security oversight.
 {{% /notice %}}
 
-![document_processor IAM Role with 4 least-privilege permission groups](../images/05-iam-role-least-privilege.png)
-*Illustration: IAM Role on Console with inline policy displaying 4 statements (`ReadRawDocuments`, `WriteScopedDynamoTables`, `InvokeEmbeddingModelOnly`, `TextractOcr`).*
+adRawDocuments`, `WriteScopedDynamoTables`, `InvokeEmbeddingModelOnly`, `TextractOcr`).\_
 
 ---
+
 #### Next content
 
 Next: [5.3.3 - Text Extraction by File Type](../5.3.3-Text-Extraction/)

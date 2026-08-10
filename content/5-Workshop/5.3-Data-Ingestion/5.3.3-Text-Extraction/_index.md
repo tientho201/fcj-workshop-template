@@ -5,6 +5,7 @@ weight: 3
 chapter: false
 pre: " <b> 5.3.3 </b> "
 ---
+
 For each file pushed into SQS, the `_process_s3_object` function in `handler.py` runs sequentially, **writing status updates to the `ingestion_status` table after each step** so that the UI can poll via the `/status` endpoint. The first step in this pipeline is text extraction — branching according to the file extension.
 
 #### Extension Declarations and Text Extraction Functions
@@ -172,13 +173,8 @@ def _write_status(document_id, key, status, tracer, **extra):
 
 When `pypdf` returns an empty string, Lambda **intentionally refrains from raising an exception** so that SQS does not treat this as a failure or perform unnecessary retries — instead, it records the `awaiting_ocr_confirmation` status and halts processing. The user confirms whether to perform OCR on the document via the `/documents-decision` endpoint before Lambda is invoked again to resume (details on this resume mechanism can be found on page [5.3.5 - Resume OCR Mechanism and Error Handling](../5.3.5-Resume-OCR-Error-Handling/)).
 
-![CloudWatch logs when a scanned PDF awaits OCR confirmation](../images/06-awaiting-ocr-status.png)
-*Illustration: Lambda log showing `awaiting_ocr_confirmation` status and corresponding update in the `ingestion_status` table.*
-
-![OCR test returning extracted text from a scanned image file](../images/07-textract-ocr-result.png)
-*Illustration: Lambda log displaying extracted text content from a scanned image file via Textract.*
-
 ---
+
 #### Next content
 
 Next: [5.3.4 - Parent-Child Chunking and Embedding](../5.3.4-Chunking-Embedding/)

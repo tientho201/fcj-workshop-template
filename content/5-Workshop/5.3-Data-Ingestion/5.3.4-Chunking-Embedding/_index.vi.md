@@ -5,6 +5,7 @@ weight: 4
 chapter: false
 pre: " <b> 5.3.4 </b> "
 ---
+
 Sau khi có văn bản đã trích xuất (từ trang [5.3.3](../5.3.3-Text-Extraction/)), bước tiếp theo là chia nhỏ tài liệu, sinh vector embedding, và lưu vào 2 bảng DynamoDB đã tạo ở trang [5.3.2](../5.3.2-Infrastructure-DynamoDB-IAM/).
 
 #### Parent-Child Chunking
@@ -119,9 +120,6 @@ def embed_texts(model_id, texts, input_type):
 
 Model dùng để embedding được lấy từ biến môi trường `BEDROCK_EMBEDDING_MODEL_ID`, khớp đúng với ARN đã scope trong IAM Role ở trang 5.3.2 — đảm bảo Lambda chỉ gọi được đúng 1 model, không thể gọi các model Bedrock khác.
 
-![Test gọi Bedrock Titan Embeddings trả về vector](../images/08-bedrock-embedding-test.png)
-*Ảnh minh họa: log hoặc kết quả test trả về vector có đúng số chiều theo tài liệu model.*
-
 #### Lưu Child Chunks: vector nhị phân + BM25 term frequency
 
 ```python
@@ -161,8 +159,7 @@ def _index_children(children, vectors):
 {{% notice note %}}
 `vector_store.pack_vector()` đóng gói vector thành **Binary attribute** (`embedding`) thay vì `List<Number>` — tiết kiệm đáng kể chi phí lưu trữ và băng thông đọc/ghi trên DynamoDB so với lưu mảng số thô. Trường `term_freq_json` lưu sẵn term frequency dạng JSON string cùng với `doc_length`, để Luồng 2 chỉ cần tính cosine similarity + BM25 score rồi kết hợp bằng **Reciprocal Rank Fusion (RRF)** mà không cần gọi thêm engine tìm kiếm nào khác. Toàn bộ pipeline không còn bước "Lưu Vectors → OpenSearch" như sơ đồ gốc — bước đó giờ chính là 2 lần ghi DynamoDB (parent chunks và child chunks) ở trang này.
 {{% /notice %}}
-![Item trong bảng child_chunks với embedding và term_freq_json](../images/09-dynamodb-child-chunks-item.png)
-*Ảnh minh họa: 1 item trong `child_chunks` với attribute `embedding` (Binary) và `term_freq_json` (String JSON).*
+
 #### Nội dung tiếp theo
 
 Tiếp theo: [5.3.5 - Cơ chế Resume OCR và xử lý lỗi](../5.3.5-Resume-OCR-Error-Handling/)

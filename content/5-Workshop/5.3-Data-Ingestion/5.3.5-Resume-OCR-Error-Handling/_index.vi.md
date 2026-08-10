@@ -5,11 +5,13 @@ weight: 5
 chapter: false
 pre: " <b> 5.3.5 </b> "
 ---
+
 Trang này trình bày 2 cơ chế đặc biệt của Lambda `document_processor`: lối vào thứ hai để tiếp tục/hủy tài liệu đang chờ xác nhận OCR, và cách xử lý khi gặp lỗi runtime bất ngờ.
 
 #### Lối vào thứ hai: Resume / Cancel OCR
 
-Lambda này có **2 lối vào**: 
+Lambda này có **2 lối vào**:
+
 - **Lối chính qua SQS** (`event["Records"]`): Xử lý bất đồng bộ các file mới upload lên S3.
 - **Lối thứ hai không qua SQS** (gọi trực tiếp khi `event` có key `"action"`): Nhận lệnh trực tiếp từ `chat_engine` (endpoint `/documents-decision`) để tiếp tục (resume) hoặc hủy (cancel) tài liệu PDF scan đang tạm dừng ở trạng thái `awaiting_ocr_confirmation` (xem trang [5.3.3 - Trích xuất văn bản theo loại file](../5.3.3-Text-Extraction/)).
 
@@ -86,9 +88,6 @@ lambda_client.invoke(
 
 Cơ chế này cho phép người dùng, thông qua giao diện chat (endpoint `/documents-decision`), chủ động quyết định có chấp nhận chi phí OCR cho một file PDF scan hay không, thay vì hệ thống tự động OCR mọi trường hợp.
 
-![Test resume_ocr gọi trực tiếp Lambda không qua SQS](../images/10-resume-ocr-invoke-test.png)
-*Ảnh minh họa: test invoke Lambda trực tiếp với payload `{"action": "resume_ocr", "bucket": "...", "key": "..."}`.*
-
 #### Xử lý lỗi runtime bất ngờ (Function DLQ)
 
 Khác với `ingestion_dlq` (SQS tự động đẩy vào sau 3 lần retry — xem trang [5.3.1 - Hạ tầng: S3 và SQS](../5.3.1-Infrastructure-S3-SQS/)), queue `document_processor_fn_dlq` được chính code chủ động ghi khi gặp lỗi không lường trước (bug trong code, không phải do file hỏng):
@@ -115,6 +114,7 @@ def _report_to_function_dlq(record, error):
 Tách 2 tầng DLQ này giúp đội vận hành phân biệt nhanh khi rà soát: nếu message nằm ở `ingestion_dlq` → nên kiểm tra lại tệp nguồn; nếu nằm ở `document_processor_fn_dlq` → nên xem traceback chi tiết để sửa lỗi mã nguồn.
 
 ---
+
 #### Nội dung tiếp theo
 
 Tiếp theo: [5.3.6 - Kiểm thử End-to-End](../5.3.6-End-To-End-Testing/)
