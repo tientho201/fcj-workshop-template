@@ -39,10 +39,18 @@ jobs:
 ```yaml
 # .github/workflows/deploy.yml (hiện tại)
 on:
-  workflow_dispatch: {} # xem comment trong deploy.yml:3-11
+  workflow_dispatch: {}
+
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+permissions:
+  contents: read
 
 jobs:
   terraform-apply:
+    name: terraform apply (production)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -62,9 +70,8 @@ Workflow còn đặt `concurrency: group: deploy-production` với `cancel-in-pr
 `workflow_dispatch` là **"cổng chặn" miễn phí** thay Required reviewers, cùng mục tiêu: **không có cú click chủ động thì không có gì bị apply**. Không phải lúc nào cũng cần đúng tính năng “chuẩn” — cơ chế đơn giản hơn nhưng đạt cùng mục tiêu an toàn vẫn hợp lý khi tính năng chuẩn không khả dụng.
 {{% /notice %}}
 
-![So sánh workflow trigger trước và sau khi sửa](../images/02-deploy-trigger-before-after.png)
-*Trước: push tự apply (Required reviewer không xuất hiện). Sau: nút “Run workflow” thủ công trong tab Actions.*
-
 ---
 
-Tiếp theo: [5.9.3 - Thiết lập thủ công và giới hạn phạm vi](../5.9.3-Manual-Setup-and-Scope-Limitations/)
+#### Nội dung tiếp theo
+
+- [5.9.3 - Thiết lập thủ công và giới hạn phạm vi](../5.9.3-Manual-Setup-and-Scope-Limitations/)

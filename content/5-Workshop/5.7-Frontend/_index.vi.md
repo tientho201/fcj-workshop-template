@@ -12,12 +12,12 @@ Khác với SPA có build step thường gặp, giao diện dự án là **một
 
 Trình duyệt chỉ gọi backend qua **4 route API của Luồng 2** (xem [5.4.1](../5.4-Realtime-QA/5.4.1-API-Gateway-Cognito/)):
 
-| Route | Dùng để |
-|---|---|
-| `POST /chat` | Gửi câu hỏi, nhận câu trả lời (+ `trace`, `cached`, `sources`) |
-| `POST /documents` | Upload text (`content`) hoặc nhị phân (`content_base64`) |
-| `GET /status` | Poll tiến trình ingestion (`document_id`) |
-| `POST /documents-decision` | Xác nhận OCR (`ocr`) hoặc hủy với PDF scan |
+| Route                      | Dùng để                                                        |
+| -------------------------- | -------------------------------------------------------------- |
+| `POST /chat`               | Gửi câu hỏi, nhận câu trả lời (+ `trace`, `cached`, `sources`) |
+| `POST /documents`          | Upload text (`content`) hoặc nhị phân (`content_base64`)       |
+| `GET /status`              | Poll tiến trình ingestion (`document_id`)                      |
+| `POST /documents-decision` | Xác nhận OCR (`ocr`) hoặc hủy với PDF scan                     |
 
 Giao diện chia **2 cột**: **trái** là khu thao tác (đăng nhập, tải tài liệu, hỏi đáp), **phải** là khu quan sát pipeline — sơ đồ các bước chạy animation **theo đúng số liệu thời gian thật** backend trả về (`trace` / trạng thái ingestion), không phải hiệu ứng dàn dựng.
 
@@ -31,8 +31,8 @@ Giao diện chia **2 cột**: **trái** là khu thao tác (đăng nhập, tải 
 
 #### Sơ đồ giao diện
 
-![Giao diện 2 cột: khu thao tác và khu quan sát pipeline](/images/5-Workshop/5.7-Web/image.png)
-*Ảnh chụp console 2 cột thật (trái: kết nối / upload / chat; phải: pipeline + nhật ký).*
+![Giao diện 2 cột: khu thao tác và khu quan sát pipeline](/images/5-Workshop/5.7-Frontend/image.png)
+_Ảnh chụp console 2 cột thật (trái: kết nối / upload / chat; phải: pipeline + nhật ký)._
 
 #### Nội dung chi tiết
 

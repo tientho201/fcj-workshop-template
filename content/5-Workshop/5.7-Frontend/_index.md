@@ -12,12 +12,12 @@ Unlike a typical SPA with a build step, this project's UI is a **single self-con
 
 The browser talks to the backend only through the **4 API routes from Stream 2** (see [5.4.1](../5.4-Realtime-QA/5.4.1-API-Gateway-Cognito/)):
 
-| Route | Purpose |
-|---|---|
-| `POST /chat` | Send questions, receive answers (+ `trace`, `cached`, `sources`) |
-| `POST /documents` | Upload text (`content`) or binary (`content_base64`) |
-| `GET /status` | Poll ingestion progress (`document_id`) |
-| `POST /documents-decision` | Confirm OCR (`ocr`) or cancel for scanned PDFs |
+| Route                      | Purpose                                                          |
+| -------------------------- | ---------------------------------------------------------------- |
+| `POST /chat`               | Send questions, receive answers (+ `trace`, `cached`, `sources`) |
+| `POST /documents`          | Upload text (`content`) or binary (`content_base64`)             |
+| `GET /status`              | Poll ingestion progress (`document_id`)                          |
+| `POST /documents-decision` | Confirm OCR (`ocr`) or cancel for scanned PDFs                   |
 
 The layout is **two panes**: **left** for actions (sign-in, upload, Q&A), **right** for observing the pipeline — step animation driven by **real timings** from the backend (`trace` / ingestion status), not staged effects.
 
@@ -31,8 +31,8 @@ The layout is **two panes**: **left** for actions (sign-in, upload, Q&A), **righ
 
 #### UI overview
 
-![Two-pane UI: action panel and pipeline observer](/images/5-Workshop/5.7-Web/image.png)
-*Screenshot of the real two-pane console (left: connect / upload / chat; right: pipeline + log).*
+![Two-pane UI: action panel and pipeline observer](/images/5-Workshop/5.7-Frontend/image.png)
+_Screenshot of the real two-pane console (left: connect / upload / chat; right: pipeline + log)._
 
 #### Detailed contents
 

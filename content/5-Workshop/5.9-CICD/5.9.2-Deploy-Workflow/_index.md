@@ -39,10 +39,18 @@ This is the hardest class of bug to spot: no error message, the YAML is valid, o
 ```yaml
 # .github/workflows/deploy.yml (current)
 on:
-  workflow_dispatch: {} # see comments in deploy.yml:3-11
+  workflow_dispatch: {}
+
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+permissions:
+  contents: read
 
 jobs:
   terraform-apply:
+    name: terraform apply (production)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -63,8 +71,10 @@ The workflow also sets `concurrency: group: deploy-production` with `cancel-in-p
 {{% /notice %}}
 
 ![Deploy trigger before vs after the fix](../images/02-deploy-trigger-before-after.png)
-*Before: push auto-ran apply (Required reviewer never appeared). After: manual “Run workflow” button in the Actions tab.*
+_Before: push auto-ran apply (Required reviewer never appeared). After: manual “Run workflow” button in the Actions tab._
 
 ---
 
-Next: [5.9.3 - Manual Setup and Scope Limitations](../5.9.3-Manual-Setup-and-Scope-Limitations/)
+#### Next Content
+
+- [5.9.3 - Manual Setup and Scope Limitations](../5.9.3-Manual-Setup-and-Scope-Limitations/)
