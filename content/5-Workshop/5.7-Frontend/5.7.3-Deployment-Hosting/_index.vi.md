@@ -33,9 +33,6 @@ terraform output cognito_app_client_id
 # terraform output -raw api_key_value
 ```
 
-![Panel Kết nối để điền API endpoint và Cognito Client ID](../images/06-connection-panel.png)
-*Panel **1 · Kết nối**: API URL, Client ID, Region, email/mật khẩu.*
-
 {{% notice tip %}}
 API Gateway / Cognito Client ID đổi mỗi lần `terraform apply` lại từ đầu (destroy + tạo mới, không phải update tại chỗ). **Luôn chạy lại 2 lệnh `terraform output` ở trên sau mỗi lần apply lại toàn bộ hạ tầng**, rồi cập nhật panel Kết nối — nếu quên, giao diện sẽ gọi endpoint cũ đã không còn tồn tại.
 {{% /notice %}}
@@ -62,13 +59,13 @@ aws cognito-idp admin-set-user-password \
 
 #### Giới hạn đã biết (UI + API)
 
-| Giới hạn | Chi tiết |
-|---|---|
+| Giới hạn         | Chi tiết                                                                               |
+| ---------------- | -------------------------------------------------------------------------------------- |
 | Body API Gateway | Tối đa 10 MB; PDF/ảnh base64 phồng ~33% nên dung lượng nhị phân thực nhận được nhỏ hơn |
-| PDF nhiều trang | Textract đồng bộ (`detect_document_text`) chỉ **1 trang** — nhiều trang báo lỗi rõ |
-| Quota Bedrock | Gửi dồn có thể HTTP 429 (`retryable`) — đợi rồi thử lại |
-| Hosting | Frontend không nằm trong vòng Terraform destroy/apply; chỉ mở file local |
-| Layout | Dưới ~900px lưới xếp thành một cột |
+| PDF nhiều trang  | Textract đồng bộ (`detect_document_text`) chỉ **1 trang** — nhiều trang báo lỗi rõ     |
+| Quota Bedrock    | Gửi dồn có thể HTTP 429 (`retryable`) — đợi rồi thử lại                                |
+| Hosting          | Frontend không nằm trong vòng Terraform destroy/apply; chỉ mở file local               |
+| Layout           | Dưới ~900px lưới xếp thành một cột                                                     |
 
 #### Hướng mở rộng (chưa làm)
 
@@ -80,4 +77,6 @@ Việc này **chưa được triển khai** trong phạm vi stack thực tập h
 
 ---
 
-Tiếp theo: [5.7.4 - Kiểm thử end-to-end](../5.7.4-Test-end-to-end/)
+#### Nội dung tiếp theo
+
+- [5.7.4 - Kiểm thử end-to-end](../5.7.4-Test-end-to-end/)

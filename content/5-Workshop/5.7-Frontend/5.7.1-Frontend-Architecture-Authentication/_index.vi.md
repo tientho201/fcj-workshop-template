@@ -30,7 +30,7 @@ fetch(`https://cognito-idp.${region}.amazonaws.com/`, {
 App Client phía Terraform là **public client** (`generate_secret = false`) — phù hợp vì code chạy hoàn toàn ở trình duyệt, không có nơi nào an toàn để giữ client secret.
 
 ![Gọi trực tiếp InitiateAuth qua fetch, xem trong DevTools Network](../images/01-initiate-auth-network-tab.png)
-*Tab Network: POST tới `cognito-idp.<region>.amazonaws.com` với header `X-Amz-Target`.*
+_Tab Network: POST tới `cognito-idp.<region>.amazonaws.com` với header `X-Amz-Target`._
 
 #### Vòng đời token — không có refresh flow
 
@@ -48,11 +48,11 @@ fetch(apiUrl, { headers: { Authorization: state.token } });
 
 **`state.token` chỉ tồn tại trong bộ nhớ (biến JS), không lưu vào `localStorage`/cookie** — refresh trang là mất token, phải đăng nhập lại. Ngược lại, **cấu hình kết nối** (API URL, Client ID, Region, email) được lưu ở `localStorage` để lần sau khỏi gõ lại; **mật khẩu không bao giờ được lưu**, chỉ tồn tại trong ô input lúc gõ.
 
-| Dữ liệu | Nơi lưu | Tồn tại tới khi nào |
-|---|---|---|
-| `IdToken` | Biến JS (`state.token`) | Đóng tab hoặc reload trang |
+| Dữ liệu                           | Nơi lưu                  | Tồn tại tới khi nào                    |
+| --------------------------------- | ------------------------ | -------------------------------------- |
+| `IdToken`                         | Biến JS (`state.token`)  | Đóng tab hoặc reload trang             |
 | API URL, Client ID, Region, email | `localStorage` (`rag.*`) | Người dùng tự xóa hoặc đổi giá trị mới |
-| Mật khẩu | Không lưu | Chỉ trong lúc gõ vào ô input |
+| Mật khẩu                          | Không lưu                | Chỉ trong lúc gõ vào ô input           |
 
 Mục **1 · Kết nối** điền từ Terraform output sau apply:
 
@@ -72,8 +72,10 @@ File example Terraform đặt `api_require_api_key = true`, nghĩa là mọi rou
 Mọi request backend đi qua helper `api()` — ghép endpoint đã cấu hình và gắn `Authorization: state.token`. Nút Upload / Gửi câu hỏi chỉ mở sau khi login. Challenge phụ (MFA, …) báo lỗi rõ — MFA mặc định tắt trong stack này.
 
 ![Token hết hạn, giao diện báo lỗi rõ ràng yêu cầu đăng nhập lại](../images/02-token-expired-message.png)
-*Sau ~60 phút, thao tác tiếp theo trả 401; UI yêu cầu đăng nhập lại thay vì treo im lặng.*
+_Sau ~60 phút, thao tác tiếp theo trả 401; UI yêu cầu đăng nhập lại thay vì treo im lặng._
 
 ---
 
-Tiếp theo: [5.7.2 - Giao diện Chat và Upload tài liệu](../5.7.2-Chat-Upload-UI/)
+#### Nội dung tiếp theo
+
+- [5.7.2 - Giao diện Chat và Upload tài liệu](../5.7.2-Chat-Upload-UI/)

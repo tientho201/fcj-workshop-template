@@ -33,9 +33,6 @@ terraform output cognito_app_client_id
 # terraform output -raw api_key_value
 ```
 
-![Connection panel for API endpoint and Cognito Client ID](../images/06-connection-panel.png)
-*Panel **1 · Kết nối**: API URL, Client ID, Region, email/password.*
-
 {{% notice tip %}}
 API Gateway / Cognito Client IDs change whenever you `terraform apply` from a full recreate (destroy + create, not an in-place update). **Always re-run the two `terraform output` commands above after a full stack rebuild**, then update the Connection panel — otherwise the UI calls a dead endpoint.
 {{% /notice %}}
@@ -62,13 +59,13 @@ aws cognito-idp admin-set-user-password \
 
 #### Known limits (UI + API)
 
-| Limit | Detail |
-|---|---|
-| API Gateway body | 10 MB max; base64 PDF/images inflate ~33%, so usable binary size is smaller |
-| Multi-page PDF | Sync Textract (`detect_document_text`) handles **1 page** only — multi-page fails with a clear error |
-| Bedrock quota | Bursting requests can return HTTP 429 (`retryable`) — wait and retry |
-| Hosting | Frontend is not part of the Terraform destroy/apply surface; only open the file locally |
-| Layout | Below ~900px width the grid collapses to one column |
+| Limit            | Detail                                                                                               |
+| ---------------- | ---------------------------------------------------------------------------------------------------- |
+| API Gateway body | 10 MB max; base64 PDF/images inflate ~33%, so usable binary size is smaller                          |
+| Multi-page PDF   | Sync Textract (`detect_document_text`) handles **1 page** only — multi-page fails with a clear error |
+| Bedrock quota    | Bursting requests can return HTTP 429 (`retryable`) — wait and retry                                 |
+| Hosting          | Frontend is not part of the Terraform destroy/apply surface; only open the file locally              |
+| Layout           | Below ~900px width the grid collapses to one column                                                  |
 
 #### Possible follow-up (not built)
 
@@ -80,4 +77,6 @@ That path is **out of scope** for the current internship stack. In a report, tre
 
 ---
 
-Next: [5.7.4 - End-to-End Testing](../5.7.4-Test-end-to-end/)
+#### Next content
+
+- [5.7.4 - End-to-End Testing](../5.7.4-Test-end-to-end/)

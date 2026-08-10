@@ -5,6 +5,7 @@ weight: 6
 chapter: false
 pre: " <b> 5.3.6 </b> "
 ---
+
 Sau khi hoàn tất hạ tầng ([5.3.1](../5.3.1-Infrastructure-S3-SQS/), [5.3.2](../5.3.2-Infrastructure-DynamoDB-IAM/)) và logic xử lý ([5.3.3](../5.3.3-Text-Extraction/), [5.3.4](../5.3.4-Chunking-Embedding/), [5.3.5](../5.3.5-Resume-OCR-Error-Handling/)), bước cuối cùng là kiểm thử toàn bộ luồng end-to-end.
 
 #### Kịch bản test
@@ -32,8 +33,8 @@ Sau mỗi lần, kiểm tra theo đúng thứ tự:
 
 ##### Hình 3: Kết quả test end-to-end với file png
 
-- Với file png thì  sẽ gửi nguyên dạng (base64) để document-processor chạy Textract OCR — không hiển thị được dạng text ở hộp thoại upload
-![Kết quả test end-to-end với file png](/images/5-Workshop/5.3-Data-Ingestion/image5.3.6-3.png)
+- Với file png thì sẽ gửi nguyên dạng (base64) để document-processor chạy Textract OCR — không hiển thị được dạng text ở hộp thoại upload
+  ![Kết quả test end-to-end với file png](/images/5-Workshop/5.3-Data-Ingestion/image5.3.6-3.png)
 
 ##### Hình 4: Kết quả test end-to-end với file md
 
@@ -48,4 +49,3 @@ Sau mỗi lần, kiểm tra theo đúng thứ tự:
 - Xử lý được cả 3 loại tài liệu (text thuần, PDF có/không có lớp text, ảnh scan) với luồng xác nhận OCR chủ động thay vì OCR mù mọi PDF (tiết kiệm chi phí Textract).
 - Toàn bộ vector và chỉ số BM25 lưu gọn trong DynamoDB (dạng Binary + JSON string), loại bỏ hoàn toàn nhu cầu vận hành thêm một cụm OpenSearch Serverless riêng.
 - IAM Role tuân thủ least-privilege, có ghi chú rõ ngoại lệ (Textract) để tránh hiểu nhầm khi review bảo mật.
-

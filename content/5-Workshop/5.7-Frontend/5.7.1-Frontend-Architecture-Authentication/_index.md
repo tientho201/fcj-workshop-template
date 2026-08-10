@@ -30,7 +30,7 @@ fetch(`https://cognito-idp.${region}.amazonaws.com/`, {
 The Terraform App Client is a **public client** (`generate_secret = false`) — correct for browser-only code, where there is nowhere safe to keep a client secret.
 
 ![Direct InitiateAuth via fetch in DevTools Network](../images/01-initiate-auth-network-tab.png)
-*DevTools Network: POST to `cognito-idp.<region>.amazonaws.com` with header `X-Amz-Target`.*
+_DevTools Network: POST to `cognito-idp.<region>.amazonaws.com` with header `X-Amz-Target`._
 
 #### Token lifecycle — no refresh flow
 
@@ -48,11 +48,11 @@ fetch(apiUrl, { headers: { Authorization: state.token } });
 
 `state.token` lives only in memory (a JS variable) — **not** in `localStorage` or cookies. Reload the page and the token is gone; sign in again. Connection settings (API URL, Client ID, region, email) **are** stored in `localStorage` so you do not retype them; the **password is never stored**, only present in the input while typing.
 
-| Data | Stored where | Lives until |
-|---|---|---|
-| `IdToken` | JS variable (`state.token`) | Tab close or page reload |
-| API URL, Client ID, Region, email | `localStorage` (`rag.*`) | User clears storage or overwrites |
-| Password | Not stored | Only while typing in the input |
+| Data                              | Stored where                | Lives until                       |
+| --------------------------------- | --------------------------- | --------------------------------- |
+| `IdToken`                         | JS variable (`state.token`) | Tab close or page reload          |
+| API URL, Client ID, Region, email | `localStorage` (`rag.*`)    | User clears storage or overwrites |
+| Password                          | Not stored                  | Only while typing in the input    |
 
 Section **1 · Kết nối** is filled from Terraform outputs after apply:
 
@@ -72,8 +72,10 @@ All four routes (`/chat`, `/documents`, `/status`, `/documents-decision`) use a 
 Every backend call goes through a shared `api()` helper that prefixes the configured endpoint and sets `Authorization: state.token`. Upload and Ask stay disabled until login succeeds. Extra Cognito challenges (MFA, etc.) surface as errors — MFA is off by default in this stack.
 
 ![Clear error when the token has expired](../images/02-token-expired-message.png)
-*After ~60 minutes, the next call returns 401; the UI asks the user to sign in again instead of hanging silently.*
+_After ~60 minutes, the next call returns 401; the UI asks the user to sign in again instead of hanging silently._
 
 ---
 
-Next: [5.7.2 - Chat Interface and Document Upload](../5.7.2-Chat-Upload-UI/)
+#### Next content
+
+- [5.7.2 - Chat Interface and Document Upload](../5.7.2-Chat-Upload-UI/)
