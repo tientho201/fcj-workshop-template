@@ -14,7 +14,11 @@ This section describes design decisions **at the code level**, distinct from the
 📌 **Zero external dependency** — except for exactly 1 library (`pypdf`, vendored directly into git rather than installed during `terraform apply`), all logic relies solely on `boto3`/`botocore` and standard Python libraries. Even the Redis client is a ~70-line **custom-written** RESP client, instead of using `redis-py`.
 {{% /notice %}}
 
-As a result of this principle, 2 shared libraries (`bm25.py`, `vector_store.py`) exist as **identical copies** in both Lambdas — without using Lambda Layers or a shared package, keeping each Lambda **completely self-contained**, trading off manual synchronization when making modifications.
+{{% notice warning %}}
+📌 **Update (re-checked against actual code):** There are **4 shared files** between the 2 Lambdas, not 2 as previously noted — `bm25.py`, `vector_store.py`, **`tracing.py`**, and **`embeddings.py`**. All 4 exist as **identical copies** in both Lambdas — without using Lambda Layers or a shared package, keeping each Lambda **completely self-contained**, trading off manual synchronization when making modifications. This risk is **covered by automated tests** (`test_shared_copies_in_sync.py`, see [5.8.4](5.8.4-Backend-Testing/)).
+{{% /notice %}}
+
+---
 
 #### Detailed Contents
 

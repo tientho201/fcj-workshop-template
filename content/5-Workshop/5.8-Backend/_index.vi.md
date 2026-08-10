@@ -14,7 +14,11 @@ Phần này mô tả các quyết định thiết kế **ở mức code**, khác
 📌 **Zero external dependency** — ngoại trừ đúng 1 thư viện (`pypdf`, được vendor thẳng vào git thay vì cài lúc `terraform apply`), toàn bộ logic chỉ dùng `boto3`/`botocore` và thư viện chuẩn Python. Ngay cả client Redis cũng là một RESP client ~70 dòng **tự viết**, thay vì dùng `redis-py`.
 {{% /notice %}}
 
-Hệ quả của nguyên tắc này là 2 thư viện dùng chung (`bm25.py`, `vector_store.py`) tồn tại dưới dạng **bản sao y hệt** ở cả 2 Lambda — không dùng Lambda Layer hay package chung, giữ mỗi Lambda **tự chứa hoàn toàn**, đánh đổi lấy việc phải đồng bộ tay khi sửa.
+{{% notice warning %}}
+📌 **Cập nhật (đã đối chiếu lại với code thật):** có **4 file** dùng chung giữa 2 Lambda, không phải 2 như ghi nhận trước đây — `bm25.py`, `vector_store.py`, **`tracing.py`**, **`embeddings.py`**. Cả 4 tồn tại dưới dạng **bản sao y hệt** ở cả 2 Lambda — không dùng Lambda Layer hay package chung, giữ mỗi Lambda **tự chứa hoàn toàn**, đánh đổi lấy việc phải đồng bộ tay khi sửa. Rủi ro này **đã có test tự động kiểm tra** (`test_shared_copies_in_sync.py`, xem [5.8.4](5.8.4-Backend-Testing/)).
+{{% /notice %}}
+
+---
 
 #### Nội dung chi tiết
 
