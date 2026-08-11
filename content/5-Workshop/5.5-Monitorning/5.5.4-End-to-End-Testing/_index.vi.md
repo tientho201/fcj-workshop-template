@@ -25,9 +25,6 @@ Sau khi hoàn tất SNS ([5.5.1](../5.5.1-SNS-2-Channels-By-Severity/)), Alarms 
 Kịch bản 4: request sai path/method thường ra **4xx**, không kích hoạt `apigw-5xx`. Cần lỗi phía server (5xx) hoặc tỷ lệ 5xx đủ lớn trong cửa sổ 5 phút.
 {{% /notice %}}
 
-![Alarm ALARM và tin nhắn Slack](../images/08-alarm-triggered-slack-message.png)
-_Ví dụ: `bedrock-throttle` ở trạng thái ALARM và tin nhắn trên Slack qua AWS Chatbot._
-
 #### Kết quả đạt được
 
 - Hai kênh SNS theo severity — Warning (email) và Critical (Slack) — giảm alarm fatigue.
@@ -35,13 +32,3 @@ _Ví dụ: `bedrock-throttle` ở trạng thái ALARM và tin nhắn trên Slack
 - `dlq-depth` gộp cả 2 tầng DLQ (Luồng 1) — không bỏ sót message ở một tầng.
 - Dashboard 9 widget: 7 metric AWS + cache hit rate (EMF) + RAGAS (`put_metric_data`).
 - `treat_missing_data = "notBreaching"` tránh cảnh báo giả khi môi trường ít traffic.
-
-#### Checklist hoàn thành Luồng 3
-
-- [ ] Subscription email `alerts-info` ở trạng thái `Confirmed`
-- [ ] Slack OAuth trên Console đã làm trước khi apply Chatbot (hoặc cố ý để `NONE` / trống)
-- [ ] Bốn alarm monitoring (`lambda-errors`, `apigw-5xx`, `bedrock-throttle`, `dlq-depth`) test được cả chiều `ALARM` và tự về `OK`
-- [ ] `bedrock-throttle` bắt được log `ThrottlingException` từ các Lambda có filter
-- [ ] `dlq-depth` phát hiện message ở bất kỳ tầng DLQ nào
-- [ ] Dashboard đủ 9 widget; hiểu vì sao widget Cache/RAGAS có thể trống lúc đầu
-- [ ] Đã nắm vì sao cache metric dùng EMF (VPC không NAT) thay vì `PutMetricData`

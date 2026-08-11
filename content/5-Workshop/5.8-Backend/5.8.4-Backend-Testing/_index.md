@@ -49,15 +49,3 @@ Full details on [5.10.1](../../5.10-System-Testing/5.10.1-Manual-E2E-Testing/), 
 - **No tests for `handler.py`** in either Lambda (parts directly calling `boto3` — S3, DynamoDB, Bedrock, Textract) — requires mocks (`moto` or similar) or dedicated integration tests to cover further.
 - **No tests for `/feedback` route** or the join between `evaluation_runner.py` ↔ `message_id-index` (noted on [5.8.2](../5.8.2-Cache-and-Observability/) and [Stream 4, page 5.6.3](../../5.6-RAGAS/5.6.3-RAGAS-Evaluation-Logic/)) — logic has been manually cross-checked (field/GSI names match between Terraform and Python) but **lacks automated tests**.
   {{% /notice %}}
-
-#### Backend Completion Checklist
-
-- [x] Clear understanding of zero-dependency principle and 4 manually-synced files (`bm25.py`, `vector_store.py`, `tracing.py`, `embeddings.py`)
-- [x] Understood single-`Scan` mechanism for both cosine and BM25, and why RRF is used over weighted score summation
-- [x] Understood custom-built Redis client supporting only 3 commands, best-effort principle, and **non-session-based** caching
-- [x] Understood where `message_id` is generated, its purpose, and why a GSI is needed for reverse lookup
-- [x] Understood recurring IAM pattern "base table permissions do not include GSI permissions" in 2 places
-- [x] Distinguished 3 intentional fail-open points from explicit throttling handling
-- [x] 33-test `pytest` suite passing and integrated into CI
-- [ ] Tests for `handler.py` (direct AWS dependencies) — remaining gap
-- [ ] Tests for `/feedback` route and GSI join — remaining gap

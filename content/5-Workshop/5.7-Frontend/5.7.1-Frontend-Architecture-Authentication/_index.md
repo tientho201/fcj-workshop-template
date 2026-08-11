@@ -29,9 +29,6 @@ fetch(`https://cognito-idp.${region}.amazonaws.com/`, {
 
 The Terraform App Client is a **public client** (`generate_secret = false`) — correct for browser-only code, where there is nowhere safe to keep a client secret.
 
-![Direct InitiateAuth via fetch in DevTools Network](../images/01-initiate-auth-network-tab.png)
-_DevTools Network: POST to `cognito-idp.<region>.amazonaws.com` with header `X-Amz-Target`._
-
 #### Token lifecycle — no refresh flow
 
 ```javascript

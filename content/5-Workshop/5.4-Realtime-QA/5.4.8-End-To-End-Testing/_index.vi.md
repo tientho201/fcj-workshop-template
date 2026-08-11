@@ -6,7 +6,7 @@ chapter: false
 pre: " <b> 5.4.8 </b> "
 ---
 
-Sau khi hoàn tất hạ tầng (5.4.1, 5.4.2) và toàn bộ logic xử lý (5.4.3 → 5.4.6), bước cuối cùng là kiểm thử các kịch bản thực tế của Luồng 2.
+Sau khi hoàn tất hạ tầng ([5.4.1](../5.4.1-API-Gateway-Cognito),[5.4.2](../5.4.2-Cache-Guardrails-IAM/)) và toàn bộ logic xử lý ([5.4.3](../5.4.3-Cache-Lookup-Query-Rewriting/) → [5.4.7](../5.4.7-Alternative-Route/)), bước cuối cùng là kiểm thử các kịch bản thực tế của Luồng 2.
 
 #### Kịch bản test
 
@@ -40,34 +40,6 @@ Sau khi hoàn tất hạ tầng (5.4.1, 5.4.2) và toàn bộ logic xử lý (5.
 
 ![Kết quả test 4](/images/5-Workshop/5.4-Realtime-QA/image5.4.8-4.png)
 
-##### Hình 5: Kết quả test 5
-
-![Kết quả test 5](/images/5-Workshop/5.4-Realtime-QA/image5.4.8-5.png)
-
-##### Hình 6: Kết quả test 6
-
-![Kết quả test 6](/images/5-Workshop/5.4-Realtime-QA/image5.4.8-6.png)
-
-##### Hình 7: Kết quả test 7
-
-![Kết quả test 7](/images/5-Workshop/5.4-Realtime-QA/image5.4.8-7.png)
-
-##### Hình 8: Kết quả test 8
-
-![Kết quả test 8](/images/5-Workshop/5.4-Realtime-QA/image5.4.8-8.png)
-
-##### Hình 9: Kết quả test 9
-
-![Kết quả test 9](/images/5-Workshop/5.4-Realtime-QA/image5.4.8-9.png)
-
-##### Hình 10: Kết quả test 10
-
-![Kết quả test 10](/images/5-Workshop/5.4-Realtime-QA/image5.4.8-10.png)
-
-##### Hình 11: Kết quả test 11
-
-![Kết quả test 11](/images/5-Workshop/5.4-Realtime-QA/image5.4.8-11.png)
-
 #### Kết quả đạt được
 
 - API bảo mật bằng Cognito, phục vụ đủ 4 route qua 1 Lambda duy nhất, giảm số lượng function cần quản lý.
@@ -76,23 +48,3 @@ Sau khi hoàn tất hạ tầng (5.4.1, 5.4.2) và toàn bộ logic xử lý (5.
 - Hybrid Search tự cài đặt trên DynamoDB (cosine + BM25 → RRF) thay thế hoàn toàn OpenSearch, giảm 1 thành phần hạ tầng cần vận hành.
 - Guardrail 2 tầng (input/output) và xử lý Throttling riêng biệt giúp hệ thống vừa an toàn về nội dung, vừa thân thiện với client khi quá tải.
 - Route `/documents-decision` kết nối liền mạch với Luồng 1, hoàn thiện trải nghiệm human-in-the-loop cho việc xác nhận OCR.
-
-#### Checklist hoàn thành Luồng 2
-
-- [ ] API Gateway 4 route hoạt động đúng, Cognito Authorizer chặn được request không có token hợp lệ
-- [ ] CORS preflight (OPTIONS) hoạt động, không chạm Lambda/dữ liệu thật
-- [ ] ElastiCache kết nối được qua IAM auth (không dùng mật khẩu tĩnh)
-- [ ] Bedrock Guardrail chặn đúng nội dung vi phạm ở cả input và output
-- [ ] IAM Role `chat_engine` chỉ có đúng 6 nhóm quyền least-privilege đã liệt kê ở 5.4.2
-- [ ] Cache hit/miss hoạt động đúng logic `cacheable = not history`
-- [ ] Query Rewriting hoạt động đúng khi có lịch sử, fallback đúng khi lỗi
-- [ ] Hybrid Search trả kết quả hợp lý, early-return đúng khi không có context liên quan
-- [ ] Câu trả lời sinh ra có trích dẫn `document_id`, đã qua Guardrail output
-- [ ] `chat_history` lưu đủ `retrieved_context` và `source_document_ids` cho Luồng 4 sử dụng
-- [ ] Lỗi Throttling trả đúng HTTP 429, log ERROR xuất hiện để Luồng 3 bắt được
-- [ ] Route `/documents-decision` gọi đúng sang `document_processor` bất đồng bộ
-- [ ] Route `/feedback` ghi đúng item vào bảng `feedback`, `message_id` hoạt động cho cả nhánh cache hit/bị chặn
-- [ ] Nút feedback trên UI khóa/mở khóa đúng, phục hồi sạch khi lỗi mạng
-      {{% notice note %}}
-      Dữ liệu `retrieved_context` và `source_document_ids` lưu ở trang [5.4.5](../5.4.5-Sinh-cau-tra-loi-Luu-lich-su/) sẽ được dùng trực tiếp ở **Luồng 4 (RAGAS Evaluation)** để tính `context_precision`/`context_recall` — không cần chạy lại retrieval khi đánh giá.
-      {{% /notice %}}

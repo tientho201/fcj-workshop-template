@@ -49,15 +49,3 @@ Chi tiết đầy đủ ở [5.10.1](../../5.10-System-Testing/5.10.1-Manual-E2E
 - **Không có test cho `handler.py`** của cả 2 Lambda (phần gọi `boto3` trực tiếp — S3, DynamoDB, Bedrock, Textract) — cần mock (`moto` hoặc tương tự) hoặc integration test riêng nếu muốn phủ tiếp.
 - **Không có test cho route `/feedback`** hay join `evaluation_runner.py` ↔ `message_id-index` (đã nói ở [5.8.2](../5.8.2-Cache-va-Observability/) và [Luồng 4, trang 5.6.3](../../5.6-RAGAS/5.6.3-RAGAS-Evaluation-Logic/)) — logic đã kiểm tra chéo thủ công (tên field/GSI khớp giữa Terraform và Python) nhưng **chưa có test tự động**.
   {{% /notice %}}
-
-#### Checklist hoàn thành phần Backend
-
-- [x] Hiểu rõ nguyên tắc zero-dependency và 4 file cần đồng bộ tay (`bm25.py`, `vector_store.py`, `tracing.py`, `embeddings.py`)
-- [x] Hiểu cơ chế 1 lần `Scan` cho cả cosine và BM25, vì sao dùng RRF thay vì cộng điểm trọng số
-- [x] Hiểu rõ Redis client tự viết chỉ hỗ trợ 3 lệnh, nguyên tắc best-effort, và cache **không theo session**
-- [x] Hiểu `message_id` sinh ở đâu, dùng để làm gì, và vì sao cần GSI để nối ngược
-- [x] Hiểu pattern IAM "quyền bảng gốc không bao gồm quyền GSI" lặp lại ở 2 nơi
-- [x] Phân biệt được 3 điểm fail-open có chủ đích với cách xử lý throttle rõ ràng
-- [x] Bộ `pytest` 33 test đã chạy, đã nối CI
-- [ ] Test cho `handler.py` (phụ thuộc AWS trực tiếp) — gap còn lại
-- [ ] Test cho route `/feedback` và join qua GSI — gap còn lại

@@ -10,23 +10,20 @@ After SNS ([5.5.1](../5.5.1-SNS-2-Channels-By-Severity/)), Alarms ([5.5.2](../5.
 
 #### Test scenarios
 
-| # | Scenario | Expected result |
-|---|---|---|
-| 1 | SNS Console → `alerts-info` subscription | Status `Confirmed` (not `Pending confirmation`) |
-| 2 | AWS Chatbot → Slack channel configuration | Correct workspace/channel; if `slack_*` is `NONE`, the Chatbot resource does not exist (by design) |
-| 3 | Simulate Lambda failures (throw exceptions for several minutes past the Errors threshold) | `lambda-errors` → `ALARM`, email via `alerts-info` |
-| 4 | Cause API/Lambda 5xx (e.g. a transient fault in chat-engine returning 500) | `apigw-5xx` → `ALARM` when 5xx rate exceeds the % threshold, email received |
-| 5 | Trigger `ThrottlingException` (burst Bedrock calls or mock the error in code) | Log filter matches, `bedrock-throttle` → `ALARM`, Slack message via `alerts-critical` |
-| 6 | Push one failing message into a DLQ (ingestion DLQ or function DLQ) | `dlq-depth` → `ALARM` as soon as depth > 0, Slack message |
-| 7 | Open dashboard `${name_prefix}-overview` | 7 AWS widgets populate after traffic; Cache Hit Rate after a few `/chat` calls; RAGAS after evaluation has run ≥ once |
-| 8 | Stop the fault simulation after `ALARM` | Alarm returns to `OK` on its own once the threshold is no longer breached — no manual reset |
+| #   | Scenario                                                                                  | Expected result                                                                                                       |
+| --- | ----------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
+| 1   | SNS Console → `alerts-info` subscription                                                  | Status `Confirmed` (not `Pending confirmation`)                                                                       |
+| 2   | AWS Chatbot → Slack channel configuration                                                 | Correct workspace/channel; if `slack_*` is `NONE`, the Chatbot resource does not exist (by design)                    |
+| 3   | Simulate Lambda failures (throw exceptions for several minutes past the Errors threshold) | `lambda-errors` → `ALARM`, email via `alerts-info`                                                                    |
+| 4   | Cause API/Lambda 5xx (e.g. a transient fault in chat-engine returning 500)                | `apigw-5xx` → `ALARM` when 5xx rate exceeds the % threshold, email received                                           |
+| 5   | Trigger `ThrottlingException` (burst Bedrock calls or mock the error in code)             | Log filter matches, `bedrock-throttle` → `ALARM`, Slack message via `alerts-critical`                                 |
+| 6   | Push one failing message into a DLQ (ingestion DLQ or function DLQ)                       | `dlq-depth` → `ALARM` as soon as depth > 0, Slack message                                                             |
+| 7   | Open dashboard `${name_prefix}-overview`                                                  | 7 AWS widgets populate after traffic; Cache Hit Rate after a few `/chat` calls; RAGAS after evaluation has run ≥ once |
+| 8   | Stop the fault simulation after `ALARM`                                                   | Alarm returns to `OK` on its own once the threshold is no longer breached — no manual reset                           |
 
 {{% notice tip %}}
 Scenario 4: a wrong path/method usually yields **4xx**, which does not trip `apigw-5xx`. You need a server-side failure (5xx) or a high enough 5xx rate in the 5-minute window.
 {{% /notice %}}
-
-![Alarm in ALARM state and Slack message](../images/08-alarm-triggered-slack-message.png)
-*Example: `bedrock-throttle` in ALARM and the corresponding Slack message via AWS Chatbot.*
 
 #### Outcomes
 
@@ -35,13 +32,3 @@ Scenario 4: a wrong path/method usually yields **4xx**, which does not trip `api
 - `dlq-depth` covers both DLQ layers (Stream 1) — no silent backlog on one tier.
 - Dashboard with 9 widgets: 7 AWS metrics + cache hit rate (EMF) + RAGAS (`put_metric_data`).
 - `treat_missing_data = "notBreaching"` avoids false alarms in low-traffic environments.
-
-#### Stream 3 completion checklist
-
-- [ ] `alerts-info` email subscription is `Confirmed`
-- [ ] Slack OAuth was completed in the Console before applying Chatbot (or `NONE` / empty was intentional)
-- [ ] All four monitoring alarms (`lambda-errors`, `apigw-5xx`, `bedrock-throttle`, `dlq-depth`) were tested both into `ALARM` and back to `OK`
-- [ ] `bedrock-throttle` matched `ThrottlingException` logs from the filtered Lambdas
-- [ ] `dlq-depth` fired for a message on either DLQ tier
-- [ ] Dashboard shows all 9 widgets; Cache/RAGAS emptiness at first is understood
-- [ ] EMF for cache metrics is understood (VPC without NAT vs `PutMetricData`)

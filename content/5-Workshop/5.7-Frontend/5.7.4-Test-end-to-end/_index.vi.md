@@ -32,19 +32,6 @@ Sau [5.7.1](../5.7.1-Frontend-Architecture-Authentication/)–[5.7.3](../5.7.3-D
 Nếu ingest quá ~90s, xem CloudWatch Logs `document-processor` và độ sâu SQS/DLQ (alarm Luồng 3). Timeout UI cố ý để pipeline kẹt lộ ra thay vì quay mãi.
 {{% /notice %}}
 
-#### Checklist trước khi coi là “đạt”
-
-- [ ] Token hết hạn (đợi &gt; 60 phút) → thao tác tiếp báo lỗi rõ ràng, không treo im lặng
-- [ ] Upload file nhị phân &gt; ~7 MB → xác nhận nhận được thông báo giới hạn body 10 MB của API Gateway
-- [ ] Reload trang giữa lúc đang poll `/status` → không crash; cấu hình vẫn còn nhờ `localStorage`
-- [ ] Responsive: thu nhỏ dưới 900px → layout chuyển 1 cột
-- [ ] Đã dán `terraform output` vào **1 · Kết nối**; mật khẩu không nằm trong `localStorage`
-- [ ] Rõ frontend chỉ chạy local (không Amplify / S3 website trong stack này)
-
-{{% notice tip %}}
-Kịch bản #11 (429) và checklist giới hạn body 10 MB dễ bị bỏ sót khi demo qua loa — đây là 2 giới hạn thực tế đáng ghi vào phần “Kết quả kiểm thử”.
-{{% /notice %}}
-
 #### Kết quả đạt được
 
 - UI một file gọi đủ bốn route Luồng 2 với JWT Cognito thật.

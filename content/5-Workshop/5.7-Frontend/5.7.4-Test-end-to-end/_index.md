@@ -32,15 +32,6 @@ After [5.7.1](../5.7.1-Frontend-Architecture-Authentication/)–[5.7.3](../5.7.3
 If ingest hangs past ~90s, check CloudWatch Logs for `document-processor` and SQS/DLQ depth (Stream 3 alarms). The UI timeout is intentional so a stuck pipeline surfaces instead of spinning forever.
 {{% /notice %}}
 
-#### Checklist before calling it “done”
-
-- [ ] Token expired (wait &gt; 60 minutes) → next action shows a clear error, does not hang
-- [ ] Binary upload &gt; ~7 MB → confirm you see the API Gateway 10 MB body limit message
-- [ ] Reload the page while polling `/status` → no crash; connection config still present via `localStorage`
-- [ ] Responsive: shrink below 900px → layout becomes one column
-- [ ] `terraform output` values pasted into **1 · Kết nối**; password not left in `localStorage`
-- [ ] Clear that frontend is local-only (no Amplify / S3 website in this stack)
-
 {{% notice tip %}}
 Scenario #11 (429) and the 10 MB body-limit check are the easiest to skip in a casual demo — both are real system limits worth recording in a “test results” section.
 {{% /notice %}}

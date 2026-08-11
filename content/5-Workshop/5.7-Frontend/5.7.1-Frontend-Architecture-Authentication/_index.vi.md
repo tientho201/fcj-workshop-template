@@ -29,9 +29,6 @@ fetch(`https://cognito-idp.${region}.amazonaws.com/`, {
 
 App Client phía Terraform là **public client** (`generate_secret = false`) — phù hợp vì code chạy hoàn toàn ở trình duyệt, không có nơi nào an toàn để giữ client secret.
 
-![Gọi trực tiếp InitiateAuth qua fetch, xem trong DevTools Network](../images/01-initiate-auth-network-tab.png)
-_Tab Network: POST tới `cognito-idp.<region>.amazonaws.com` với header `X-Amz-Target`._
-
 #### Vòng đời token — không có refresh flow
 
 ```javascript
