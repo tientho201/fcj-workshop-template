@@ -50,7 +50,7 @@ Through the **Agent Forge - Deepdive Day 1** event, I gained a clearer understan
 #### Event Photos
 
 <div style="display: flex; gap: 12px; justify-content: space-between; align-items: center; margin: 15px 0;">
-  <img src="/images/4-EventParticipated/event2_01.jpg" alt="Event photo 1" style="width: 32%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); object-fit: cover;" />
-  <img src="/images/4-EventParticipated/event2_02.jpg" alt="Event photo 2" style="width: 32%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); object-fit: cover;" />
-  <img src="/images/4-EventParticipated/event2_03.jpg" alt="Event photo 3" style="width: 32%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); object-fit: cover;" />
+  <img src="/images/4-EventParticipated/event1_01.jpg" alt="Event photo 1" style="width: 32%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); object-fit: cover;" />
+  <img src="/images/4-EventParticipated/event1_02.jpg" alt="Event photo 2" style="width: 32%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); object-fit: cover;" />
+  <img src="/images/4-EventParticipated/event1_03.jpg" alt="Event photo 3" style="width: 32%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); object-fit: cover;" />
 </div>

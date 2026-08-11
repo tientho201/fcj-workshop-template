@@ -83,7 +83,7 @@ Qua sự kiện **Agent Forge - Deepdive Day 2**, em hiểu rõ hơn về các t
 #### Một số hình ảnh khi tham gia sự kiện
 
 <div style="display: flex; gap: 12px; justify-content: space-between; align-items: center; margin: 15px 0;">
-  <img src="/images/4-EventParticipated/event3_01.jpg" alt="Hình ảnh tham gia sự kiện 1" style="width: 32%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); object-fit: cover;" />
-  <img src="/images/4-EventParticipated/event3_02.jpg" alt="Hình ảnh tham gia sự kiện 2" style="width: 32%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); object-fit: cover;" />
-  <img src="/images/4-EventParticipated/event3_03.jpg" alt="Hình ảnh tham gia sự kiện 3" style="width: 32%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); object-fit: cover;" />
+  <img src="/images/4-EventParticipated/event2_01.jpg" alt="Hình ảnh tham gia sự kiện 1" style="width: 32%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); object-fit: cover;" />
+  <img src="/images/4-EventParticipated/event2_02.jpg" alt="Hình ảnh tham gia sự kiện 2" style="width: 32%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); object-fit: cover;" />
+  <img src="/images/4-EventParticipated/event2_03.jpg" alt="Hình ảnh tham gia sự kiện 3" style="width: 32%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); object-fit: cover;" />
 </div>
