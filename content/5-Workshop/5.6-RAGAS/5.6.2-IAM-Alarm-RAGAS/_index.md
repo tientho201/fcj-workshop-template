@@ -109,9 +109,6 @@ resource "aws_iam_role_policy" "evaluation_runner_bedrock" {
 **Why must `cloudwatch:PutMetricData` use `resources = "*"`?** This is one of the few AWS actions that **does not support scoping by ARN** — the action itself has no concept of a specific "resource" to restrict. Instead, the project uses an **IAM Condition** constraining `cloudwatch:namespace = RAGEvaluation` — meaning this Lambda **is only allowed to write metrics into the exact namespace `RAGEvaluation`**, and cannot write to any other namespace (including AWS system namespaces). This remains true least-privilege, just using a different restriction mechanism than other actions (using `Condition` instead of `Resource`).
 {{% /notice %}}
 
-![IAM Role evaluation_runner with namespace condition on PutMetricData](../images/04-iam-role-evaluation-runner.png)
-_Illustration: Inline policy on IAM Console, statement `PublishRAGEvaluationMetricsOnly` with Condition clearly showing the namespace constraint._
-
 #### RAG Quality Alarm: `ragas-faithfulness-low`
 
 ```hcl

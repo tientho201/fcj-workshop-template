@@ -111,9 +111,6 @@ resource "aws_iam_role_policy" "evaluation_runner_bedrock" {
 **Vì sao `cloudwatch:PutMetricData` phải dùng `resources = "*"`?** Đây là 1 trong số ít action của AWS **không hỗ trợ scope theo ARN** — bản thân action này không có khái niệm "resource" cụ thể để giới hạn. Thay vào đó, dự án dùng **IAM Condition** ràng buộc `cloudwatch:namespace = RAGEvaluation` — nghĩa là Lambda này **chỉ được phép ghi metric vào đúng 1 namespace `RAGEvaluation`**, không thể ghi vào namespace khác (kể cả namespace hệ thống của AWS). Đây vẫn là least-privilege đúng nghĩa, chỉ là cơ chế giới hạn khác với các action khác (dùng `Condition` thay vì `Resource`).
 {{% /notice %}}
 
-![IAM Role evaluation_runner với condition namespace trên PutMetricData](../images/04-iam-role-evaluation-runner.png)
-_Ảnh minh họa: inline policy trên IAM Console, statement `PublishRAGEvaluationMetricsOnly` với Condition hiển thị rõ ràng buộc namespace._
-
 #### Alarm chất lượng RAG: `ragas-faithfulness-low`
 
 ```hcl

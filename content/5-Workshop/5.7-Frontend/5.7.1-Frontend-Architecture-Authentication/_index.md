@@ -71,9 +71,6 @@ All four routes (`/chat`, `/documents`, `/status`, `/documents-decision`) use a 
 
 Every backend call goes through a shared `api()` helper that prefixes the configured endpoint and sets `Authorization: state.token`. Upload and Ask stay disabled until login succeeds. Extra Cognito challenges (MFA, etc.) surface as errors — MFA is off by default in this stack.
 
-![Clear error when the token has expired](../images/02-token-expired-message.png)
-_After ~60 minutes, the next call returns 401; the UI asks the user to sign in again instead of hanging silently._
-
 ---
 
 #### Next content

@@ -71,9 +71,6 @@ File example Terraform đặt `api_require_api_key = true`, nghĩa là mọi rou
 
 Mọi request backend đi qua helper `api()` — ghép endpoint đã cấu hình và gắn `Authorization: state.token`. Nút Upload / Gửi câu hỏi chỉ mở sau khi login. Challenge phụ (MFA, …) báo lỗi rõ — MFA mặc định tắt trong stack này.
 
-![Token hết hạn, giao diện báo lỗi rõ ràng yêu cầu đăng nhập lại](../images/02-token-expired-message.png)
-_Sau ~60 phút, thao tác tiếp theo trả 401; UI yêu cầu đăng nhập lại thay vì treo im lặng._
-
 ---
 
 #### Nội dung tiếp theo

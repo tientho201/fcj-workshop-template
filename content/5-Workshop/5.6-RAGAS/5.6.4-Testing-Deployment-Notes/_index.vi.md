@@ -33,9 +33,6 @@ Nếu sau này cần **cập nhật code** `evaluation_runner.py` (không phải
 | 7   | Kiểm tra widget "RAGAS Evaluation Scores" ở Dashboard Luồng 3 | Đã có dữ liệu hiển thị (không còn trống như mô tả ở [trang 5.5.3](../../5.5-Flow-3-Monitoring/5.5.3-Dashboard-Custom-Metrics/)) |
 | 8   | Giả lập điểm Faithfulness thấp (dữ liệu test)                 | Alarm `ragas-faithfulness-low` chuyển `ALARM`, tin nhắn xuất hiện trên Slack qua kênh `alerts-critical`                         |
 
-![Kết quả invoke thủ công evaluation_runner lần đầu](../images/08-manual-invoke-first-run.png)
-_Ảnh minh họa: log CloudWatch của lần invoke thủ công đầu tiên, S3 và metric CloudWatch đã có dữ liệu._
-
 #### Giới hạn còn tồn tại (nêu rõ để báo cáo trung thực)
 
 Sau khi khép kín gap nối 2 bảng qua GSI ([5.6.2](../5.6.2-IAM-Alarm-RAGAS/), [5.6.3](../5.6.3-Logic-Danh-gia-RAGAS/)), vẫn còn 3 giới hạn thật cần nêu rõ:
